@@ -28,7 +28,7 @@ mutation {
   createUser(
     userInput: {
       username: "khoa"
-      password: "tester"
+      password: "bin"
       firstName: "khoa"
       lastName: "nguyen"
       email: "khoa@tester.com"
@@ -47,3 +47,14 @@ mutation {
   }
 }
 `;
+
+const findUser = `
+mutation{
+  findUser(userInput:{username: "tester", password:"tester"}) {
+    username
+    password,
+    dob,
+		firstName,
+    lastName
+  }
+}`;

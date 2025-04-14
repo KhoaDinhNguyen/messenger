@@ -7,6 +7,7 @@ const schema = buildSchema(`
 
   type RootMutation {
     ${userRoutes.createUser}
+    ${userRoutes.findUser}
   }
 
   type RootQuery {

@@ -41,4 +41,14 @@ module.exports = {
       throw err;
     }
   },
+  findUser: async function ({ userInput }, req) {
+    const { username, password } = userInput;
+
+    try {
+      const foundUser = await User.find(username, password);
+      return foundUser;
+    } catch (err) {
+      throw err;
+    }
+  },
 };
