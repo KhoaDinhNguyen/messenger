@@ -1,7 +1,11 @@
 const mongodb = require("mongodb");
 const bcrypt = require("bcrypt");
+const sgMail = require("@sendgrid/mail");
 
 const MongoClient = mongodb.MongoClient;
+require("dotenv").config();
+
+sgMail.setApiKey("SG." + process.env.EMAIL_API_KEY);
 
 const User = {
   create: async function (
@@ -30,6 +34,15 @@ const User = {
     const result = await client.db().collection("users").insertOne(newUser);
 
     //send email
+    const message = {
+      to: email,
+      from: process.env.EMAIL_FROM,
+      subject: "Sign up successfully",
+      text: `Hello ${firstName} ${lastName}, you have signed up message`,
+      html: `<h1>Hello ${firstName} ${lastName}, you have signed up message</h1>`,
+    };
+
+    sgMail.send(message);
 
     newUser.password = null;
     return newUser;
