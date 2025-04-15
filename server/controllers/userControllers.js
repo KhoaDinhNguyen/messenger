@@ -11,11 +11,11 @@ const User = {
   create: async function (
     username,
     password,
-    lastName,
-    firstName,
+    name,
     gender,
+    pronounce,
     dob,
-    phoneNumber,
+    phone,
     email
   ) {
     const client = await MongoClient.connect(process.env.DATABASE_CONNECTION);
@@ -23,12 +23,13 @@ const User = {
     const newUser = {
       username: username,
       password: password,
-      lastName: lastName,
-      firstName: firstName,
+      name: name,
       gender: gender,
+      pronounce: pronounce,
       dob: dob,
-      phoneNumber: phoneNumber,
+      phone: phone,
       email: email,
+      friends: [],
     };
 
     const result = await client.db().collection("users").insertOne(newUser);
@@ -38,8 +39,8 @@ const User = {
       to: email,
       from: process.env.EMAIL_FROM,
       subject: "Sign up successfully",
-      text: `Hello ${firstName} ${lastName}, you have signed up message`,
-      html: `<h1>Hello ${firstName} ${lastName}, you have signed up message</h1>`,
+      text: `Hello ${name}, you have signed up message`,
+      html: `<h1>Hello ${name}, you have signed up message</h1>`,
     };
 
     sgMail.send(message);

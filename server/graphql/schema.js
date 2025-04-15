@@ -3,7 +3,8 @@ const userRoutes = require("../schema/userSchema");
 
 const schema = buildSchema(`
   ${userRoutes.UserType}
-  ${userRoutes.UserInputType}
+  ${userRoutes.UserInputTypeSignUp}
+  ${userRoutes.UserInputTypeLogin}
 
   type RootMutation {
     ${userRoutes.createUser}

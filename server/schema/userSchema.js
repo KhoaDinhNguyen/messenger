@@ -1,43 +1,52 @@
 const userQueries = require("../queries/userQueries");
 
-const UserInputType = `
-  input UserInputType {
+const UserInputTypeSignUp = `
+  input UserInputTypeSignUp {
     username: String!
     password: String!
-    firstName: String
-    lastName: String
-    gender: String
-    dob: String
-    phoneNumber: String
+    name: String!
+    gender: String!
+    pronounce: String
+    dob: String!
+    phone: String
     email: String
+  }
+`;
+
+const UserInputTypeLogin = `
+  input UserInputTypeLogin {
+    username: String!
+    password: String!
   }
 `;
 
 const UserType = `
   type UserType {
-    _id: ID!
+    _id: ID
     username: String!
     password: String
-    firstName: String
-    lastName: String
+    name: String
     gender: String
+    pronounce: String
     dob: String
-    phoneNumber: String
+    phone: String
     email: String
+    friends: [UserType]!
   }
 `;
 
 const createUser = `
-  createUser(userInput: UserInputType): UserType!
+  createUser(userInput: UserInputTypeSignUp): UserType!
 `;
 
 const findUser = `
-  findUser(userInput: UserInputType): UserType!
+  findUser(userInput: UserInputTypeLogin): UserType!
 `;
 
 module.exports = {
   createUser,
   UserType,
-  UserInputType,
+  UserInputTypeSignUp,
+  UserInputTypeLogin,
   findUser,
 };

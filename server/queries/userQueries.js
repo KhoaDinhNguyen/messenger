@@ -3,19 +3,12 @@ const bcrypt = require("bcrypt");
 
 module.exports = {
   createUser: async function ({ userInput }, req) {
-    const {
-      username,
-      password,
-      lastName,
-      firstName,
-      gender,
-      dob,
-      phoneNumber,
-      email,
-    } = userInput;
+    const { username, password, name, gender, pronouce, dob, phone, email } =
+      userInput;
 
+    console.log(userInput);
     let hashedPassword;
-
+    console.log("Call this");
     try {
       const salt = await bcrypt.genSalt(Number(process.env.SALT_VALUE));
       hashedPassword = await bcrypt.hash(password, salt);
@@ -29,13 +22,15 @@ module.exports = {
       const newUser = await User.create(
         username,
         hashedPassword,
-        lastName,
-        firstName,
+        name,
         gender,
+        pronouce,
         dob,
-        phoneNumber,
+        phone,
         email
       );
+
+      console.log(newUser);
       return newUser;
     } catch (err) {
       throw err;

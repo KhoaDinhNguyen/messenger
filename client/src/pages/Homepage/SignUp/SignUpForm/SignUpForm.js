@@ -109,6 +109,52 @@ function SignUpForm() {
     };
 
     console.log(body);
+
+    const graphQLQuery = {
+      query: `
+          mutation CreateUser($username: String!, $password: String!, $name: String!, $email: String, $dob: String!, $gender: String!, $pronounce: String, $phone: String){
+            createUser(
+              userInput: {
+                username: $username
+                password: $password
+                name: $name
+                dob: $dob
+                gender: $gender
+                pronounce: $pronounce
+                email: $email
+                phone: $phone
+              }
+            ) {
+              username
+            }
+          }
+        `,
+      variables: {
+        username: account,
+        password: password,
+        name: formatName(firstName, middleName, lastName),
+        dob: formatDates(date, convertMonthToNum(month), year),
+        gender: gender,
+        email: email,
+        phone: phone,
+      },
+    };
+
+    const bodyJSON = JSON.stringify(graphQLQuery);
+    const myHeader = new Headers();
+    myHeader.append("Content-type", "application/json");
+    fetch(process.env.REACT_APP_SERVER_API, {
+      method: "POST",
+      body: bodyJSON,
+      headers: myHeader,
+    })
+      .then((jsonResponse) => jsonResponse.json())
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
