@@ -1,0 +1,34 @@
+.rootContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.linkContainers {
+  list-style: none;
+  display: flex;
+}
+
+.linkContainer {
+  padding: 15px 30px;
+  margin-left: 10px;
+}
+
+.linkContainer a {
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 500;
+  color: black;
+}
+
+.linkContainer:has(a:hover) {
+  border-bottom: 3px solid #246bce;
+}
+
+.linkContainer a:hover {
+  color: #246bce;
+}
+
+.linkContainer:has(.activeLink) {
+  border-bottom: 3px solid black;
+}
