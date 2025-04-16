@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { NavLink } from "react-router";
 
 import InputText from "../../../../components/Utils/InputText/InputText";
 import InputPassword from "../../../../components/Utils/InputPassword/InputPassword";
@@ -344,6 +345,9 @@ function SignUpForm() {
           inputContainer={styles.buttonInput}
         />
       </form>
+      <div className={styles.loginLink}>
+        <NavLink to={"/home/login"}>Already have account?</NavLink>
+      </div>
     </div>
   );
 }

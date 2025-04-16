@@ -11,12 +11,12 @@ function HomepageNavigation() {
       <nav>
         <ul className={styles.linkContainers}>
           <li className={styles.linkContainer}>
-            <NavLink to={"login"} className={linkActive}>
+            <NavLink to={"/home/login"} className={linkActive}>
               Login
             </NavLink>
           </li>
           <li className={styles.linkContainer}>
-            <NavLink to={"signup"} className={linkActive}>
+            <NavLink to={"/home/signup"} className={linkActive}>
               Sign up
             </NavLink>
           </li>
