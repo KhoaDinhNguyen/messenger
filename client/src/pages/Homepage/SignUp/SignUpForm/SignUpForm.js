@@ -138,6 +138,7 @@ function SignUpForm() {
         gender: gender,
         email: email,
         phone: phone,
+        pronounce: getPronounce(gender, ""),
       },
     };
 

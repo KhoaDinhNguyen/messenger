@@ -23,7 +23,18 @@ app.get("/", (req, res) => {
 
 app.all(
   "/graphql",
-  createHandler({ schema: graphQLSchema, rootValue: graphQLResolver })
+  createHandler({
+    schema: graphQLSchema,
+    rootValue: graphQLResolver,
+    formatError(err) {
+      if (!err.originalError) {
+        return err;
+      }
+      const message = err.message || "An error occured";
+      const code = err.originalError.code || 500;
+      return { message: message, status: code };
+    },
+  })
 );
 
 const port = process.env.PORT || 4000;

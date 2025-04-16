@@ -8,11 +8,11 @@ const schema = buildSchema(`
 
   type RootMutation {
     ${userRoutes.createUser}
-    ${userRoutes.findUser}
   }
 
   type RootQuery {
     hello: String
+    ${userRoutes.findUser}
   }
   schema {
     query: RootQuery

@@ -1,4 +1,4 @@
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { useState } from "react";
 
 import InputText from "../../../../components/Utils/InputText/InputText";
@@ -10,6 +10,7 @@ import styles from "./LoginForm.module.css";
 function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const onChangeUsername = (event) => {
     setUsername(event.target.value);
@@ -19,14 +20,59 @@ function LoginForm() {
     setPassword(event.target.value);
   };
 
-  const onSumbmitForm = (event) => {
+  const onSumbmitForm = async (event) => {
     event.preventDefault();
     const body = {
       username,
       password,
     };
 
-    console.log(body);
+    const graphQLQuery = {
+      query: `query FindUser($username: String!, $password: String!){
+          findUser(userInput: {username: $username, password: $password}) {
+            username,
+            gender,
+            pronounce,
+            name,
+            phone,
+            dob,
+            friends{
+              username
+            }
+          }
+        }`,
+      variables: {
+        username: username,
+        password: password,
+      },
+    };
+
+    const bodyJSON = JSON.stringify(graphQLQuery);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-type", "application/json");
+
+    try {
+      const jsonResponse = await fetch(process.env.REACT_APP_SERVER_API, {
+        method: "POST",
+        body: bodyJSON,
+        headers: myHeaders,
+      });
+
+      const response = await jsonResponse.json();
+      if (response.data === null) {
+        const errorArray = response.errors;
+        //fix for many errors
+        const firstError = errorArray[0];
+        const error = new Error(firstError.message);
+        error.status = firstError.status;
+        throw error;
+      } else {
+        const { findUser } = response.data;
+        navigate(`/user/${findUser.username}`);
+      }
+    } catch (err) {
+      alert(err);
+    }
   };
 
   return (

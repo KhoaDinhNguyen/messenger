@@ -1,8 +1,8 @@
-const userQueries = require("../queries/userQueries");
+const userControllers = require("../controllers/userControllers");
 
 module.exports = {
-  createUser: userQueries.createUser,
-  findUser: userQueries.findUser,
+  createUser: userControllers.createUser,
+  findUser: userControllers.findUser,
   hello() {
     return "Hello world";
   },
