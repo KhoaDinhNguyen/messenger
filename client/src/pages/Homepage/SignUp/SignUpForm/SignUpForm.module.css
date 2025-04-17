@@ -1,0 +1,113 @@
+.rootContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: 16px;
+}
+
+.formContainer {
+  width: max-content;
+}
+
+.passwordContainer {
+  display: flex;
+}
+
+.nameContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.secondRowNameContainer {
+  display: flex;
+}
+.datesContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.contactContainer {
+  display: flex;
+}
+
+.textContainer {
+  padding: 11px;
+  border-radius: 5px;
+  border: 1px solid black;
+  margin: 5px 0;
+  margin-left: 10px;
+}
+
+.textContainer:has(.textInput:focus) {
+  border: 2px solid orange;
+  padding: 10px;
+}
+
+.selectContainer {
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  width: 125px;
+  margin: 5px 0;
+  margin-left: 10px;
+}
+
+.genderOptions {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+}
+
+.genderOption {
+  margin-left: 10px;
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 5px;
+  width: 100px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.textInput {
+  width: 100%;
+  font-size: 16px;
+  border: transparent;
+  outline: transparent;
+}
+
+.buttonContainer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.buttonInput {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  padding: 20px;
+  background-color: #50c878;
+  border: transparent;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.buttonInput:hover {
+  background-color: #00693e;
+}
+
+.errorInput {
+  border: 2px solid #ff0800;
+  padding: 10px;
+}
+
+.loginLink {
+  margin-top: 10px;
+}
+.loginLink a {
+  text-decoration: none;
+  color: #246bce;
+}

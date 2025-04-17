@@ -1,0 +1,52 @@
+.rootContainer {
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 16px;
+  background-color: #246bce;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  color: white;
+  padding: 10px;
+  padding-left: 20px;
+  border-bottom: 1px solid black;
+  border: 1px solid black;
+}
+
+.textContainers {
+  border: 1px solid black;
+  border-top: transparent;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  padding: 20px;
+}
+
+.textContainer {
+  max-width: 320px;
+}
+
+.loginLink {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.loginLink a {
+  border: 1px solid black;
+  padding: 5px;
+  color: white;
+  background-color: #246bce;
+  text-decoration: none;
+}
+
+.loginLink a:hover {
+  background-color: #0d47a1;
+}

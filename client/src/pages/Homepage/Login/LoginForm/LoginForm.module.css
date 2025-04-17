@@ -1,0 +1,100 @@
+.rootContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.textContainer {
+  padding: 11px;
+  border-radius: 5px;
+  border: 1px solid black;
+  margin-top: 10px;
+  width: 300px;
+}
+
+.textContainer:has(.textInput:focus) {
+  border: 2px solid orange;
+  padding: 10px;
+}
+
+.textInput {
+  width: 100%;
+  font-size: 16px;
+  border: transparent;
+  outline: transparent;
+}
+
+.buttonContainer {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  width: 300px;
+}
+
+.buttonInput {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  padding: 15px 30px;
+  background-color: #246bce;
+  border: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.buttonInput:hover {
+  background-color: #0d47a1;
+}
+
+.signUpLink {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  padding: 15px 20px;
+  background-color: #50c878;
+  border: transparent;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.signUpLink:has(a:hover) {
+  background-color: #00693e;
+}
+.signUpLink a {
+  text-decoration: none;
+  color: white;
+}
+
+.forgetPasswordLink {
+  margin-top: 10px;
+}
+.forgetPasswordLink a {
+  text-decoration: none;
+  color: #246bce;
+}
+
+.orText {
+  margin: 20px 0px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  user-select: none;
+}
+
+.orText p {
+  color: #adb5bd;
+}
+.orText div {
+  flex-grow: 1;
+  text-decoration: line-through;
+  border: 1px solid #adb5bd;
+  height: 2px;
+}
