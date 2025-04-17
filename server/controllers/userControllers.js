@@ -1,7 +1,7 @@
 const mongodb = require("mongodb");
 const bcrypt = require("bcrypt");
 const sgMail = require("@sendgrid/mail");
-
+const User = require("../models/user");
 const MongoClient = mongodb.MongoClient;
 
 require("dotenv").config();
@@ -11,16 +11,6 @@ module.exports = {
   createUser: async function ({ userInput }, req) {
     const { username, password, name, gender, pronounce, dob, phone, email } =
       userInput;
-
-    let client;
-
-    try {
-      client = await MongoClient.connect(process.env.DATABASE_CONNECTION);
-    } catch (e) {
-      const err = new Error("Something wrong with database");
-      err.status = 500;
-      throw err;
-    }
 
     let hashedPassword;
     try {
@@ -32,11 +22,31 @@ module.exports = {
       throw error;
     }
 
-    const emailSave = !email || email === "" ? null : email;
-    const phoneSave = !phone || phone === "" ? null : phone;
-    const pronounceSave = !pronounce || pronounce === "" ? null : pronounce;
+    const emailSave = !email ? "" : email;
+    const phoneSave = !phone ? "" : phone;
+    const pronounceSave = !pronounce ? "" : pronounce;
+    const errors = [];
 
-    const newUser = {
+    const doc = await User.exists({ username: username });
+    if (doc !== null) {
+      errors.push("Username has existed");
+    }
+
+    if (emailSave !== "") {
+      const doc = await User.exists({ email: emailSave });
+      if (doc !== null) {
+        errors.push("Email has been used");
+      }
+    }
+
+    if (errors.length > 0) {
+      const error = new Error("Invalid user's input");
+      error.data = errors;
+      error.code = 400;
+      throw error;
+    }
+
+    const newUser = new User({
       username: username,
       password: hashedPassword,
       name: name,
@@ -45,22 +55,13 @@ module.exports = {
       dob: dob,
       phone: phoneSave,
       email: emailSave,
-    };
+      friends: [],
+    });
 
     try {
-      await client.db().collection("users").insertOne(newUser);
+      await newUser.save();
     } catch (err) {
-      if (err.message.includes("username_1 dup key")) {
-        const error = new Error("Username has existed");
-        error.code = 400;
-        throw error;
-      } else if (err.message.includes("email_1 dup key")) {
-        const error = new Error("Email has been used");
-        error.code = 400;
-        throw error;
-      } else {
-        throw err;
-      }
+      throw err;
     }
 
     if (emailSave !== null) {
@@ -77,16 +78,13 @@ module.exports = {
         .then((response) => {
           console.log("Email has been send");
         })
-        .catch((err) => {
-          console.log(err.message);
-          client
-            .db()
-            .collection("users")
-            .updateOne({ username: username }, { $set: { email: null } });
+        .catch(async (err) => {
+          newUser.email = "";
+          await newUser.save();
         });
     }
 
-    newUser.password = null;
+    newUser.password = "";
 
     return newUser;
   },
@@ -129,7 +127,7 @@ module.exports = {
       throw error;
     }
 
-    foundUser.password = null;
+    foundUser.password = "";
     return foundUser;
   },
 };

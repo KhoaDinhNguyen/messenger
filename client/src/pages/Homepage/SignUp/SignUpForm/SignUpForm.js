@@ -34,11 +34,15 @@ function SignUpForm() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
+  const [errorForm, setErrorForm] = useState([]);
 
   const navigate = useNavigate();
 
   const onChangeAccount = (event) => {
     setAccount(event.target.value);
+    setErrorForm((errors) =>
+      errors.filter((error) => error !== "Username has existed")
+    );
   };
 
   const onChangePassword = (event) => {
@@ -85,6 +89,9 @@ function SignUpForm() {
   };
   const onChangeEmail = (event) => {
     setEmail(event.target.value);
+    setErrorForm((errors) =>
+      errors.filter((error) => error !== "Email has been used")
+    );
   };
 
   const onChangePhone = (event) => {
@@ -104,17 +111,15 @@ function SignUpForm() {
       ]);
     }
 
-    const body = {
-      account: account,
-      password: password,
-      name: formatName(firstName, middleName, lastName),
-      dob: formatDates(date, convertMonthToNum(month), year),
-      pronounce: getPronounce(gender, pronounce),
-      email: email,
-      phone: phone,
-    };
-
-    console.log(body);
+    // const body = {
+    //   account: account,
+    //   password: password,
+    //   name: formatName(firstName, middleName, lastName),
+    //   dob: formatDates(date, convertMonthToNum(month), year),
+    //   pronounce: getPronounce(gender, pronounce),
+    //   email: email,
+    //   phone: phone,
+    // };
 
     const graphQLQuery = {
       query: `
@@ -151,29 +156,28 @@ function SignUpForm() {
     const myHeader = new Headers();
     myHeader.append("Content-type", "application/json");
 
-    setTimeout(async () => {
-      try {
-        const jsonResponse = await fetch(process.env.REACT_APP_SERVER_API, {
-          method: "POST",
-          body: bodyJSON,
-          headers: myHeader,
-        });
+    try {
+      const jsonResponse = await fetch(process.env.REACT_APP_SERVER_API, {
+        method: "POST",
+        body: bodyJSON,
+        headers: myHeader,
+      });
 
-        const response = await jsonResponse.json();
+      setLoading(false);
+      const response = await jsonResponse.json();
 
-        if (response.data === null) {
-        } else {
-          navigate("/signupsuccess");
-        }
-      } catch (e) {
-        throw e;
+      if (response.data === null) {
+        setErrorForm([...response.errors[0].data]);
+      } else {
+        navigate("/signupsuccess");
       }
-    }, 5000);
+    } catch (e) {
+      alert(e);
+    }
   };
 
   return (
     <>
-      {" "}
       <div className={styles.rootContainer}>
         <form className={styles.formContainer} onSubmit={onSubmitHandler}>
           <div>
@@ -262,6 +266,7 @@ function SignUpForm() {
                 selectContainer={styles.selectContainer}
                 valueOption={month}
                 onChangeOption={onChangeMonth}
+                titleName={"Month"}
               />
               <InputSelect
                 id={"dateSignUp"}
@@ -270,6 +275,7 @@ function SignUpForm() {
                 selectContainer={styles.selectContainer}
                 valueOption={date}
                 onChangeOption={onChangeDate}
+                titleName={"Day"}
               />
               <InputSelect
                 id={"yearSignUp"}
@@ -278,6 +284,7 @@ function SignUpForm() {
                 selectContainer={styles.selectContainer}
                 valueOption={year}
                 onChangeOption={onChangeYear}
+                titleName={"Year"}
               />
             </div>
           </div>
@@ -351,6 +358,9 @@ function SignUpForm() {
                 onChangeText={onChangePhone}
               />
             </div>
+          </div>
+          <div>
+            <ErrorMessages messageList={errorForm} />
           </div>
           <InputButton
             type={"submit"}

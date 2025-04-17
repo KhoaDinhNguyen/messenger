@@ -9,8 +9,10 @@ function InputSelect({
   selectContainer,
   labelContainer,
   optionList,
+  titleName,
 }) {
   const labelConfig = !labelText ? "" : labelText;
+  const titleNameConfig = !titleName ? "" : titleName;
 
   const options = optionList.map((option) => {
     return (
@@ -35,6 +37,12 @@ function InputSelect({
         value={valueOption}
         required={required}
       >
+        {titleNameConfig && (
+          <option disabled value="">
+            {titleNameConfig}
+          </option>
+        )}
+
         {options}
       </select>
     </div>

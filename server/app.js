@@ -3,6 +3,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const { createHandler } = require("graphql-http/lib/use/express");
 const { ruruHTML } = require("ruru/server");
+const mongoose = require("mongoose");
 
 const graphQLSchema = require("./graphql/schema");
 const graphQLResolver = require("./graphql/resolver");
@@ -31,14 +32,22 @@ app.all(
         return err;
       }
       const message = err.message || "An error occured";
+      const data = err.originalError.data;
       const code = err.originalError.code || 500;
-      return { message: message, status: code };
+      return { message: message, status: code, data: data };
     },
   })
 );
 
 const port = process.env.PORT || 4000;
 
-app.listen(port, () => {
-  console.log(`Server at ${port}`);
-});
+mongoose
+  .connect(process.env.DATABASE_CONNECTION)
+  .then((response) => {
+    app.listen(port, () => {
+      console.log(`Server at ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.log("Something wrong with database");
+  });
