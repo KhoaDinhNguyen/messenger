@@ -56,9 +56,14 @@ module.exports = {
       phone: phoneSave,
       email: emailSave,
       friends: [],
+      profileUrl: "",
     });
 
     try {
+      const response = await newUser.save();
+      newUser.profileUrl = `${
+        process.env.FRONTEND_API
+      }/userpublic?userid=${response._id.toString()}`;
       await newUser.save();
     } catch (err) {
       throw err;
@@ -128,6 +133,19 @@ module.exports = {
     }
 
     foundUser.password = "";
+    return foundUser;
+  },
+  findUserById: async function ({ userInput }, req) {
+    const { id } = userInput;
+
+    const foundUser = await User.findById(id);
+
+    if (foundUser === null) {
+      const error = new Error("User does not exist");
+      error.status = 400;
+      throw error;
+    }
+
     return foundUser;
   },
 };

@@ -1,8 +1,11 @@
 const userControllers = require("../controllers/userControllers");
 
+const { createUser, findUser, findUserById } = userControllers;
+
 module.exports = {
-  createUser: userControllers.createUser,
-  findUser: userControllers.findUser,
+  createUser,
+  findUser,
+  findUserById,
   hello() {
     return "Hello world";
   },

@@ -17,6 +17,8 @@ import ForgetPassword from "./pages/Auth/ForgetPassword/ForgetPassword";
 
 import User from "./pages/User/User";
 
+import UserPublic from "./pages/UserPublic/UserPublic";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -30,6 +32,7 @@ const router = createBrowserRouter(
       </Route>
       <Route path="user/:username" element={<User />}></Route>
       <Route path="signupsuccess" element={<SignUpSuccess />} />
+      <Route path="userpublic" element={<UserPublic />} />
     </>
   )
 );

@@ -15,6 +15,10 @@ const userSchema = new Schema({
   email: String,
   phone: String,
   friends: [{ type: Schema.ObjectId, ref: "User" }],
+  profileUrl: {
+    type: String,
+    require: true,
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);

@@ -5,7 +5,8 @@ const schema = buildSchema(`
   ${userRoutes.UserType}
   ${userRoutes.UserInputTypeSignUp}
   ${userRoutes.UserInputTypeLogin}
-
+  ${userRoutes.UserInputTypeId}
+  
   type RootMutation {
     ${userRoutes.createUser}
   }
@@ -13,6 +14,7 @@ const schema = buildSchema(`
   type RootQuery {
     hello: String
     ${userRoutes.findUser}
+    ${userRoutes.findUserById}
   }
   schema {
     query: RootQuery
