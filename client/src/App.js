@@ -10,6 +10,7 @@ import Root from "./pages/Root";
 import Homepage from "./pages/Homepage/Homepage";
 import SignUp from "./pages/Homepage/SignUp/SignUp";
 import Login from "./pages/Homepage/Login/Login";
+import SignUpSuccess from "./pages/Homepage/SignUp/SignUpSuccess/SignUpSuccess";
 
 import Auth from "./pages/Auth/Auth";
 import ForgetPassword from "./pages/Auth/ForgetPassword/ForgetPassword";
@@ -28,6 +29,7 @@ const router = createBrowserRouter(
         <Route path="forgetpassword" element={<ForgetPassword />} />
       </Route>
       <Route path="user/:username" element={<User />}></Route>
+      <Route path="signupsuccess" element={<SignUpSuccess />} />
     </>
   )
 );
