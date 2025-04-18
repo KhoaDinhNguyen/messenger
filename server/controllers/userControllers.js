@@ -89,12 +89,11 @@ module.exports = {
         });
     }
 
-    newUser.password = "";
-
     return newUser;
   },
 
   findUser: async function ({ userInput }, req) {
+    // TODO: Change mongoose
     const { username, password } = userInput;
 
     let client;
@@ -132,7 +131,6 @@ module.exports = {
       throw error;
     }
 
-    foundUser.password = "";
     return foundUser;
   },
   findUserById: async function ({ userInput }, req) {
@@ -147,5 +145,12 @@ module.exports = {
     }
 
     return foundUser;
+  },
+  findUserByName: async function ({ userInput }, req) {
+    const { name } = userInput;
+    const foundUsers = await User.find({ $text: { $search: name } });
+
+    console.log(foundUsers);
+    return foundUsers;
   },
 };

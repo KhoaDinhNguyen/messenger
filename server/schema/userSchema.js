@@ -1,5 +1,11 @@
 const userQueries = require("../controllers/userControllers");
 
+const UserInputTypeName = `
+  input UserInputTypeName {
+    name: String!
+  }
+`;
+
 const UserInputTypeId = `
   input UserInputTypeId {
     id: String!
@@ -29,7 +35,7 @@ const UserInputTypeLogin = `
 const UserType = `
   type UserType {
     _id: ID
-    username: String!
+    username: String
     password: String
     name: String
     gender: String
@@ -54,12 +60,18 @@ const findUserById = `
   findUserById(userInput: UserInputTypeId): UserType!
 `;
 
+const findUserByName = `
+  findUserByName(userInput: UserInputTypeName): [UserType!]
+`;
+
 module.exports = {
   createUser,
   UserType,
   UserInputTypeId,
   UserInputTypeSignUp,
   UserInputTypeLogin,
+  UserInputTypeName,
   findUser,
   findUserById,
+  findUserByName,
 };

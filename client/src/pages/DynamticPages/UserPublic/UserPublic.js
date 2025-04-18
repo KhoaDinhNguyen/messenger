@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-import HomepageNavigation from "../Homepage/HomepageNavigation/HomepageNavigation";
+import HomepageNavigation from "../../Homepage/HomepageNavigation/HomepageNavigation";
 import UserProfile from "./UserProfile/UserProfile";
-import UserNotFound from "./UserNotFound/UserNotFound";
+import UserNotFound from "../UserNotFound/UserNotFound";
 
 import styles from "./UserPublic.module.css";
 
-function UserPublic() {
+function UserPublic({ isAuth }) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [user, setUser] = useState(null);
 

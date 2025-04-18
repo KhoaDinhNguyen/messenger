@@ -1,9 +1,8 @@
-import userpublic from "../../../asset/img/userpublic.png";
+import userpublic from "../../../../asset/img/userpublic.png";
 
 import styles from "./UserProfile.module.css";
 
 function UserProfile({ user }) {
-  console.log(user);
   const { name, dob, pronounce, email, phone, friend } = user;
   return (
     <div className={styles.rootContainer}>

@@ -20,6 +20,11 @@ function HomepageNavigation() {
               Sign up
             </NavLink>
           </li>
+          <li className={styles.linkContainer}>
+            <NavLink to={"/home/searchuser"} className={linkActive}>
+              Friends
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </div>
