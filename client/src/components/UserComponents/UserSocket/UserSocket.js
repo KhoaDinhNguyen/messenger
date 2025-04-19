@@ -3,6 +3,7 @@ import { Manager } from "socket.io-client";
 import { useDispatch } from "react-redux";
 
 import { notificationListSlice } from "../../../redux/notificationSlice";
+import { userWaitingFriendsSlice } from "../../../redux/userSlice";
 
 function UserSocket({ userid }) {
   const dispatch = useDispatch();
@@ -16,11 +17,21 @@ function UserSocket({ userid }) {
     });
     const socket = manager.socket("/");
     socket.connect();
-    socket.on("notification", (data) => {
+    socket.on("friendRequest", (data) => {
       const { action, notification } = data;
-      console.log(notification);
-      if (action === "friendRequest") {
+      if (action === "create") {
         dispatch(notificationListSlice.actions.addNotification(notification));
+        dispatch(
+          userWaitingFriendsSlice.actions.addItem({
+            friendId: notification.senderId.id,
+            friendName: notification.senderId.name,
+            type: "sender",
+          })
+        );
+      } else if (action === "remove") {
+        const { senderId } = notification;
+        dispatch(notificationListSlice.actions.removeNotification(senderId));
+        dispatch(userWaitingFriendsSlice.actions.removeItem(senderId));
       }
     });
   }, [userid, dispatch]);

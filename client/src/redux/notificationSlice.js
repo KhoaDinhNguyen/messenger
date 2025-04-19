@@ -10,6 +10,11 @@ const notificationListSlice = createSlice({
     addNotification(state, action) {
       return [...state, action.payload];
     },
+    removeNotification(state, action) {
+      return state.filter(
+        (notification) => notification.friendId === action.payload
+      );
+    },
   },
 });
 

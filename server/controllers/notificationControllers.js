@@ -15,8 +15,6 @@ module.exports = {
       senderId: senderId,
     });
 
-    const foundSocket = Sockets.findSocketByUserId(receiverId.id);
-
     try {
       const [response, sender, receiver] = await Promise.all([
         newNotification.save(),
@@ -43,11 +41,13 @@ module.exports = {
       throw err;
     }
 
+    const foundSocket = Sockets.findSocketByUserId(receiverId.id);
+
     if (foundSocket !== null) {
       console.log(foundSocket.socketId);
       try {
-        io.getIO().to(foundSocket.socketId).emit("notification", {
-          action: "friendRequest",
+        io.getIO().to(foundSocket.socketId).emit("friendRequest", {
+          action: "create",
           notification: newNotification,
         });
         console.log(`emit to ${receiverId.id}`);
@@ -66,5 +66,40 @@ module.exports = {
     } catch (err) {
       throw err;
     }
+  },
+  dropNotificationBySenderAndReceiver: async function (
+    { notificationInput },
+    req
+  ) {
+    const { senderId, receiverId } = notificationInput;
+
+    let removedNotification;
+
+    try {
+      removedNotification = await Notification.deleteOne({
+        "senderId.id": senderId,
+        "receiverId.id": receiverId,
+      });
+    } catch (err) {
+      throw err;
+    }
+
+    const foundSocket = Sockets.findSocketByUserId(receiverId);
+
+    if (foundSocket !== null) {
+      console.log(foundSocket.socketId);
+      try {
+        io.getIO()
+          .to(foundSocket.socketId)
+          .emit("friendRequest", {
+            action: "remove",
+            notification: { senderId: senderId },
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    return true;
   },
 };

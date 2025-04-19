@@ -56,6 +56,7 @@ mongoose
       socket.on("disconnect", () => {
         console.log(`${socket.handshake.query.userid} disconnect`);
         Sockets.deleteSocketByUserId(socket.handshake.query.userid);
+        socket.disconnect(true);
       });
     });
   })

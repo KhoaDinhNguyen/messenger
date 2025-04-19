@@ -2,6 +2,11 @@ const mongodb = require("mongodb");
 const bcrypt = require("bcrypt");
 const sgMail = require("@sendgrid/mail");
 const User = require("../models/user");
+
+const {
+  dropNotificationBySenderAndReceiver,
+} = require("./notificationControllers");
+
 const MongoClient = mongodb.MongoClient;
 
 require("dotenv").config();
@@ -155,5 +160,31 @@ module.exports = {
     const foundUsers = await User.find({ $text: { $search: name } });
 
     return foundUsers;
+  },
+  dropWaitingFriend: async function ({ userInput }, req) {
+    const { id, friendId } = userInput;
+
+    try {
+      await Promise.all([
+        User.updateOne(
+          { _id: id },
+          { $pull: { waitingFriends: { friendId: friendId } } }
+        ),
+        ,
+        User.updateOne(
+          { _id: friendId },
+          { $pull: { waitingFriends: { friendId: id } } }
+        ),
+        dropNotificationBySenderAndReceiver({
+          notificationInput: {
+            senderId: id,
+            receiverId: friendId,
+          },
+        }),
+      ]);
+    } catch (err) {
+      throw err;
+    }
+    return true;
   },
 };

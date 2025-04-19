@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 
 import UserItem from "./UserItem/UserItem";
 
-import { dropFriendsById } from "../../../utils/friendsConfigs/sortFriends";
+import { dropUsersById } from "../../../utils/friendsConfigs/sortFriends";
 
 import {
   userFriendsSlice,
@@ -13,8 +13,15 @@ import styles from "./UsersList.module.css";
 
 function UsersList({ isAuth, usersList }) {
   const friendsList = useSelector((state) => state[userFriendsSlice.name]);
+  const waitingFriendsList = useSelector(
+    (state) => state[userWaitingFriendsSlice.name]
+  );
 
-  const newUsersList = dropFriendsById(usersList, friendsList);
+  const newUsersList = dropUsersById(
+    usersList,
+    friendsList,
+    waitingFriendsList
+  );
 
   if (newUsersList.length === 0) {
     return (

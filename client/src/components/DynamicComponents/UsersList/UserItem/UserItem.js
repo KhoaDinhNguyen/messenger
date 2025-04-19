@@ -1,9 +1,12 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
 
 import InputButton from "../../../Utils/InputButton/InputButton";
 
-import { nameSlice } from "../../../../redux/userSlice";
+import {
+  nameSlice,
+  userWaitingFriendsSlice,
+} from "../../../../redux/userSlice";
 
 import userpublic from "../../../../asset/img/userpublic.png";
 
@@ -11,6 +14,8 @@ import styles from "./UserItem.module.css";
 
 function UserItem({ user, isAuth }) {
   const params = useParams();
+  const dispatch = useDispatch();
+
   const senderId = params.userid;
   const senderName = useSelector((state) => state[nameSlice.name]);
 
@@ -69,6 +74,13 @@ function UserItem({ user, isAuth }) {
       .then((jsonResponse) => jsonResponse.json())
       .then((respnose) => {
         console.log(respnose);
+        dispatch(
+          userWaitingFriendsSlice.actions.addItem({
+            friendId: _id,
+            friendName: name,
+            type: "receiver",
+          })
+        );
       })
       .catch((err) => {
         console.log(err);

@@ -1,3 +1,10 @@
+const UserInputTypeFriend = `
+  input UserInputTypeFriend {
+    id: String!
+    friendId: String!
+  }
+`;
+
 const UserInputTypeName = `
   input UserInputTypeName {
     name: String!
@@ -39,7 +46,7 @@ const UserInputTypeLogin = `
 
 const UserWaitingFriendsType = `
   type UserWaitingFriendsType {
-    friendId: UserType
+    friendId: String
     friendName: String
     type: String
   }
@@ -85,9 +92,14 @@ const findUserByName = `
   findUserByName(userInput: UserInputTypeName): [UserType!]
 `;
 
+const dropWaitingFriend = `
+  dropWaitingFriend(userInput: UserInputTypeFriend): Boolean
+`;
+
 module.exports = {
   createUser,
   UserType,
+  UserInputTypeFriend,
   UserWaitingFriendsType,
   UserIdNameType,
   UserInputTypeId,
@@ -98,4 +110,5 @@ module.exports = {
   findUser,
   findUserById,
   findUserByName,
+  dropWaitingFriend,
 };

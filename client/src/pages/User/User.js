@@ -29,9 +29,8 @@ function User() {
             _id
           },
           waitingFriends{
-            id {
-              _id
-            },
+            friendId,
+            friendName,
             type
           }
         }

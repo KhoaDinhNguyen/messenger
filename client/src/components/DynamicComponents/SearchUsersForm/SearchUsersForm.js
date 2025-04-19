@@ -35,15 +35,19 @@ function SearchUsersForm({ setUsersList }) {
     const myHeader = new Headers();
     myHeader.append("Content-type", "application/json");
 
-    const jsonResponse = await fetch(process.env.REACT_APP_SERVER_API, {
-      method: "POST",
-      body: bodyJSON,
-      headers: myHeader,
-    });
+    try {
+      const jsonResponse = await fetch(process.env.REACT_APP_SERVER_API, {
+        method: "POST",
+        body: bodyJSON,
+        headers: myHeader,
+      });
 
-    const response = await jsonResponse.json();
+      const response = await jsonResponse.json();
 
-    setUsersList(response.data.findUserByName);
+      setUsersList(response.data.findUserByName);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

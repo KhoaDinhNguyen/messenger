@@ -27,6 +27,12 @@ const userWaitingFriendsSlice = createSlice({
     init(state, action) {
       return action.payload;
     },
+    addItem(state, action) {
+      return [...state, action.payload];
+    },
+    removeItem(state, action) {
+      return state.filter((friend) => friend.friendId !== action.payload);
+    },
   },
 });
 
