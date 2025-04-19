@@ -1,14 +1,78 @@
+import { useSelector } from "react-redux";
+import { useParams } from "react-router";
+
 import InputButton from "../../../Utils/InputButton/InputButton";
+
+import { nameSlice } from "../../../../redux/userSlice";
 
 import userpublic from "../../../../asset/img/userpublic.png";
 
 import styles from "./UserItem.module.css";
 
 function UserItem({ user, isAuth }) {
-  const { name, profileUrl, pronounce } = user;
+  const params = useParams();
+  const senderId = params.userid;
+  const senderName = useSelector((state) => state[nameSlice.name]);
+
+  const { _id, name, profileUrl, pronounce } = user;
 
   const onClickSeeDetails = () => {
     window.open(profileUrl, "_blank");
+  };
+
+  const onClickAddFriend = () => {
+    const graphQLQuery = {
+      query: `
+      mutation CreateNotification ($senderId: String!, $senderName: String!, $receiverId: String!, $receiverName: String!) {
+        createNotification(notificationInput:{
+          type: "friendRequest", 
+          message:"Hello", 
+          senderId: {
+            id: $senderId, 
+            name: $senderName
+          }
+          receiverId: {
+            id: $receiverId, 
+            name: $receiverName
+          }
+        }) {
+          _id,
+          type,
+          message,
+          senderId {
+            id,
+            name
+          },
+          receiverId {
+            id,
+            name
+          }
+        }
+      }`,
+      variables: {
+        senderId: senderId,
+        senderName: senderName,
+        receiverId: _id,
+        receiverName: name,
+      },
+    };
+
+    const bodyJSON = JSON.stringify(graphQLQuery);
+    const myHeaderes = new Headers();
+    myHeaderes.append("Content-type", "application/json");
+
+    fetch(process.env.REACT_APP_SERVER_API, {
+      method: "POST",
+      body: bodyJSON,
+      headers: myHeaderes,
+    })
+      .then((jsonResponse) => jsonResponse.json())
+      .then((respnose) => {
+        console.log(respnose);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -34,6 +98,7 @@ function UserItem({ user, isAuth }) {
             valueButton={"Add friend"}
             id={"addFriend"}
             inputContainer={styles.addFriendInput}
+            onClickHandler={onClickAddFriend}
           />
         )}
       </div>

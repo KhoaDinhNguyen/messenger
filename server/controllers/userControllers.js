@@ -56,14 +56,18 @@ module.exports = {
       phone: phoneSave,
       email: emailSave,
       friends: [],
+      waitingFriends: [],
       profileUrl: "",
     });
 
     try {
       const response = await newUser.save();
+
       newUser.profileUrl = `${
         process.env.FRONTEND_API
       }/userpublic?userid=${response._id.toString()}`;
+      newUser.friends.push(response._id);
+
       await newUser.save();
     } catch (err) {
       throw err;
@@ -150,7 +154,6 @@ module.exports = {
     const { name } = userInput;
     const foundUsers = await User.find({ $text: { $search: name } });
 
-    console.log(foundUsers);
     return foundUsers;
   },
 };

@@ -15,6 +15,13 @@ const userSchema = new Schema({
   email: String,
   phone: String,
   friends: [{ type: Schema.ObjectId, ref: "User" }],
+  waitingFriends: [
+    {
+      friendId: { type: Schema.ObjectId, ref: "User" },
+      friendName: { type: String, require: true },
+      type: { type: String, require: true },
+    },
+  ],
   profileUrl: {
     type: String,
     require: true,

@@ -44,8 +44,19 @@ const port = process.env.PORT || 4000;
 mongoose
   .connect(process.env.DATABASE_CONNECTION)
   .then((response) => {
-    app.listen(port, () => {
+    const server = app.listen(port, () => {
       console.log(`Server at ${port}`);
+    });
+    const io = require("./socket").init(server);
+    const Sockets = require("./models/socket");
+    io.on("connect", (socket) => {
+      console.log(`${socket.handshake.query.userid} connect`);
+      Sockets.insertSocket(socket.handshake.query.userid, socket.id);
+      //Sockets.findSocketByUserId("");
+      socket.on("disconnect", () => {
+        console.log(`${socket.handshake.query.userid} disconnect`);
+        Sockets.deleteSocketByUserId(socket.handshake.query.userid);
+      });
     });
   })
   .catch((err) => {

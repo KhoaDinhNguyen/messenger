@@ -1,5 +1,15 @@
 const { buildSchema } = require("graphql");
 const userRoutes = require("../schema/userSchema");
+const notificationRouts = require("../schema/notificationSchema");
+
+const { UserWaitingFriendsType, UserIdNameType, UserInputTypeIdName } =
+  userRoutes;
+const {
+  notificationInputType,
+  notificationType,
+  createNotification,
+  getNotificationsById,
+} = notificationRouts;
 
 const schema = buildSchema(`
   ${userRoutes.UserType}
@@ -7,9 +17,17 @@ const schema = buildSchema(`
   ${userRoutes.UserInputTypeLogin}
   ${userRoutes.UserInputTypeId}
   ${userRoutes.UserInputTypeName}
+
+  ${UserInputTypeIdName}
+  ${UserIdNameType}
+  ${UserWaitingFriendsType}
+
+  ${notificationInputType}
+  ${notificationType}
   
   type RootMutation {
     ${userRoutes.createUser}
+    ${createNotification}
   }
 
   type RootQuery {
@@ -17,6 +35,7 @@ const schema = buildSchema(`
     ${userRoutes.findUser}
     ${userRoutes.findUserById}
     ${userRoutes.findUserByName}
+    ${getNotificationsById}
   }
   schema {
     query: RootQuery

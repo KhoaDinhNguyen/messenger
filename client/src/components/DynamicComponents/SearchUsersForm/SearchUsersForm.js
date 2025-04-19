@@ -22,7 +22,7 @@ function SearchUsersForm({ setUsersList }) {
             _id,
             name,
             profileUrl,
-            pronounce
+            pronounce,
           }
         }
       `,
