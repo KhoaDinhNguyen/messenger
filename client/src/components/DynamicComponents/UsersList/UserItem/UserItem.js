@@ -28,18 +28,13 @@ function UserItem({ user, isAuth }) {
   const onClickAddFriend = () => {
     const graphQLQuery = {
       query: `
-      mutation CreateNotification ($senderId: String!, $senderName: String!, $receiverId: String!, $receiverName: String!) {
-        createNotification(notificationInput:{
-          type: "friendRequest", 
-          message:"Hello", 
-          senderId: {
-            id: $senderId, 
-            name: $senderName
-          }
-          receiverId: {
-            id: $receiverId, 
-            name: $receiverName
-          }
+      mutation CreateFriendRequest ($senderId: String!, $senderName: String!, $receiverId: String!, $receiverName: String!) {
+        createFriendRequest(userInput:{
+          message:"Hello",
+          senderId: $senderId,
+          senderName: $senderName,
+          receiverId: $receiverId,
+          receiverName: $receiverName,
         }) {
           _id,
           type,

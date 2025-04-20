@@ -8,6 +8,10 @@ const {
   UserInputTypeIdName,
   dropWaitingFriend,
   UserInputTypeFriend,
+  UserInputTypeFriendRequest,
+  declineFriendRequest,
+  createFriendRequest,
+  dropFriendRequest,
 } = userRoutes;
 
 const {
@@ -30,7 +34,8 @@ const schema = buildSchema(`
   ${UserInputTypeIdName}
   ${UserIdNameType}
   ${UserWaitingFriendsType}
-
+  ${UserInputTypeFriendRequest}
+  
   ${notificationInputType}
   ${notificationType}
   ${NotificationInputSenderAndReceiver}
@@ -40,6 +45,9 @@ const schema = buildSchema(`
     ${createNotification}
     ${dropNotificationBySenderAndReceiver}
     ${dropWaitingFriend}
+    ${declineFriendRequest}
+    ${createFriendRequest}
+    ${dropFriendRequest}
   }
 
   type RootQuery {

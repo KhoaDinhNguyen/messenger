@@ -9,6 +9,7 @@ function UserSocket({ userid }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log("Call");
     const manager = new Manager(process.env.REACT_APP_SERVER_API, {
       autoConnect: true,
       query: {
@@ -18,8 +19,10 @@ function UserSocket({ userid }) {
     const socket = manager.socket("/");
     socket.connect();
     socket.on("friendRequest", (data) => {
+      console.log(data);
       const { action, notification } = data;
       if (action === "create") {
+        console.log(notification);
         dispatch(notificationListSlice.actions.addNotification(notification));
         dispatch(
           userWaitingFriendsSlice.actions.addItem({
@@ -32,6 +35,12 @@ function UserSocket({ userid }) {
         const { senderId } = notification;
         dispatch(notificationListSlice.actions.removeNotification(senderId));
         dispatch(userWaitingFriendsSlice.actions.removeItem(senderId));
+      } else if (action === "decline") {
+        console.log(notification);
+        dispatch(notificationListSlice.actions.addNotification(notification));
+        dispatch(
+          userWaitingFriendsSlice.actions.removeItem(notification.senderId.id)
+        );
       }
     });
   }, [userid, dispatch]);

@@ -19,9 +19,9 @@ class Sockets {
     this._sockets.push(new Socket(userId, socketId));
   }
   findSocketByUserId(userId) {
-    this._sockets.forEach((socket) => {
-      console.log(socket);
-    });
+    // this._sockets.forEach((socket) => {
+    //   console.log(socket);
+    // });
     const foundSocket = this._sockets.filter(
       (socket) => socket.userId === userId
     );

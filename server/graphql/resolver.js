@@ -7,6 +7,9 @@ const {
   findUserById,
   findUserByName,
   dropWaitingFriend,
+  declineFriendRequest,
+  createFriendRequest,
+  dropFriendRequest,
 } = userControllers;
 const { createNotification, getNotificationsById } = notificationControllers;
 
@@ -18,6 +21,9 @@ module.exports = {
   findUserByName,
   createNotification,
   getNotificationsById,
+  declineFriendRequest,
+  createFriendRequest,
+  dropFriendRequest,
   hello() {
     return "Hello world";
   },

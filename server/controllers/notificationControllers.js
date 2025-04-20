@@ -6,55 +6,23 @@ const Sockets = require("../models/socket");
 
 module.exports = {
   createNotification: async function ({ notificationInput }, req) {
-    const { type, message, receiverId, senderId } = notificationInput;
-
+    const { type, message, receiverId, senderId, receiverName, senderName } =
+      notificationInput;
     const newNotification = new Notification({
       type: type,
       message: message,
-      receiverId: receiverId,
-      senderId: senderId,
+      receiverId: { id: receiverId, name: receiverName },
+      senderId: { id: senderId, name: senderName },
     });
 
     try {
-      const [response, sender, receiver] = await Promise.all([
-        newNotification.save(),
-        User.findById(senderId.id),
-        User.findById(receiverId.id),
-      ]);
-      newNotification._id = response._id;
-      sender.waitingFriends.push({
-        friendId: receiverId.id,
-        friendName: receiver.name,
-        type: "receiver",
-      });
-      receiver.waitingFriends.push({
-        friendId: senderId.id,
-        friendName: sender.name,
-        type: "sender",
-      });
-      await Promise.all([
-        newNotification.save(),
-        sender.save(),
-        receiver.save(),
-      ]);
+      await newNotification.save();
+      newNotification._id = newNotification._id;
+      await newNotification.save();
     } catch (err) {
       throw err;
     }
 
-    const foundSocket = Sockets.findSocketByUserId(receiverId.id);
-
-    if (foundSocket !== null) {
-      console.log(foundSocket.socketId);
-      try {
-        io.getIO().to(foundSocket.socketId).emit("friendRequest", {
-          action: "create",
-          notification: newNotification,
-        });
-        console.log(`emit to ${receiverId.id}`);
-      } catch (err) {
-        console.log(err);
-      }
-    }
     return newNotification;
   },
   getNotificationsById: async function ({ userInput }, req) {
@@ -82,22 +50,6 @@ module.exports = {
       });
     } catch (err) {
       throw err;
-    }
-
-    const foundSocket = Sockets.findSocketByUserId(receiverId);
-
-    if (foundSocket !== null) {
-      console.log(foundSocket.socketId);
-      try {
-        io.getIO()
-          .to(foundSocket.socketId)
-          .emit("friendRequest", {
-            action: "remove",
-            notification: { senderId: senderId },
-          });
-      } catch (err) {
-        console.log(err);
-      }
     }
 
     return true;

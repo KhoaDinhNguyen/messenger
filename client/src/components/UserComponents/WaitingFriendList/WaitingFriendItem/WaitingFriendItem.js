@@ -20,12 +20,15 @@ function WaitingFriendItem({ friend }) {
   const onClickRemoveFriendRequest = async () => {
     const graphQLQuery = {
       query: `
-        mutation DropWaitingFriend($id: String!, $friendId: String!){
-          dropWaitingFriend(userInput: {id: $id, friendId:$friendId})
+        mutation DropFriendRequest($senderId: String!, $receiverId: String!){
+          dropFriendRequest(userInput: {
+            senderId: $senderId
+            receiverId: $receiverId
+          })
         }`,
       variables: {
-        id: params.userid,
-        friendId: friendId,
+        senderId: params.userid,
+        receiverId: friendId,
       },
     };
 

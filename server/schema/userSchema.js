@@ -1,7 +1,19 @@
+const UserInputTypeFriendRequest = `
+  input UserInputTypeFriendRequest {
+    senderId: String!
+    receiverId: String!
+    senderName: String
+    receiverName: String
+    message: String
+  }
+
+`;
+
 const UserInputTypeFriend = `
   input UserInputTypeFriend {
     id: String!
     friendId: String!
+    isResponse: Boolean!
   }
 `;
 
@@ -96,6 +108,17 @@ const dropWaitingFriend = `
   dropWaitingFriend(userInput: UserInputTypeFriend): Boolean
 `;
 
+const declineFriendRequest = `
+  declineFriendRequest(userInput: UserInputTypeFriendRequest): notificationType
+`;
+
+const createFriendRequest = `
+  createFriendRequest(userInput: UserInputTypeFriendRequest): notificationType
+`;
+
+const dropFriendRequest = `
+  dropFriendRequest(userInput: UserInputTypeFriendRequest): Boolean
+`;
 module.exports = {
   createUser,
   UserType,
@@ -107,8 +130,12 @@ module.exports = {
   UserInputTypeLogin,
   UserInputTypeName,
   UserInputTypeIdName,
+  UserInputTypeFriendRequest,
   findUser,
   findUserById,
   findUserByName,
   dropWaitingFriend,
+  declineFriendRequest,
+  createFriendRequest,
+  dropFriendRequest,
 };

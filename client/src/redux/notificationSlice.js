@@ -11,9 +11,11 @@ const notificationListSlice = createSlice({
       return [...state, action.payload];
     },
     removeNotification(state, action) {
-      return state.filter(
-        (notification) => notification.friendId === action.payload
-      );
+      return state.filter((notification) => {
+        console.log(action.payload);
+        console.log(notification.senderId.id !== action.payload);
+        return notification.senderId.id !== action.payload;
+      });
     },
   },
 });

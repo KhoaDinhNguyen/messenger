@@ -3,9 +3,18 @@ const bcrypt = require("bcrypt");
 const sgMail = require("@sendgrid/mail");
 const User = require("../models/user");
 
+const io = require("../socket");
+const Sockets = require("../models/socket");
+
 const {
   dropNotificationBySenderAndReceiver,
+  createNotification,
 } = require("./notificationControllers");
+const {
+  createFriendRequest,
+  dropFriendRequest,
+} = require("../schema/userSchema");
+const notification = require("../models/notification");
 
 const MongoClient = mongodb.MongoClient;
 
@@ -170,7 +179,6 @@ module.exports = {
           { _id: id },
           { $pull: { waitingFriends: { friendId: friendId } } }
         ),
-        ,
         User.updateOne(
           { _id: friendId },
           { $pull: { waitingFriends: { friendId: id } } }
@@ -185,6 +193,126 @@ module.exports = {
     } catch (err) {
       throw err;
     }
+
     return true;
+  },
+  dropFriendRequest: async function ({ userInput, req }) {
+    const { senderId, receiverId } = userInput;
+
+    try {
+      await this.dropWaitingFriend({
+        userInput: { id: senderId, friendId: receiverId },
+      });
+    } catch (err) {
+      throw err;
+    }
+
+    const foundSocket = Sockets.findSocketByUserId(receiverId);
+
+    if (foundSocket !== null) {
+      try {
+        io.getIO()
+          .to(foundSocket.socketId)
+          .emit("friendRequest", {
+            action: "remove",
+            notification: { senderId: senderId },
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    return true;
+  },
+  createFriendRequest: async function ({ userInput, req }) {
+    const { senderId, receiverId, senderName, receiverName, message } =
+      userInput;
+
+    try {
+      const [newNotification, ,] = await Promise.all([
+        createNotification({
+          notificationInput: {
+            type: "friendRequest",
+            message: message,
+            senderId: senderId,
+            receiverId: receiverId,
+            senderName: senderName,
+            receiverName: receiverName,
+          },
+        }),
+        User.findByIdAndUpdate(senderId, {
+          $push: {
+            waitingFriends: {
+              friendId: receiverId,
+              friendName: receiverName,
+              type: "receiver",
+            },
+          },
+        }),
+        User.findByIdAndUpdate(receiverId, {
+          $push: {
+            waitingFriends: {
+              friendId: senderId,
+              friendName: senderName,
+              type: "sender",
+            },
+          },
+        }),
+      ]);
+
+      const foundSocket = Sockets.findSocketByUserId(receiverId);
+      if (foundSocket !== null) {
+        try {
+          io.getIO().to(foundSocket.socketId).emit("friendRequest", {
+            action: "create",
+            notification: newNotification,
+          });
+          console.log(`emit to ${receiverId}`);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      return newNotification;
+    } catch (err) {
+      throw err;
+    }
+  },
+  declineFriendRequest: async function ({ userInput }, req) {
+    const { senderId, receiverId, senderName, receiverName, message } =
+      userInput;
+
+    try {
+      const [, newNotification] = await Promise.all([
+        this.dropWaitingFriend({
+          userInput: {
+            id: receiverId,
+            friendId: senderId,
+          },
+        }),
+        createNotification({
+          notificationInput: {
+            type: "declineFriendRequest",
+            message: message,
+            senderId: senderId,
+            receiverId: receiverId,
+            senderName: senderName,
+            receiverName: receiverName,
+          },
+        }),
+      ]);
+
+      console.log(receiverId);
+      const foundSocket = Sockets.findSocketByUserId(receiverId);
+      if (foundSocket !== null) {
+        io.getIO().to(foundSocket.socketId).emit("friendRequest", {
+          action: "decline",
+          notification: newNotification,
+        });
+        console.log(`emit to ${receiverId}`);
+      }
+      return newNotification;
+    } catch (err) {
+      throw err;
+    }
   },
 };
