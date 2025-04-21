@@ -1,5 +1,7 @@
+import { NavLink } from "react-router";
+
 function Root() {
-  return <p>Hey</p>;
+  return <NavLink to="home">Login</NavLink>;
 }
 
 export default Root;
