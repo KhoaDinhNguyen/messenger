@@ -1,7 +1,13 @@
-import { NavLink } from "react-router";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 function Root() {
-  return <NavLink to="home">Login</NavLink>;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate("home");
+  });
+  return <></>;
 }
 
 export default Root;

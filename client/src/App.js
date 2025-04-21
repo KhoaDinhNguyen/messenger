@@ -20,6 +20,7 @@ import ForgetPassword from "./pages/Auth/ForgetPassword/ForgetPassword";
 
 import User from "./pages/User/User";
 import UserNotification from "./pages/User/UserNotification/UserNotification";
+import UserMessenger from "./pages/User/UserChat/UserMessenger";
 
 import SearchUsers from "./pages/DynamticPages/SearchUsers/SearchUsers";
 import UserPublic from "./pages/DynamticPages/UserPublic/UserPublic";
@@ -43,6 +44,7 @@ const router = createBrowserRouter(
       <Route path="user/:userid" element={<User />}>
         <Route path="searchuser" element={<SearchUsers isAuth={true} />} />
         <Route path="notification" element={<UserNotification />} />
+        <Route path="messenger" element={<UserMessenger />} />
       </Route>
       <Route path="signupsuccess" element={<SignUpSuccess />} />
       <Route path="userpublic" element={<UserPublic />} />

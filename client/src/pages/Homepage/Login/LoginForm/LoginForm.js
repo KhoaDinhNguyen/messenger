@@ -37,7 +37,8 @@ function LoginForm() {
             phone,
             dob,
             friends{
-              username
+              friendId
+              friendName
             }
           }
         }`,
