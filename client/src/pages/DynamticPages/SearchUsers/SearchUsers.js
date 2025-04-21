@@ -8,12 +8,13 @@ import styles from "./SearchUsers.module.css";
 
 function SearchUsers({ isAuth }) {
   const [usersList, setUsersList] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className={styles.rootContainer}>
-      <SearchUsersForm setUsersList={setUsersList} />
+      <SearchUsersForm setUsersList={setUsersList} setLoading={setLoading} />
       {isAuth && <WaitingFriendList />}
-      <UsersList usersList={usersList} isAuth={isAuth} />
+      <UsersList usersList={usersList} isAuth={isAuth} loading={loading} />
     </div>
   );
 }

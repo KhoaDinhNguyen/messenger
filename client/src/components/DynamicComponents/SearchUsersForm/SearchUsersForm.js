@@ -5,7 +5,7 @@ import InputButton from "../../Utils/InputButton/InputButton";
 
 import styles from "./SearchUsersForm.module.css";
 
-function SearchUsersForm({ setUsersList }) {
+function SearchUsersForm({ setUsersList, setLoading }) {
   const [searchString, setSearchString] = useState("");
 
   const onChangSearchString = (event) => {
@@ -14,7 +14,7 @@ function SearchUsersForm({ setUsersList }) {
 
   const onSubmitForm = async (event) => {
     event.preventDefault();
-
+    setLoading(true);
     const graphQLQuery = {
       query: `
         query FindUserByName($name: String!) {
@@ -36,15 +36,18 @@ function SearchUsersForm({ setUsersList }) {
     myHeader.append("Content-type", "application/json");
 
     try {
-      const jsonResponse = await fetch(process.env.REACT_APP_SERVER_API, {
-        method: "POST",
-        body: bodyJSON,
-        headers: myHeader,
-      });
+      setTimeout(async () => {
+        const jsonResponse = await fetch(process.env.REACT_APP_SERVER_API, {
+          method: "POST",
+          body: bodyJSON,
+          headers: myHeader,
+        });
 
-      const response = await jsonResponse.json();
+        const response = await jsonResponse.json();
 
-      setUsersList(response.data.findUserByName);
+        setUsersList(response.data.findUserByName);
+        setLoading(false);
+      }, 5000);
     } catch (err) {
       console.log(err);
     }
