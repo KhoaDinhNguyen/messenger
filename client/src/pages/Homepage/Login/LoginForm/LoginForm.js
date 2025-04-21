@@ -60,7 +60,6 @@ function LoginForm() {
       });
 
       const response = await jsonResponse.json();
-      console.log(response);
       if (response.data === null) {
         const errorArray = response.errors;
         //fix for many errors

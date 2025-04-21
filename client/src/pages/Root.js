@@ -1,5 +1,13 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+
 function Root() {
-  return <p>Hey</p>;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate("home");
+  });
+  return <></>;
 }
 
 export default Root;

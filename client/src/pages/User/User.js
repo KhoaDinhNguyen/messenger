@@ -57,8 +57,6 @@ function User() {
         .then((response) => {
           const { friends, waitingFriends, name } = response.data.findUserById;
           // console.log(response);
-          console.log(response.data.findUserById);
-          console.log(friends);
           dispatch(userFriendsSlice.actions.init(friends));
           dispatch(userWaitingFriendsSlice.actions.init(waitingFriends));
           dispatch(nameSlice.actions.init(name));
@@ -118,8 +116,6 @@ function User() {
 
     findUserById();
     getNotificationById();
-
-    console.log("USER");
   }, [dispatch, params.userid]);
 
   return (

@@ -19,6 +19,11 @@ function UserNavigation() {
       <nav>
         <ul className={styles.linkContainers}>
           <li className={styles.linkContainer}>
+            <NavLink to={"messenger"} className={linkActive}>
+              Messenger
+            </NavLink>
+          </li>
+          <li className={styles.linkContainer}>
             <NavLink to={"searchuser"} className={linkActive}>
               Friends
             </NavLink>

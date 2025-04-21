@@ -24,9 +24,6 @@ function UserPublic({ isAuth }) {
             pronounce,
             email,
             phone,
-            friends{
-              username
-            }
           }
         }`,
         variables: {

@@ -1,0 +1,11 @@
+.rootContainer {
+  padding: 50px;
+}
+
+.friendList {
+  list-style-type: none;
+}
+
+.friendList li:last-child {
+  border-bottom: 1px solid grey;
+}
