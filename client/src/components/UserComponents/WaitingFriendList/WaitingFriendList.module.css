@@ -1,0 +1,10 @@
+.rootContainer {
+  margin-top: 20px;
+  background-color: #d7e3fc;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.listContainer {
+  list-style-type: none;
+}

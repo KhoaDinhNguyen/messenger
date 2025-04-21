@@ -237,7 +237,6 @@ function SignUpForm() {
                 <InputText
                   id={"middleNameSignUp"}
                   placeholder={"Middle name (optional)"}
-                  minLength={3}
                   rootContainer={styles.textContainer}
                   inputContainer={styles.textInput}
                   valueText={middleName}

@@ -1,0 +1,64 @@
+.rootContainer {
+  display: flex;
+  align-items: center;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 20px 30px;
+  margin-top: 20px;
+}
+
+.image {
+  width: 64px;
+  height: auto;
+}
+
+.textContainer {
+  margin-left: 20px;
+  width: max-content;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.pronounce {
+  color: #6c757d;
+}
+
+.buttonsContainer {
+  display: flex;
+  margin-left: 50px;
+}
+
+.seeProfileInput {
+  padding: 10px 20px;
+  margin-left: 10px;
+  font-size: 14px;
+  border: transparent;
+  border-radius: 10px;
+  font-weight: 700;
+  background-color: #ffb4a2;
+  color: white;
+  cursor: pointer;
+}
+
+.seeProfileInput:hover {
+  background-color: #e5989b;
+}
+
+.addFriendInput {
+  padding: 10px 20px;
+  margin-left: 10px;
+  font-size: 14px;
+  border: transparent;
+  border-radius: 10px;
+  font-weight: 700;
+  background-color: #02c39a;
+  color: white;
+  cursor: pointer;
+}
+
+.addFriendInput:hover {
+  background-color: #00a896;
+}

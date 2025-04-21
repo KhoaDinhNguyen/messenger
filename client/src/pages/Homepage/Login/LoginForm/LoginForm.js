@@ -30,7 +30,7 @@ function LoginForm() {
     const graphQLQuery = {
       query: `query FindUser($username: String!, $password: String!){
           findUser(userInput: {username: $username, password: $password}) {
-            username,
+            _id,
             gender,
             pronounce,
             name,
@@ -68,7 +68,8 @@ function LoginForm() {
         throw error;
       } else {
         const { findUser } = response.data;
-        navigate(`/user/${findUser.username}`);
+        const { _id } = findUser;
+        navigate(`/user/${_id}`);
       }
     } catch (err) {
       alert(err);

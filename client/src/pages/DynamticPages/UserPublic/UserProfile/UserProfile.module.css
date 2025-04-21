@@ -1,0 +1,37 @@
+.rootContainer {
+  display: flex;
+  border: 3px solid black;
+  border-radius: 10px;
+  padding: 50px;
+  background-color: white;
+  margin-top: 100px;
+}
+
+.image {
+  width: 128px;
+  height: auto;
+}
+
+.textContainer,
+.imageContainer {
+  padding: 20px;
+}
+
+.name {
+  font-size: 32px;
+  font-weight: 500;
+  margin-bottom: -5px;
+}
+
+.pronounce {
+  color: #6c757d;
+}
+
+.subInfoContainers {
+  margin-top: 20px;
+}
+
+.subInfoContainer {
+  display: grid;
+  grid-template-columns: 100px max-content;
+}

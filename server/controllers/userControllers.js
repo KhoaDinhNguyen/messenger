@@ -1,7 +1,17 @@
 const mongodb = require("mongodb");
 const bcrypt = require("bcrypt");
+const mongoose = require("mongoose");
 const sgMail = require("@sendgrid/mail");
 const User = require("../models/user");
+
+const io = require("../socket");
+const Sockets = require("../models/socket");
+
+const {
+  dropNotificationBySenderAndReceiver,
+  createNotification,
+} = require("./notificationControllers");
+
 const MongoClient = mongodb.MongoClient;
 
 require("dotenv").config();
@@ -56,9 +66,18 @@ module.exports = {
       phone: phoneSave,
       email: emailSave,
       friends: [],
+      waitingFriends: [],
+      profileUrl: "",
     });
 
     try {
+      const response = await newUser.save();
+
+      newUser.profileUrl = `${
+        process.env.FRONTEND_API
+      }/userpublic?userid=${response._id.toString()}`;
+      newUser.friends.push({ friendId: response._id, friendName: name });
+
       await newUser.save();
     } catch (err) {
       throw err;
@@ -84,12 +103,11 @@ module.exports = {
         });
     }
 
-    newUser.password = "";
-
     return newUser;
   },
 
   findUser: async function ({ userInput }, req) {
+    // TODO: Change mongoose
     const { username, password } = userInput;
 
     let client;
@@ -127,7 +145,254 @@ module.exports = {
       throw error;
     }
 
-    foundUser.password = "";
     return foundUser;
+  },
+  findUserById: async function ({ userInput }, req) {
+    const { id } = userInput;
+
+    const foundUser = await User.findById(id);
+
+    if (foundUser === null) {
+      const error = new Error("User does not exist");
+      error.status = 400;
+      throw error;
+    }
+
+    return foundUser;
+  },
+  findUserByName: async function ({ userInput }, req) {
+    const { name } = userInput;
+    const foundUsers = await User.find({ $text: { $search: name } });
+
+    return foundUsers;
+  },
+  dropWaitingFriend: async function ({ userInput }, req) {
+    const { id, friendId } = userInput;
+
+    console.log(id);
+    console.log(friendId);
+    try {
+      await Promise.all([
+        User.updateOne(
+          { _id: id },
+          { $pull: { waitingFriends: { friendId: friendId } } }
+        ),
+        User.updateOne(
+          { _id: friendId },
+          { $pull: { waitingFriends: { friendId: id } } }
+        ),
+        dropNotificationBySenderAndReceiver({
+          notificationInput: {
+            senderId: id,
+            receiverId: friendId,
+            type: "friendRequest",
+          },
+        }),
+      ]);
+    } catch (err) {
+      throw err;
+    }
+
+    return true;
+  },
+  dropFriendRequest: async function ({ userInput, req }) {
+    const { senderId, receiverId } = userInput;
+
+    try {
+      await this.dropWaitingFriend({
+        userInput: { id: senderId, friendId: receiverId },
+      });
+    } catch (err) {
+      throw err;
+    }
+
+    const foundSocket = Sockets.findSocketByUserId(receiverId);
+
+    if (foundSocket !== null) {
+      try {
+        io.getIO()
+          .to(foundSocket.socketId)
+          .emit("friendRequest", {
+            action: "remove",
+            notification: { senderId: senderId },
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    return true;
+  },
+  createFriendRequest: async function ({ userInput, req }) {
+    const { senderId, receiverId, senderName, receiverName, message } =
+      userInput;
+
+    try {
+      const [newNotification, ,] = await Promise.all([
+        createNotification({
+          notificationInput: {
+            type: "friendRequest",
+            message: message,
+            senderId: senderId,
+            receiverId: receiverId,
+            senderName: senderName,
+            receiverName: receiverName,
+          },
+        }),
+        User.findByIdAndUpdate(senderId, {
+          $push: {
+            waitingFriends: {
+              friendId: receiverId,
+              friendName: receiverName,
+              type: "receiver",
+            },
+          },
+        }),
+        User.findByIdAndUpdate(receiverId, {
+          $push: {
+            waitingFriends: {
+              friendId: senderId,
+              friendName: senderName,
+              type: "sender",
+            },
+          },
+        }),
+        dropNotificationBySenderAndReceiver({
+          notificationInput: {
+            senderId: senderId,
+            receiverId: receiverId,
+            type: "declineFriendRequest",
+          },
+        }),
+      ]);
+
+      const foundSocket = Sockets.findSocketByUserId(receiverId);
+      if (foundSocket !== null) {
+        try {
+          io.getIO().to(foundSocket.socketId).emit("friendRequest", {
+            action: "create",
+            notification: newNotification,
+          });
+          console.log(`emit to ${receiverId}`);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      return newNotification;
+    } catch (err) {
+      throw err;
+    }
+  },
+  declineFriendRequest: async function ({ userInput }, req) {
+    const { senderId, receiverId, senderName, receiverName, message } =
+      userInput;
+
+    try {
+      const [, newNotification] = await Promise.all([
+        this.dropWaitingFriend({
+          userInput: {
+            id: receiverId,
+            friendId: senderId,
+          },
+        }),
+        createNotification({
+          notificationInput: {
+            type: "declineFriendRequest",
+            message: message,
+            senderId: senderId,
+            receiverId: receiverId,
+            senderName: senderName,
+            receiverName: receiverName,
+          },
+        }),
+      ]);
+
+      console.log(receiverId);
+      const foundSocket = Sockets.findSocketByUserId(receiverId);
+      if (foundSocket !== null) {
+        io.getIO().to(foundSocket.socketId).emit("friendRequest", {
+          action: "decline",
+          notification: newNotification,
+        });
+        console.log(`emit to ${receiverId}`);
+      }
+      return newNotification;
+    } catch (err) {
+      throw err;
+    }
+  },
+  acceptFriendRequest: async function ({ userInput }, req) {
+    const { senderId, receiverId, senderName, receiverName, message } =
+      userInput;
+
+    console.log(senderName);
+
+    // const senderObjectId = mongoose.Types.ObjectId(senderId);
+    // const receiverObjectId = mongoose.Types.ObjectId(receiverId);
+
+    console.log(senderId);
+    try {
+      const [, newNotification] = await Promise.all([
+        this.dropWaitingFriend({
+          userInput: {
+            id: receiverId,
+            friendId: senderId,
+          },
+        }),
+        createNotification({
+          notificationInput: {
+            type: "acceptFriendRequest",
+            message: message,
+            senderId: senderId,
+            receiverId: receiverId,
+            senderName: senderName,
+            receiverName: receiverName,
+          },
+        }),
+        dropNotificationBySenderAndReceiver({
+          notificationInput: {
+            senderId: receiverId,
+            receiverId: senderId,
+            type: "declineFriendRequest",
+          },
+        }),
+        dropNotificationBySenderAndReceiver({
+          notificationInput: {
+            senderId: senderId,
+            receiverId: receiverId,
+            type: "declineFriendRequest",
+          },
+        }),
+        User.findByIdAndUpdate(senderId, {
+          $push: {
+            friends: {
+              friendId: receiverId,
+              friendName: receiverName,
+            },
+          },
+        }),
+        User.findByIdAndUpdate(receiverId, {
+          $push: {
+            friends: {
+              friendId: senderId,
+              friendName: senderName,
+            },
+          },
+        }),
+      ]);
+
+      console.log(receiverId);
+      const foundSocket = Sockets.findSocketByUserId(receiverId);
+      if (foundSocket !== null) {
+        io.getIO().to(foundSocket.socketId).emit("friendRequest", {
+          action: "accept",
+          notification: newNotification,
+        });
+        console.log(`emit to ${receiverId}`);
+      }
+      return newNotification;
+    } catch (err) {
+      throw err;
+    }
   },
 };

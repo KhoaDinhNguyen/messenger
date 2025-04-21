@@ -1,0 +1,9 @@
+.rootContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.notificationsContainer {
+  margin-top: 50px;
+}

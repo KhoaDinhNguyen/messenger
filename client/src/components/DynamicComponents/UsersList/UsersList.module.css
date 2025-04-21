@@ -1,0 +1,13 @@
+.rootContainer {
+  margin-top: 10px;
+}
+
+.listContainer {
+  list-style-type: none;
+}
+
+.text {
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: 500;
+}

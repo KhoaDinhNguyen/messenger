@@ -14,7 +14,23 @@ const userSchema = new Schema({
   dob: String,
   email: String,
   phone: String,
-  friends: [{ type: Schema.ObjectId, ref: "User" }],
+  friends: [
+    {
+      friendId: { type: Schema.ObjectId, ref: "User" },
+      friendName: { type: String, require: true },
+    },
+  ],
+  waitingFriends: [
+    {
+      friendId: { type: Schema.ObjectId, ref: "User" },
+      friendName: { type: String, require: true },
+      type: { type: String, require: true },
+    },
+  ],
+  profileUrl: {
+    type: String,
+    require: true,
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);

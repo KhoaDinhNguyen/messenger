@@ -1,0 +1,69 @@
+.infoContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 20px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
+.imageContainer {
+  margin-right: 20px;
+}
+
+.image {
+  width: 64px;
+}
+
+.textContainer {
+  max-width: 300px;
+}
+
+.sender {
+  font-size: 18px;
+}
+
+.message {
+  font-weight: 300;
+}
+
+.buttonsContainer {
+  margin-left: 50px;
+  display: flex;
+}
+
+.declineInput {
+  padding: 10px 20px;
+  margin-left: 10px;
+  font-size: 14px;
+  border: transparent;
+  border-radius: 10px;
+  font-weight: 700;
+  background-color: #ffb4a2;
+  color: white;
+  cursor: pointer;
+}
+
+.declineInput:hover {
+  background-color: #e5989b;
+}
+
+.acceptInput {
+  padding: 10px 20px;
+  margin-left: 10px;
+  font-size: 14px;
+  border: transparent;
+  border-radius: 10px;
+  font-weight: 700;
+  background-color: #02c39a;
+  color: white;
+  cursor: pointer;
+}
+
+.acceptInput:hover {
+  background-color: #00a896;
+}
