@@ -381,7 +381,7 @@ module.exports = {
         }),
       ]);
 
-      console.log(receiverId);
+      //console.log(receiverId);
       const foundSocket = Sockets.findSocketByUserId(receiverId);
       if (foundSocket !== null) {
         io.getIO().to(foundSocket.socketId).emit("friendRequest", {
