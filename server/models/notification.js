@@ -13,26 +13,22 @@ const notificationSchema = new Schema(
       require: true,
     },
     senderId: {
-      id: {
-        type: Schema.ObjectId,
-        ref: "User",
-        require: true,
-      },
-      name: {
-        type: String,
-        require: true,
-      },
+      type: Schema.ObjectId,
+      ref: "User",
+      require: true,
+    },
+    senderName: {
+      type: String,
+      require: true,
     },
     receiverId: {
-      id: {
-        type: Schema.ObjectId,
-        ref: "User",
-        require: true,
-      },
-      name: {
-        type: String,
-        require: true,
-      },
+      type: Schema.ObjectId,
+      ref: "User",
+      require: true,
+    },
+    receiverName: {
+      type: String,
+      require: true,
     },
   },
   { collection: "notifications" }

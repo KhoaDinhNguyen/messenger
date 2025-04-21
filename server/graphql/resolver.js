@@ -6,7 +6,6 @@ const {
   findUser,
   findUserById,
   findUserByName,
-  dropWaitingFriend,
   declineFriendRequest,
   createFriendRequest,
   dropFriendRequest,
@@ -21,7 +20,6 @@ const {
 
 module.exports = {
   createUser,
-  dropWaitingFriend,
   findUser,
   findUserById,
   findUserByName,

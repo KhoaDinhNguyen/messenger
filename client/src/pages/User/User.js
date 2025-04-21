@@ -71,17 +71,13 @@ function User() {
         query: `
         query GetNotificationsById($id: String!) {
           getNotificationsById(userInput:{id: $id}) {
-          _id,
-              receiverId {
-                id,
-                name
-              },
-              senderId {
-                id,
-                name
-              },
-              message,
-              type
+            _id
+            receiverId
+            receiverName
+            senderId
+            senderName
+            message
+            type
           }
         }
       `,

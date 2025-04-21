@@ -25,12 +25,13 @@ function UserSocket({ userid }) {
       console.log(data);
       const { action, notification } = data;
       if (action === "create") {
-        console.log(notification);
+        const { senderId, senderName } = notification;
+
         dispatch(notificationListSlice.actions.addNotification(notification));
         dispatch(
           userWaitingFriendsSlice.actions.addItem({
-            friendId: notification.senderId.id,
-            friendName: notification.senderId.name,
+            friendId: senderId,
+            friendName: senderName,
             type: "sender",
           })
         );
@@ -38,7 +39,7 @@ function UserSocket({ userid }) {
         const { senderId } = notification;
         dispatch(
           notificationListSlice.actions.removeNotification({
-            senderId: senderId.id,
+            senderId: senderId,
             receiverId: userid,
             type: "friendRequest",
           })
@@ -48,24 +49,24 @@ function UserSocket({ userid }) {
         console.log(notification);
         dispatch(notificationListSlice.actions.addNotification(notification));
         dispatch(
-          userWaitingFriendsSlice.actions.removeItem(notification.senderId.id)
+          userWaitingFriendsSlice.actions.removeItem(notification.senderId)
         );
       } else if (action === "accept") {
         console.log(notification);
         const { senderId } = notification;
         dispatch(notificationListSlice.actions.addNotification(notification));
         dispatch(
-          userWaitingFriendsSlice.actions.removeItem(notification.senderId.id)
+          userWaitingFriendsSlice.actions.removeItem(notification.senderId)
         );
         dispatch(
           userFriendsSlice.actions.addItem({
-            friendId: notification.senderId.id,
-            friendName: notification.senderId.name,
+            friendId: notification.senderId,
+            friendName: notification.senderName,
           })
         );
         dispatch(
           notificationListSlice.actions.removeNotification({
-            senderId: senderId.id,
+            senderId: senderId,
             receiverId: userid,
             type: "declineFriendRequest",
           })

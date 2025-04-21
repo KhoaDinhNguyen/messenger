@@ -1,9 +1,9 @@
 import { NavLink, useNavigate } from "react-router";
 import { useState } from "react";
 
-import InputText from "../../../../components/Utils/InputText/InputText";
-import InputPassword from "../../../../components/Utils/InputPassword/InputPassword";
-import InputButton from "../../../../components/Utils/InputButton/InputButton";
+import InputText from "../../Utils/InputText/InputText";
+import InputPassword from "../../Utils/InputPassword/InputPassword";
+import InputButton from "../../Utils/InputButton/InputButton";
 
 import styles from "./LoginForm.module.css";
 

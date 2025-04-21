@@ -17,7 +17,7 @@ import styles from "./FriendRequest.module.css";
 function FriendRequest({ notification }) {
   const params = useParams();
   const dispatch = useDispatch();
-  const { message, senderId } = notification;
+  const { message, senderId, senderName } = notification;
   const receiverId = params.userid;
   const receiverName = useSelector((state) => state[nameSlice.name]);
 
@@ -32,22 +32,18 @@ function FriendRequest({ notification }) {
             receiverName: $receiverName
             message: "${receiverName} does not accept your friend request"
           }) {
-            senderId {
-              id,
-              name
-            }
-            receiverId{
-              id,
-              name
-            }
+            senderId
+            senderName
+            receiverId
+            receiverName
           }
         }
       `,
       variables: {
         senderId: receiverId,
         senderName: receiverName,
-        receiverId: senderId.id,
-        receiverName: senderId.name,
+        receiverId: senderId,
+        receiverName: senderName,
       },
     };
 
@@ -65,11 +61,11 @@ function FriendRequest({ notification }) {
         if (response.data === null) {
         } else {
           const notification = response.data.declineFriendRequest;
-          console.log(notification);
-          dispatch(userWaitingFriendsSlice.actions.removeItem(senderId.id));
+
+          dispatch(userWaitingFriendsSlice.actions.removeItem(senderId));
           dispatch(
             notificationListSlice.actions.removeNotification({
-              senderId: senderId.id,
+              senderId: senderId,
               receiverId: receiverId,
               type: "friendRequest",
             })
@@ -92,22 +88,18 @@ function FriendRequest({ notification }) {
             receiverName: $receiverName
             message: "You and ${receiverName} are friends now"
           }) {
-            senderId {
-              id,
-              name
-            }
-            receiverId{
-              id,
-              name
-            }
+            senderId
+            senderName
+            receiverId
+            receiverName
           }
         }
       `,
       variables: {
         senderId: receiverId,
         senderName: receiverName,
-        receiverId: senderId.id,
-        receiverName: senderId.name,
+        receiverId: senderId,
+        receiverName: senderName,
       },
     };
 
@@ -125,19 +117,19 @@ function FriendRequest({ notification }) {
         if (response.data === null) {
         } else {
           const notification = response.data.acceptFriendRequest;
-          console.log(notification);
-          dispatch(userWaitingFriendsSlice.actions.removeItem(senderId.id));
+
+          dispatch(userWaitingFriendsSlice.actions.removeItem(senderId));
           dispatch(
             notificationListSlice.actions.removeNotification({
-              senderId: senderId.id,
+              senderId: senderId,
               receiverId: receiverId,
               type: "friendRequest",
             })
           );
           dispatch(
             userFriendsSlice.actions.addItem({
-              friendId: notification.senderId.id,
-              friendName: notification.senderId.name,
+              friendId: notification.senderId,
+              friendName: notification.senderName,
             })
           );
         }
@@ -155,7 +147,7 @@ function FriendRequest({ notification }) {
           <img alt="user" src={userpublic} className={styles.image} />
         </div>
         <div className={styles.textContainer}>
-          <p className={styles.sender}>From: {senderId.name}</p>
+          <p className={styles.sender}>From: {senderName}</p>
           <p className={styles.message}>Message: {message}</p>
         </div>
         <div className={styles.buttonsContainer}>

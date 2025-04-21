@@ -3,22 +3,29 @@ const userRoutes = require("../schema/userSchema");
 const notificationRouts = require("../schema/notificationSchema");
 
 const {
-  UserWaitingFriendsType,
-  UserIdNameType,
-  UserInputTypeIdName,
-  dropWaitingFriend,
-  UserInputTypeFriend,
+  UserInputTypeSignUp,
+  UserInputTypeLogin,
+  UserInputTypeId,
+  UserInputTypeName,
   UserInputTypeFriendRequest,
+  UserInputTypeFriend,
+  UserType,
+  UserWaitingFriendsType,
+  UserFriendsType,
+  createUser,
+  findUser,
+  findUserById,
+  findUserByName,
+  dropWaitingFriend,
   declineFriendRequest,
   createFriendRequest,
   dropFriendRequest,
   acceptFriendRequest,
-  UserFriendsType,
 } = userRoutes;
 
 const {
-  notificationInputType,
-  notificationType,
+  NotificationInputType,
+  NotificationType,
   NotificationInputSenderAndReceiver,
   createNotification,
   getNotificationsById,
@@ -26,39 +33,40 @@ const {
 } = notificationRouts;
 
 const schema = buildSchema(`
-  ${userRoutes.UserType}
-  ${userRoutes.UserInputTypeSignUp}
-  ${userRoutes.UserInputTypeLogin}
-  ${userRoutes.UserInputTypeId}
-  ${userRoutes.UserInputTypeName}
-
-  ${UserFriendsType}
-  ${UserInputTypeFriend}
-  ${UserInputTypeIdName}
-  ${UserIdNameType}
-  ${UserWaitingFriendsType}
+  ${UserInputTypeSignUp}
+  ${UserInputTypeLogin}
+  ${UserInputTypeId}
+  ${UserInputTypeName}
   ${UserInputTypeFriendRequest}
-  
-  ${notificationInputType}
-  ${notificationType}
+  ${UserInputTypeFriend}
+
+  ${NotificationInputType}
   ${NotificationInputSenderAndReceiver}
 
+  ${UserType}
+  ${UserWaitingFriendsType}
+  ${UserFriendsType}
+
+  ${NotificationType}
+  
+
   type RootMutation {
-    ${userRoutes.createUser}
-    ${createNotification}
-    ${dropNotificationBySenderAndReceiver}
-    ${dropWaitingFriend}
+    ${createUser}
     ${declineFriendRequest}
     ${createFriendRequest}
     ${dropFriendRequest}
     ${acceptFriendRequest}
+    ${dropWaitingFriend}
+
+    ${createNotification}
+    ${dropNotificationBySenderAndReceiver}
   }
 
   type RootQuery {
     hello: String
-    ${userRoutes.findUser}
-    ${userRoutes.findUserById}
-    ${userRoutes.findUserByName}
+    ${findUser}
+    ${findUserById}
+    ${findUserByName}
     ${getNotificationsById}
   }
   schema {

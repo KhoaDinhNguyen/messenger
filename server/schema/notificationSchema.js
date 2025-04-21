@@ -6,22 +6,26 @@ const NotificationInputSenderAndReceiver = `
   }
 `;
 
-const notificationInputType = `
+const NotificationInputType = `
   input notificationInputType {
     type: String!
     message: String!
-    receiverId: UserInputTypeIdName!
-    senderId: UserInputTypeIdName!
+    senderId: String!
+    senderName: String!
+    receiverId: String!
+    receiverName: String!
   }
 `;
 
-const notificationType = `
+const NotificationType = `
   type notificationType {
     _id: ID
     type: String
     message: String
-    receiverId: UserIdNameType!
-    senderId: UserIdNameType!
+    senderId: String!
+    senderName: String!
+    receiverId: String!
+    receiverName: String!
   }
 `;
 
@@ -38,8 +42,8 @@ const getNotificationsById = `
 `;
 
 module.exports = {
-  notificationInputType,
-  notificationType,
+  NotificationInputType,
+  NotificationType,
   NotificationInputSenderAndReceiver,
   createNotification,
   getNotificationsById,

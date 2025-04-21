@@ -6,7 +6,7 @@ import styles from "./NotificationItem.module.css";
 
 function NotificationItem({ notification }) {
   const { type } = notification;
-  console.log(notification);
+
   let notificationItem;
 
   if (type === "friendRequest") {

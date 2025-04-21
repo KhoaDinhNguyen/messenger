@@ -1,41 +1,3 @@
-const UserInputTypeFriendRequest = `
-  input UserInputTypeFriendRequest {
-    senderId: String!
-    receiverId: String!
-    senderName: String
-    receiverName: String
-    message: String
-  }
-
-`;
-
-const UserInputTypeFriend = `
-  input UserInputTypeFriend {
-    id: String!
-    friendId: String!
-    isResponse: Boolean!
-  }
-`;
-
-const UserInputTypeName = `
-  input UserInputTypeName {
-    name: String!
-  }
-`;
-
-const UserInputTypeId = `
-  input UserInputTypeId {
-    id: String!
-  }
-`;
-
-const UserInputTypeIdName = `
-  input UserInputTypeIdName {
-    id: String!
-    name: String!
-  }
-`;
-
 const UserInputTypeSignUp = `
   input UserInputTypeSignUp {
     username: String!
@@ -56,6 +18,36 @@ const UserInputTypeLogin = `
   }
 `;
 
+const UserInputTypeFriendRequest = `
+  input UserInputTypeFriendRequest {
+    senderId: String!
+    receiverId: String!
+    senderName: String
+    receiverName: String
+    message: String
+  }
+
+`;
+
+const UserInputTypeName = `
+  input UserInputTypeName {
+    name: String!
+  }
+`;
+
+const UserInputTypeId = `
+  input UserInputTypeId {
+    id: String!
+  }
+`;
+
+const UserInputTypeFriend = `
+  input UserInputTypeFriend {
+    id: String!
+    friendId: String!
+  }
+`;
+
 const UserWaitingFriendsType = `
   type UserWaitingFriendsType {
     friendId: String
@@ -68,13 +60,6 @@ const UserFriendsType = `
   type UserFriendsType {
     friendId: String
     friendName: String
-  }
-`;
-
-const UserIdNameType = `
-  type UserIdNameType {
-    id: String!
-    name: String!
   }
 `;
 
@@ -134,16 +119,14 @@ const acceptFriendRequest = `
 module.exports = {
   createUser,
   UserType,
-  UserInputTypeFriend,
   UserWaitingFriendsType,
   UserFriendsType,
-  UserIdNameType,
   UserInputTypeId,
   UserInputTypeSignUp,
   UserInputTypeLogin,
   UserInputTypeName,
-  UserInputTypeIdName,
   UserInputTypeFriendRequest,
+  UserInputTypeFriend,
   findUser,
   findUserById,
   findUserByName,

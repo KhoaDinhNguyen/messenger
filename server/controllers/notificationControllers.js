@@ -1,23 +1,20 @@
 const Notification = require("../models/notification");
-const User = require("../models/user");
-
-const io = require("../socket");
-const Sockets = require("../models/socket");
 
 module.exports = {
   createNotification: async function ({ notificationInput }, req) {
     const { type, message, receiverId, senderId, receiverName, senderName } =
       notificationInput;
+
     const newNotification = new Notification({
       type: type,
       message: message,
-      receiverId: { id: receiverId, name: receiverName },
-      senderId: { id: senderId, name: senderName },
+      senderId: senderId,
+      senderName: senderName,
+      receiverId: receiverId,
+      receiverName: receiverName,
     });
 
     try {
-      await newNotification.save();
-      newNotification._id = newNotification._id;
       await newNotification.save();
     } catch (err) {
       throw err;
@@ -29,7 +26,7 @@ module.exports = {
     const { id } = userInput;
 
     try {
-      const notifications = await Notification.find({ "receiverId.id": id });
+      const notifications = await Notification.find({ receiverId: id });
       return notifications;
     } catch (err) {
       throw err;
@@ -46,8 +43,8 @@ module.exports = {
 
     try {
       removedNotification = await Notification.deleteMany({
-        "senderId.id": senderId,
-        "receiverId.id": receiverId,
+        senderId: senderId,
+        receiverId: receiverId,
         type: type,
       });
     } catch (err) {

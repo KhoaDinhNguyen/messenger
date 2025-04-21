@@ -13,7 +13,7 @@ import store from "./redux/store";
 import Homepage from "./pages/Homepage/Homepage";
 import SignUp from "./pages/Homepage/SignUp/SignUp";
 import Login from "./pages/Homepage/Login/Login";
-import SignUpSuccess from "./pages/Homepage/SignUp/SignUpSuccess/SignUpSuccess";
+import SignUpSuccess from "./pages/Homepage/SignUpSuccess/SignUpSuccess";
 
 import Auth from "./pages/Auth/Auth";
 import ForgetPassword from "./pages/Auth/ForgetPassword/ForgetPassword";

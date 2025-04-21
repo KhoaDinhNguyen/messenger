@@ -36,17 +36,13 @@ function UserItem({ user, isAuth }) {
           receiverId: $receiverId,
           receiverName: $receiverName,
         }) {
-          _id,
-          type,
-          message,
-          senderId {
-            id,
-            name
-          },
-          receiverId {
-            id,
-            name
-          }
+          _id
+          type
+          message
+          senderId
+          senderName
+          receiverId
+          receiverName
         }
       }`,
       variables: {

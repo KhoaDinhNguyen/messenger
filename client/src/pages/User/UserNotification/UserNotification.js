@@ -11,7 +11,6 @@ function UserNotification() {
     (state) => state[notificationListSlice.name]
   );
 
-  console.log("Call");
   return (
     <div className={styles.rootContainer}>
       {notificationsList.length > 0 && (
