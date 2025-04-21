@@ -109,7 +109,7 @@ module.exports = {
   findUser: async function ({ userInput }, req) {
     // TODO: Change mongoose
     const { username, password } = userInput;
-
+    console.log("CALL");
     let client;
     try {
       client = await MongoClient.connect(process.env.DATABASE_CONNECTION);
@@ -125,6 +125,7 @@ module.exports = {
         .db()
         .collection("users")
         .findOne({ username: username });
+      console.log(foundUser);
     } catch (e) {
       const err = new Error("Something wrong with database");
       err.status = 500;
