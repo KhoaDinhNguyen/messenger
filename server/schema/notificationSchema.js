@@ -30,7 +30,7 @@ const createNotification = `
 `;
 
 const dropNotificationBySenderAndReceiver = `
-  dropNotificationById(notificationInput: NotificationInputSenderAndReceiver): Boolean
+  dropNotificationBySenderAndReceiver(notificationInput: NotificationInputSenderAndReceiver): Boolean
 `;
 
 const getNotificationsById = `

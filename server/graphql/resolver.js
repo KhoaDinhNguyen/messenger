@@ -12,7 +12,12 @@ const {
   dropFriendRequest,
   acceptFriendRequest,
 } = userControllers;
-const { createNotification, getNotificationsById } = notificationControllers;
+
+const {
+  createNotification,
+  getNotificationsById,
+  dropNotificationBySenderAndReceiver,
+} = notificationControllers;
 
 module.exports = {
   createUser,
@@ -26,6 +31,7 @@ module.exports = {
   createFriendRequest,
   dropFriendRequest,
   acceptFriendRequest,
+  dropNotificationBySenderAndReceiver,
   hello() {
     return "Hello world";
   },

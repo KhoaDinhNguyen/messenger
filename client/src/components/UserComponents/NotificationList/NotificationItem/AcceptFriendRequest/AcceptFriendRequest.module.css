@@ -36,34 +36,18 @@
   display: flex;
 }
 
-.declineInput {
+.seenInput {
   padding: 10px 20px;
   margin-left: 10px;
   font-size: 14px;
   border: transparent;
   border-radius: 10px;
   font-weight: 700;
-  background-color: #ffb4a2;
+  background-color: #dbb42c;
   color: white;
   cursor: pointer;
 }
 
-.declineInput:hover {
-  background-color: #e5989b;
-}
-
-.acceptInput {
-  padding: 10px 20px;
-  margin-left: 10px;
-  font-size: 14px;
-  border: transparent;
-  border-radius: 10px;
-  font-weight: 700;
-  background-color: #02c39a;
-  color: white;
-  cursor: pointer;
-}
-
-.acceptInput:hover {
-  background-color: #00a896;
+.seenInput:hover {
+  background-color: #c9a227;
 }

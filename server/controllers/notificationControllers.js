@@ -41,6 +41,7 @@ module.exports = {
   ) {
     const { senderId, receiverId, type } = notificationInput;
 
+    // console.log(notificationInput);
     let removedNotification;
 
     try {
