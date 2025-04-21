@@ -58,7 +58,6 @@ mongoose
         Sockets.deleteSocketByUserId(socket.handshake.query.userid);
         socket.disconnect(true);
       });
-      //socket.disconnect(true);
     });
   })
   .catch((err) => {

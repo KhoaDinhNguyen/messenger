@@ -5,6 +5,7 @@ import InputButton from "../../../../Utils/InputButton/InputButton";
 
 import {
   nameSlice,
+  userFriendsSlice,
   userWaitingFriendsSlice,
 } from "../../../../../redux/userSlice";
 import { notificationListSlice } from "../../../../../redux/notificationSlice";
@@ -67,7 +68,77 @@ function FriendRequest({ notification }) {
           console.log(notification);
           dispatch(userWaitingFriendsSlice.actions.removeItem(senderId.id));
           dispatch(
-            notificationListSlice.actions.removeNotification(senderId.id)
+            notificationListSlice.actions.removeNotification({
+              senderId: senderId.id,
+              receiverId: receiverId,
+              type: "friendRequest",
+            })
+          );
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const onClickAcceptFriendRequest = () => {
+    const graphQLQuery = {
+      query: `
+        mutation AcceptFriendRequest($senderId: String!, $senderName: String!, $receiverId: String!, $receiverName: String!){
+          acceptFriendRequest(userInput: {
+            senderId: $senderId,
+            senderName: $senderName
+            receiverId: $receiverId 
+            receiverName: $receiverName
+            message: "You and ${receiverName} are friends now"
+          }) {
+            senderId {
+              id,
+              name
+            }
+            receiverId{
+              id,
+              name
+            }
+          }
+        }
+      `,
+      variables: {
+        senderId: receiverId,
+        senderName: receiverName,
+        receiverId: senderId.id,
+        receiverName: senderId.name,
+      },
+    };
+
+    const bodyJSON = JSON.stringify(graphQLQuery);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-type", "application/json");
+
+    fetch(process.env.REACT_APP_SERVER_API, {
+      method: "POST",
+      body: bodyJSON,
+      headers: myHeaders,
+    })
+      .then((jsonResponse) => jsonResponse.json())
+      .then((response) => {
+        if (response.data === null) {
+        } else {
+          const notification = response.data.acceptFriendRequest;
+          console.log(notification);
+          dispatch(userWaitingFriendsSlice.actions.removeItem(senderId.id));
+          dispatch(
+            notificationListSlice.actions.removeNotification({
+              senderId: senderId.id,
+              receiverId: receiverId,
+              type: "friendRequest",
+            })
+          );
+          dispatch(
+            userFriendsSlice.actions.addItem({
+              friendId: notification.senderId.id,
+              friendName: notification.senderId.name,
+            })
           );
         }
       })
@@ -100,6 +171,7 @@ function FriendRequest({ notification }) {
             type={"button"}
             valueButton={"Accept"}
             inputContainer={styles.acceptInput}
+            onClickHandler={onClickAcceptFriendRequest}
           />
         </div>
       </div>

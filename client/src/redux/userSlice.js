@@ -17,6 +17,9 @@ const userFriendsSlice = createSlice({
     init(state, action) {
       return action.payload;
     },
+    addItem(state, action) {
+      return [...state, action.payload];
+    },
   },
 });
 

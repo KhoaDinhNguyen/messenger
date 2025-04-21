@@ -21,22 +21,23 @@ function User() {
       const graphQLQuery = {
         query: `
         query FindUserById($id: String!){
-        findUserById(userInput: {id: $id}) {
-          gender,
-          pronounce,
-          name,
-          phone,
-          dob,
-          friends{
-            _id
-          },
-          waitingFriends{
-            friendId,
-            friendName,
-            type
+          findUserById(userInput: {id: $id}) {
+            gender,
+            pronounce,
+            name,
+            phone,
+            dob,
+            friends{
+              friendId,
+              friendName,
+            },
+            waitingFriends{
+              friendId,
+              friendName,
+              type
+            }
           }
         }
-      }
       `,
         variables: {
           id: params.userid,
@@ -56,6 +57,8 @@ function User() {
         .then((response) => {
           const { friends, waitingFriends, name } = response.data.findUserById;
           // console.log(response);
+          console.log(response.data.findUserById);
+          console.log(friends);
           dispatch(userFriendsSlice.actions.init(friends));
           dispatch(userWaitingFriendsSlice.actions.init(waitingFriends));
           dispatch(nameSlice.actions.init(name));

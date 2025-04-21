@@ -12,6 +12,8 @@ const {
   declineFriendRequest,
   createFriendRequest,
   dropFriendRequest,
+  acceptFriendRequest,
+  UserFriendsType,
 } = userRoutes;
 
 const {
@@ -30,6 +32,7 @@ const schema = buildSchema(`
   ${userRoutes.UserInputTypeId}
   ${userRoutes.UserInputTypeName}
 
+  ${UserFriendsType}
   ${UserInputTypeFriend}
   ${UserInputTypeIdName}
   ${UserIdNameType}
@@ -48,6 +51,7 @@ const schema = buildSchema(`
     ${declineFriendRequest}
     ${createFriendRequest}
     ${dropFriendRequest}
+    ${acceptFriendRequest}
   }
 
   type RootQuery {

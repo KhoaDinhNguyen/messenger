@@ -64,6 +64,13 @@ const UserWaitingFriendsType = `
   }
 `;
 
+const UserFriendsType = `
+  type UserFriendsType {
+    friendId: String
+    friendName: String
+  }
+`;
+
 const UserIdNameType = `
   type UserIdNameType {
     id: String!
@@ -82,7 +89,7 @@ const UserType = `
     dob: String
     phone: String
     email: String
-    friends: [UserType]
+    friends: [UserFriendsType]
     waitingFriends: [UserWaitingFriendsType]
     profileUrl: String
   }
@@ -119,11 +126,17 @@ const createFriendRequest = `
 const dropFriendRequest = `
   dropFriendRequest(userInput: UserInputTypeFriendRequest): Boolean
 `;
+
+const acceptFriendRequest = `
+  acceptFriendRequest(userInput: UserInputTypeFriendRequest): notificationType
+`;
+
 module.exports = {
   createUser,
   UserType,
   UserInputTypeFriend,
   UserWaitingFriendsType,
+  UserFriendsType,
   UserIdNameType,
   UserInputTypeId,
   UserInputTypeSignUp,
@@ -138,4 +151,5 @@ module.exports = {
   declineFriendRequest,
   createFriendRequest,
   dropFriendRequest,
+  acceptFriendRequest,
 };

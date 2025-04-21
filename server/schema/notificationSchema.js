@@ -2,6 +2,7 @@ const NotificationInputSenderAndReceiver = `
   input NotificationInputSenderAndReceiver {
     senderId: String!
     receiverId: String!
+    type: String!
   }
 `;
 

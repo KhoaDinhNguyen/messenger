@@ -17,6 +17,9 @@ function UsersList({ isAuth, usersList }) {
     (state) => state[userWaitingFriendsSlice.name]
   );
 
+  console.log(friendsList);
+  console.log(waitingFriendsList);
+
   const newUsersList = dropUsersById(
     usersList,
     friendsList,

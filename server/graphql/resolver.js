@@ -10,6 +10,7 @@ const {
   declineFriendRequest,
   createFriendRequest,
   dropFriendRequest,
+  acceptFriendRequest,
 } = userControllers;
 const { createNotification, getNotificationsById } = notificationControllers;
 
@@ -24,6 +25,7 @@ module.exports = {
   declineFriendRequest,
   createFriendRequest,
   dropFriendRequest,
+  acceptFriendRequest,
   hello() {
     return "Hello world";
   },

@@ -39,14 +39,15 @@ module.exports = {
     { notificationInput },
     req
   ) {
-    const { senderId, receiverId } = notificationInput;
+    const { senderId, receiverId, type } = notificationInput;
 
     let removedNotification;
 
     try {
-      removedNotification = await Notification.deleteOne({
+      removedNotification = await Notification.deleteMany({
         "senderId.id": senderId,
         "receiverId.id": receiverId,
+        type: type,
       });
     } catch (err) {
       throw err;
