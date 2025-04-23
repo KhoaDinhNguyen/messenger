@@ -111,16 +111,6 @@ function SignUpForm() {
       ]);
     }
 
-    // const body = {
-    //   account: account,
-    //   password: password,
-    //   name: formatName(firstName, middleName, lastName),
-    //   dob: formatDates(date, convertMonthToNum(month), year),
-    //   pronounce: getPronounce(gender, pronounce),
-    //   email: email,
-    //   phone: phone,
-    // };
-
     const graphQLQuery = {
       query: `
           mutation CreateUser($username: String!, $password: String!, $name: String!, $email: String, $dob: String!, $gender: String!, $pronounce: String, $phone: String){

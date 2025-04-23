@@ -31,8 +31,9 @@ app.all(
       if (!err.originalError) {
         return err;
       }
+      console.log(err);
       const message = err.message || "An error occured";
-      const data = err.originalError.data;
+      const data = err.originalError.data || "";
       const code = err.originalError.code || 500;
       return { message: message, status: code, data: data };
     },
@@ -50,6 +51,11 @@ mongoose
     const io = require("./socket").init(server);
     const Sockets = require("./models/socket");
     io.on("connect", (socket) => {
+      if (
+        !(Sockets.findSocketByUserId(socket.handshake.query.userid) === null)
+      ) {
+        Sockets.deleteSocketByUserId(socket.handshake.query.userid);
+      }
       console.log(`${socket.handshake.query.userid} connect`);
       Sockets.insertSocket(socket.handshake.query.userid, socket.id);
       //Sockets.findSocketByUserId("");
@@ -58,7 +64,8 @@ mongoose
         Sockets.deleteSocketByUserId(socket.handshake.query.userid);
         socket.disconnect(true);
       });
-      // socket.disconnect(true);
+
+      //socket.disconnect(true);
     });
   })
   .catch((err) => {

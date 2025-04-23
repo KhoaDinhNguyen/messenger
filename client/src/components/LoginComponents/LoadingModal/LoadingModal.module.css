@@ -1,0 +1,30 @@
+.rootContainer {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.contentContainer {
+  background-color: #fff6cc;
+  padding: 10px 30px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  z-index: 999;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.title {
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+.hiddenModal {
+  position: relative;
+  top: -50%;
+}
+
+.visibleModal {
+  top: 5%;
+  transition-duration: 0.5s;
+}
