@@ -12,13 +12,11 @@ const notificationListSlice = createSlice({
     },
     removeNotification(state, action) {
       const { senderId, receiverId, type } = action.payload;
-      console.log(senderId);
-      console.log(receiverId);
-      console.log(type);
+
       return state.filter((notification) => {
         return !(
-          notification.senderId.id === senderId &&
-          notification.receiverId.id === receiverId &&
+          notification.senderId === senderId &&
+          notification.receiverId === receiverId &&
           notification.type === type
         );
       });

@@ -6,13 +6,13 @@ import { userFriendsSlice } from "../../../redux/userSlice";
 
 import styles from "./FriendList.module.css";
 
-function FriendList() {
+function FriendList({ setSearchParams }) {
   const friendsList = useSelector((state) => state[userFriendsSlice.name]);
 
   const friendsListRender = friendsList.map((friend) => {
     return (
       <li key={friend.friendId}>
-        <FriendItem friend={friend} />
+        <FriendItem friend={friend} setSearchParams={setSearchParams} />
       </li>
     );
   });

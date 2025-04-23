@@ -1,4 +1,4 @@
-import { ErrorSignUpSVG } from "../../../../utils/svgConfigs/SVG";
+import { ErrorSignUpSVG } from "../../../utils/svgConfigs/SVG";
 
 import styles from "./ErrorMessages.module.css";
 

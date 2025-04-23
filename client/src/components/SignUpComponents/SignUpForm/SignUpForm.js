@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 
-import InputText from "../../../../components/Utils/InputText/InputText";
-import InputPassword from "../../../../components/Utils/InputPassword/InputPassword";
-import InputSelect from "../../../../components/Utils/InputSelect/InputSelect";
-import InputButton from "../../../../components/Utils/InputButton/InputButton";
-import InputRadio from "../../../../components/Utils/InputRadio/InputRadio";
+import InputText from "../../Utils/InputText/InputText";
+import InputPassword from "../../Utils/InputPassword/InputPassword";
+import InputSelect from "../../Utils/InputSelect/InputSelect";
+import InputButton from "../../Utils/InputButton/InputButton";
+import InputRadio from "../../Utils/InputRadio/InputRadio";
 import ErrorMessages from "../ErrorMessages/ErrorMessages";
-import LoadingModal from "../../../../components/Utils/Modal/LoadingModal/LoadingModal";
+import LoadingModal from "../../Utils/Modal/LoadingModal/LoadingModal";
 
-import { dates, months, years } from "../../../../utils/dateConfigs/date";
-import { formatName } from "../../../../utils/nameConfigs/format";
-import { formatDates } from "../../../../utils/dateConfigs/format";
-import { getPronounce } from "../../../../utils/genderConfigs/format";
-import { convertMonthToNum } from "../../../../utils/dateConfigs/converNumToDates";
+import { dates, months, years } from "../../../utils/dateConfigs/date";
+import { formatName } from "../../../utils/nameConfigs/format";
+import { formatDates } from "../../../utils/dateConfigs/format";
+import { getPronounce } from "../../../utils/genderConfigs/format";
+import { convertMonthToNum } from "../../../utils/dateConfigs/converNumToDates";
 
 import styles from "./SignUpForm.module.css";
 
@@ -110,16 +110,6 @@ function SignUpForm() {
         "Confirmed password is incorrect",
       ]);
     }
-
-    // const body = {
-    //   account: account,
-    //   password: password,
-    //   name: formatName(firstName, middleName, lastName),
-    //   dob: formatDates(date, convertMonthToNum(month), year),
-    //   pronounce: getPronounce(gender, pronounce),
-    //   email: email,
-    //   phone: phone,
-    // };
 
     const graphQLQuery = {
       query: `

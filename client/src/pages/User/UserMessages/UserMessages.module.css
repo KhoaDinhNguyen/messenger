@@ -1,0 +1,5 @@
+.rootContainer {
+  display: flex;
+  height: calc(100vh - 110px);
+  justify-content: center;
+}

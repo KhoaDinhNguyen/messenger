@@ -10,7 +10,7 @@ import styles from "./DeclineFriendRequest.module.css";
 
 function DeclineFriendRequest({ notification }) {
   const dispatch = useDispatch();
-  const { senderId, message, receiverId } = notification;
+  const { senderId, message, receiverId, senderName } = notification;
 
   const onClickCloseNotification = () => {
     const graphQLQuery = {
@@ -24,8 +24,8 @@ function DeclineFriendRequest({ notification }) {
         }
       `,
       variables: {
-        senderId: senderId.id,
-        receiverId: receiverId.id,
+        senderId: senderId,
+        receiverId: receiverId,
       },
     };
 
@@ -45,8 +45,8 @@ function DeclineFriendRequest({ notification }) {
         } else {
           dispatch(
             notificationListSlice.actions.removeNotification({
-              senderId: senderId.id,
-              receiverId: receiverId.id,
+              senderId: senderId,
+              receiverId: receiverId,
               type: "declineFriendRequest",
             })
           );
@@ -62,7 +62,7 @@ function DeclineFriendRequest({ notification }) {
           <img alt="user" src={userpublic} className={styles.image} />
         </div>
         <div className={styles.textContainer}>
-          <p className={styles.sender}>From: {senderId.name}</p>
+          <p className={styles.sender}>From: {senderName}</p>
           <p className={styles.message}>{message}</p>
         </div>
         <div className={styles.buttonsContainer}>

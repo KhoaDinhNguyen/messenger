@@ -1,6 +1,8 @@
 import { useEffect } from "react";
-import { Manager } from "socket.io-client";
 import { useDispatch } from "react-redux";
+import { useSearchParams } from "react-router";
+
+import Socket from "../../../pages/User/socket";
 
 import { notificationListSlice } from "../../../redux/notificationSlice";
 import {
@@ -8,29 +10,23 @@ import {
   userWaitingFriendsSlice,
 } from "../../../redux/userSlice";
 
+import { currentMessageSlice } from "../../../redux/messageSlice";
+
 function UserSocket({ userid }) {
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    console.log("Call");
-    const manager = new Manager(process.env.REACT_APP_SERVER_API, {
-      autoConnect: true,
-      query: {
-        userid: userid,
-      },
-    });
-    const socket = manager.socket("/");
-    socket.connect();
-    socket.on("friendRequest", (data) => {
-      console.log(data);
+    function friendRequestHandler(data) {
       const { action, notification } = data;
       if (action === "create") {
-        console.log(notification);
+        const { senderId, senderName } = notification;
+
         dispatch(notificationListSlice.actions.addNotification(notification));
         dispatch(
           userWaitingFriendsSlice.actions.addItem({
-            friendId: notification.senderId.id,
-            friendName: notification.senderId.name,
+            friendId: senderId,
+            friendName: senderName,
             type: "sender",
           })
         );
@@ -38,7 +34,7 @@ function UserSocket({ userid }) {
         const { senderId } = notification;
         dispatch(
           notificationListSlice.actions.removeNotification({
-            senderId: senderId.id,
+            senderId: senderId,
             receiverId: userid,
             type: "friendRequest",
           })
@@ -48,31 +44,55 @@ function UserSocket({ userid }) {
         console.log(notification);
         dispatch(notificationListSlice.actions.addNotification(notification));
         dispatch(
-          userWaitingFriendsSlice.actions.removeItem(notification.senderId.id)
+          userWaitingFriendsSlice.actions.removeItem(notification.senderId)
         );
       } else if (action === "accept") {
-        console.log(notification);
         const { senderId } = notification;
         dispatch(notificationListSlice.actions.addNotification(notification));
         dispatch(
-          userWaitingFriendsSlice.actions.removeItem(notification.senderId.id)
+          userWaitingFriendsSlice.actions.removeItem(notification.senderId)
         );
         dispatch(
           userFriendsSlice.actions.addItem({
-            friendId: notification.senderId.id,
-            friendName: notification.senderId.name,
+            friendId: notification.senderId,
+            friendName: notification.senderName,
           })
         );
         dispatch(
           notificationListSlice.actions.removeNotification({
-            senderId: senderId.id,
+            senderId: senderId,
             receiverId: userid,
             type: "declineFriendRequest",
           })
         );
       }
-    });
-  }, [userid, dispatch]);
+    }
+
+    function messageHandler(data) {
+      const { action, message } = data;
+
+      if (action === "create") {
+        const friendId = searchParams.get("friendId");
+        if (
+          message.senderId === friendId &&
+          message.senderId !== message.receiverId
+        ) {
+          dispatch(currentMessageSlice.actions.addMessage(message));
+        }
+      }
+    }
+
+    if (Socket.getSocket() !== undefined) {
+      //console.log("CALL");
+      Socket.getSocket().on("friendRequest", friendRequestHandler);
+      Socket.getSocket().on("message", messageHandler);
+    }
+
+    return () => {
+      Socket.getSocket().off("friendRequest", friendRequestHandler);
+      Socket.getSocket().off("message", messageHandler);
+    };
+  }, [userid, dispatch, searchParams]);
 
   return <></>;
 }

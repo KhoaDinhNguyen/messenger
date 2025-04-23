@@ -6,27 +6,31 @@ const NotificationInputSenderAndReceiver = `
   }
 `;
 
-const notificationInputType = `
-  input notificationInputType {
+const NotificationInputType = `
+  input NotificationInputType {
     type: String!
     message: String!
-    receiverId: UserInputTypeIdName!
-    senderId: UserInputTypeIdName!
+    senderId: String!
+    senderName: String!
+    receiverId: String!
+    receiverName: String!
   }
 `;
 
-const notificationType = `
-  type notificationType {
+const NotificationType = `
+  type NotificationType {
     _id: ID
     type: String
     message: String
-    receiverId: UserIdNameType!
-    senderId: UserIdNameType!
+    senderId: String!
+    senderName: String!
+    receiverId: String!
+    receiverName: String!
   }
 `;
 
 const createNotification = `
-  createNotification(notificationInput: notificationInputType!) : notificationType
+  createNotification(notificationInput: NotificationInputType!) : NotificationType
 `;
 
 const dropNotificationBySenderAndReceiver = `
@@ -34,12 +38,12 @@ const dropNotificationBySenderAndReceiver = `
 `;
 
 const getNotificationsById = `
-  getNotificationsById(userInput: UserInputTypeId!) : [notificationType]
+  getNotificationsById(userInput: UserInputTypeId!) : [NotificationType]
 `;
 
 module.exports = {
-  notificationInputType,
-  notificationType,
+  NotificationInputType,
+  NotificationType,
   NotificationInputSenderAndReceiver,
   createNotification,
   getNotificationsById,

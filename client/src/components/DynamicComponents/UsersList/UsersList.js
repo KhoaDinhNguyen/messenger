@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import ClipLoader from "react-spinners/ClipLoader";
 
 import UserItem from "./UserItem/UserItem";
 
@@ -11,22 +12,27 @@ import {
 
 import styles from "./UsersList.module.css";
 
-function UsersList({ isAuth, usersList }) {
+function UsersList({ isAuth, usersList, loading }) {
   const friendsList = useSelector((state) => state[userFriendsSlice.name]);
+
   const waitingFriendsList = useSelector(
     (state) => state[userWaitingFriendsSlice.name]
   );
 
-  console.log(friendsList);
-  console.log(waitingFriendsList);
+  const newUsersList = !isAuth
+    ? usersList
+    : dropUsersById(usersList, friendsList, waitingFriendsList);
 
-  const newUsersList = dropUsersById(
-    usersList,
-    friendsList,
-    waitingFriendsList
-  );
+  if (loading === true) {
+    return (
+      <div className={styles.spinners}>
+        <ClipLoader size={50} color="#246bce" />
+        <p>Looking for users...</p>
+      </div>
+    );
+  }
 
-  if (newUsersList.length === 0) {
+  if (newUsersList.length === 0 && loading === false) {
     return (
       <div>
         <p className={styles.text}>No user found!</p>

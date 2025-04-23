@@ -1,0 +1,48 @@
+.senderContainer {
+  justify-self: flex-end;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  margin-bottom: 10px;
+  max-width: 500px;
+}
+
+.receiverContainer {
+  justify-self: flex-start;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin-bottom: 10px;
+  max-width: 500px;
+}
+
+.imageContainer {
+  display: flex;
+  align-items: center;
+}
+
+.image {
+  width: 32px;
+  height: auto;
+}
+
+.senderText {
+  background-color: #246bce;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: max-content;
+  display: flex;
+  align-items: center;
+  margin-right: 5px;
+}
+
+.receiverText {
+  background-color: #ced4da;
+  padding: 10px 20px;
+  border-radius: 20px;
+  max-width: max-content;
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+}

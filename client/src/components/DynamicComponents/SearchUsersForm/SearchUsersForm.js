@@ -5,7 +5,7 @@ import InputButton from "../../Utils/InputButton/InputButton";
 
 import styles from "./SearchUsersForm.module.css";
 
-function SearchUsersForm({ setUsersList }) {
+function SearchUsersForm({ setUsersList, setLoading }) {
   const [searchString, setSearchString] = useState("");
 
   const onChangSearchString = (event) => {
@@ -14,7 +14,7 @@ function SearchUsersForm({ setUsersList }) {
 
   const onSubmitForm = async (event) => {
     event.preventDefault();
-
+    setLoading(true);
     const graphQLQuery = {
       query: `
         query FindUserByName($name: String!) {
@@ -45,6 +45,7 @@ function SearchUsersForm({ setUsersList }) {
       const response = await jsonResponse.json();
 
       setUsersList(response.data.findUserByName);
+      setLoading(false);
     } catch (err) {
       console.log(err);
     }

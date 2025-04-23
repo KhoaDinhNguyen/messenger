@@ -98,3 +98,7 @@
   border: 1px solid #adb5bd;
   height: 2px;
 }
+
+.errorMessages {
+  width: 100%;
+}

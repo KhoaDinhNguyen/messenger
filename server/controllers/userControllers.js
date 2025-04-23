@@ -1,21 +1,45 @@
-const mongodb = require("mongodb");
 const bcrypt = require("bcrypt");
-const mongoose = require("mongoose");
 const sgMail = require("@sendgrid/mail");
 const User = require("../models/user");
 
 const io = require("../socket");
 const Sockets = require("../models/socket");
 
-const {
-  dropNotificationBySenderAndReceiver,
-  createNotification,
-} = require("./notificationControllers");
-
-const MongoClient = mongodb.MongoClient;
+const Notification = require("./notificationControllers");
 
 require("dotenv").config();
 sgMail.setApiKey("SG." + process.env.EMAIL_API_KEY);
+
+const helperFunctions = {
+  dropWaitingFriend: async function ({ userInput }) {
+    const { id, friendId } = userInput;
+
+    try {
+      await Promise.all([
+        User.updateOne(
+          { _id: id },
+          { $pull: { waitingFriends: { friendId: friendId } } }
+        ),
+        User.updateOne(
+          { _id: friendId },
+          { $pull: { waitingFriends: { friendId: id } } }
+        ),
+        Notification.dropNotificationBySenderAndReceiver({
+          notificationInput: {
+            senderId: id,
+            receiverId: friendId,
+            type: "friendRequest",
+          },
+        }),
+      ]);
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+
+    return true;
+  },
+};
 
 module.exports = {
   createUser: async function ({ userInput }, req) {
@@ -107,46 +131,29 @@ module.exports = {
   },
 
   findUser: async function ({ userInput }, req) {
-    // TODO: Change mongoose
     const { username, password } = userInput;
-    console.log("CALL");
-    let client;
+
     try {
-      client = await MongoClient.connect(process.env.DATABASE_CONNECTION);
+      const foundUser = await User.findOne({ username: username });
+
+      if (!foundUser) {
+        const error = new Error("User does not exist");
+        error.status = 400;
+        throw error;
+      }
+
+      const match = await bcrypt.compare(password, foundUser.password);
+
+      if (!match) {
+        const error = new Error("Password is incorrect");
+        error.status = 400;
+        throw error;
+      }
+
+      return foundUser;
     } catch (e) {
-      const err = new Error("Something wrong with database");
-      err.status = 500;
       throw err;
     }
-
-    let foundUser;
-    try {
-      foundUser = await client
-        .db()
-        .collection("users")
-        .findOne({ username: username });
-      console.log(foundUser);
-    } catch (e) {
-      const err = new Error("Something wrong with database");
-      err.status = 500;
-      throw err;
-    }
-
-    if (!foundUser) {
-      const error = new Error("User does not exist");
-      error.status = 400;
-      throw error;
-    }
-
-    const match = await bcrypt.compare(password, foundUser.password);
-
-    if (!match) {
-      const error = new Error("Password is incorrect");
-      error.status = 400;
-      throw error;
-    }
-
-    return foundUser;
   },
   findUserById: async function ({ userInput }, req) {
     const { id } = userInput;
@@ -167,43 +174,15 @@ module.exports = {
 
     return foundUsers;
   },
-  dropWaitingFriend: async function ({ userInput }, req) {
-    const { id, friendId } = userInput;
-
-    console.log(id);
-    console.log(friendId);
-    try {
-      await Promise.all([
-        User.updateOne(
-          { _id: id },
-          { $pull: { waitingFriends: { friendId: friendId } } }
-        ),
-        User.updateOne(
-          { _id: friendId },
-          { $pull: { waitingFriends: { friendId: id } } }
-        ),
-        dropNotificationBySenderAndReceiver({
-          notificationInput: {
-            senderId: id,
-            receiverId: friendId,
-            type: "friendRequest",
-          },
-        }),
-      ]);
-    } catch (err) {
-      throw err;
-    }
-
-    return true;
-  },
   dropFriendRequest: async function ({ userInput, req }) {
     const { senderId, receiverId } = userInput;
 
     try {
-      await this.dropWaitingFriend({
+      await helperFunctions.dropWaitingFriend({
         userInput: { id: senderId, friendId: receiverId },
       });
     } catch (err) {
+      console.log(err);
       throw err;
     }
 
@@ -219,6 +198,7 @@ module.exports = {
           });
       } catch (err) {
         console.log(err);
+        throw err;
       }
     }
 
@@ -230,7 +210,7 @@ module.exports = {
 
     try {
       const [newNotification, ,] = await Promise.all([
-        createNotification({
+        Notification.createNotification({
           notificationInput: {
             type: "friendRequest",
             message: message,
@@ -258,7 +238,7 @@ module.exports = {
             },
           },
         }),
-        dropNotificationBySenderAndReceiver({
+        Notification.dropNotificationBySenderAndReceiver({
           notificationInput: {
             senderId: senderId,
             receiverId: receiverId,
@@ -274,7 +254,7 @@ module.exports = {
             action: "create",
             notification: newNotification,
           });
-          console.log(`emit to ${receiverId}`);
+          console.log(`emit to ${receiverId} -- id: foundSocket.socketId`);
         } catch (err) {
           console.log(err);
         }
@@ -290,13 +270,13 @@ module.exports = {
 
     try {
       const [, newNotification] = await Promise.all([
-        this.dropWaitingFriend({
+        helperFunctions.dropWaitingFriend({
           userInput: {
             id: receiverId,
             friendId: senderId,
           },
         }),
-        createNotification({
+        Notification.createNotification({
           notificationInput: {
             type: "declineFriendRequest",
             message: message,
@@ -308,17 +288,19 @@ module.exports = {
         }),
       ]);
 
-      console.log(receiverId);
+      // console.log(receiverId);
       const foundSocket = Sockets.findSocketByUserId(receiverId);
       if (foundSocket !== null) {
         io.getIO().to(foundSocket.socketId).emit("friendRequest", {
           action: "decline",
           notification: newNotification,
         });
-        console.log(`emit to ${receiverId}`);
+        console.log(`emit to ${receiverId} -- id: foundSocket.socketId`);
       }
+
       return newNotification;
     } catch (err) {
+      console.log(err);
       throw err;
     }
   },
@@ -326,21 +308,15 @@ module.exports = {
     const { senderId, receiverId, senderName, receiverName, message } =
       userInput;
 
-    console.log(senderName);
-
-    // const senderObjectId = mongoose.Types.ObjectId(senderId);
-    // const receiverObjectId = mongoose.Types.ObjectId(receiverId);
-
-    console.log(senderId);
     try {
       const [, newNotification] = await Promise.all([
-        this.dropWaitingFriend({
+        helperFunctions.dropWaitingFriend({
           userInput: {
             id: receiverId,
             friendId: senderId,
           },
         }),
-        createNotification({
+        Notification.createNotification({
           notificationInput: {
             type: "acceptFriendRequest",
             message: message,
@@ -350,14 +326,14 @@ module.exports = {
             receiverName: receiverName,
           },
         }),
-        dropNotificationBySenderAndReceiver({
+        Notification.dropNotificationBySenderAndReceiver({
           notificationInput: {
             senderId: receiverId,
             receiverId: senderId,
             type: "declineFriendRequest",
           },
         }),
-        dropNotificationBySenderAndReceiver({
+        Notification.dropNotificationBySenderAndReceiver({
           notificationInput: {
             senderId: senderId,
             receiverId: receiverId,
@@ -382,17 +358,17 @@ module.exports = {
         }),
       ]);
 
-      //console.log(receiverId);
       const foundSocket = Sockets.findSocketByUserId(receiverId);
       if (foundSocket !== null) {
         io.getIO().to(foundSocket.socketId).emit("friendRequest", {
           action: "accept",
           notification: newNotification,
         });
-        console.log(`emit to ${receiverId}`);
+        console.log(`emit to ${receiverId} -- id: foundSocket.socketId`);
       }
       return newNotification;
     } catch (err) {
+      console.log(err);
       throw err;
     }
   },

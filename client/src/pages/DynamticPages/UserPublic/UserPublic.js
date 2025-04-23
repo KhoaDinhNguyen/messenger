@@ -8,7 +8,7 @@ import UserNotFound from "../UserNotFound/UserNotFound";
 import styles from "./UserPublic.module.css";
 
 function UserPublic({ isAuth }) {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [user, setUser] = useState(null);
 
   useEffect(() => {

@@ -1,65 +1,91 @@
 const { buildSchema } = require("graphql");
-const userRoutes = require("../schema/userSchema");
-const notificationRouts = require("../schema/notificationSchema");
+const userSchema = require("../schema/userSchema");
+const notificationSchema = require("../schema/notificationSchema");
+const MessageSchema = require("../schema/messageSchema");
 
 const {
-  UserWaitingFriendsType,
-  UserIdNameType,
-  UserInputTypeIdName,
-  dropWaitingFriend,
-  UserInputTypeFriend,
+  UserInputTypeSignUp,
+  UserInputTypeLogin,
+  UserInputTypeId,
+  UserInputTypeName,
   UserInputTypeFriendRequest,
+  UserInputTypeFriend,
+  UserType,
+  UserWaitingFriendsType,
+  UserFriendsType,
+  createUser,
+  findUser,
+  findUserById,
+  findUserByName,
+  dropWaitingFriend,
   declineFriendRequest,
   createFriendRequest,
   dropFriendRequest,
   acceptFriendRequest,
-  UserFriendsType,
-} = userRoutes;
+} = userSchema;
 
 const {
-  notificationInputType,
-  notificationType,
+  NotificationInputType,
+  NotificationType,
   NotificationInputSenderAndReceiver,
   createNotification,
   getNotificationsById,
   dropNotificationBySenderAndReceiver,
-} = notificationRouts;
+} = notificationSchema;
+
+const {
+  MessageInputType,
+  MessageType,
+  MessageInputTypeSenderAndReceiver,
+  createMessage,
+  getMessage,
+  getLatestMessages,
+} = MessageSchema;
 
 const schema = buildSchema(`
-  ${userRoutes.UserType}
-  ${userRoutes.UserInputTypeSignUp}
-  ${userRoutes.UserInputTypeLogin}
-  ${userRoutes.UserInputTypeId}
-  ${userRoutes.UserInputTypeName}
-
-  ${UserFriendsType}
-  ${UserInputTypeFriend}
-  ${UserInputTypeIdName}
-  ${UserIdNameType}
-  ${UserWaitingFriendsType}
+  ${UserInputTypeSignUp}
+  ${UserInputTypeLogin}
+  ${UserInputTypeId}
+  ${UserInputTypeName}
   ${UserInputTypeFriendRequest}
-  
-  ${notificationInputType}
-  ${notificationType}
+  ${UserInputTypeFriend}
+
+  ${NotificationInputType}
   ${NotificationInputSenderAndReceiver}
 
+  ${MessageInputType}
+  ${MessageInputTypeSenderAndReceiver}
+
+  ${UserType}
+  ${UserWaitingFriendsType}
+  ${UserFriendsType}
+
+  ${NotificationType}
+  
+  ${MessageType}
+
   type RootMutation {
-    ${userRoutes.createUser}
-    ${createNotification}
-    ${dropNotificationBySenderAndReceiver}
-    ${dropWaitingFriend}
+    ${createUser}
     ${declineFriendRequest}
     ${createFriendRequest}
     ${dropFriendRequest}
     ${acceptFriendRequest}
+    ${dropWaitingFriend}
+
+    ${createNotification}
+    ${dropNotificationBySenderAndReceiver}
+
+    ${createMessage}
   }
 
   type RootQuery {
     hello: String
-    ${userRoutes.findUser}
-    ${userRoutes.findUserById}
-    ${userRoutes.findUserByName}
+    ${findUser}
+    ${findUserById}
+    ${findUserByName}
     ${getNotificationsById}
+    ${getMessage}
+    ${getLatestMessages}
   }
   schema {
     query: RootQuery
