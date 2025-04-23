@@ -11,7 +11,7 @@ function LoadingModal({ visible }) {
           visible ? styles.visibleModal : styles.hiddenModal
         }`}
       >
-        <CircleLoader size={"30"} />
+        <CircleLoader size={"30px"} />
         <p className={styles.title}>Authenticating...</p>
       </div>
     </Modal>

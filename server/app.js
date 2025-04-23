@@ -57,6 +57,7 @@ mongoose
         Sockets.deleteSocketByUserId(socket.handshake.query.userid);
       }
       console.log(`${socket.handshake.query.userid} connect`);
+      console.log(socket.id);
       Sockets.insertSocket(socket.handshake.query.userid, socket.id);
       //Sockets.findSocketByUserId("");
       socket.on("disconnect", () => {
@@ -64,8 +65,6 @@ mongoose
         Sockets.deleteSocketByUserId(socket.handshake.query.userid);
         socket.disconnect(true);
       });
-
-      //socket.disconnect(true);
     });
   })
   .catch((err) => {

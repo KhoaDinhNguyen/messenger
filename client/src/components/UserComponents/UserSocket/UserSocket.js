@@ -1,7 +1,8 @@
 import { useEffect } from "react";
-import { Manager } from "socket.io-client";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router";
+
+import Socket from "../../../pages/User/socket";
 
 import { notificationListSlice } from "../../../redux/notificationSlice";
 import {
@@ -13,19 +14,10 @@ import { currentMessageSlice } from "../../../redux/messageSlice";
 
 function UserSocket({ userid }) {
   const dispatch = useDispatch();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    const manager = new Manager(process.env.REACT_APP_SERVER_API, {
-      autoConnect: true,
-      query: {
-        userid: userid,
-      },
-    });
-    const socket = manager.socket("/");
-    socket.connect();
-    socket.on("friendRequest", (data) => {
-      console.log(data);
+    function friendRequestHandler(data) {
       const { action, notification } = data;
       if (action === "create") {
         const { senderId, senderName } = notification;
@@ -74,9 +66,9 @@ function UserSocket({ userid }) {
           })
         );
       }
-    });
+    }
 
-    socket.on("message", (data) => {
+    function messageHandler(data) {
       const { action, message } = data;
 
       if (action === "create") {
@@ -88,7 +80,18 @@ function UserSocket({ userid }) {
           dispatch(currentMessageSlice.actions.addMessage(message));
         }
       }
-    });
+    }
+
+    if (Socket.getSocket() !== undefined) {
+      //console.log("CALL");
+      Socket.getSocket().on("friendRequest", friendRequestHandler);
+      Socket.getSocket().on("message", messageHandler);
+    }
+
+    return () => {
+      Socket.getSocket().off("friendRequest", friendRequestHandler);
+      Socket.getSocket().off("message", messageHandler);
+    };
   }, [userid, dispatch, searchParams]);
 
   return <></>;

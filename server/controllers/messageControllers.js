@@ -28,7 +28,7 @@ module.exports = {
           action: "create",
           message: newMessage,
         });
-        console.log(`emit to ${receiverId}`);
+        console.log(`emit to ${receiverId} -- id: ${foundSocket.socketId}`);
       }
     } catch (err) {
       console.log(err);

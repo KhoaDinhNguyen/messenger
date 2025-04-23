@@ -10,11 +10,19 @@ import {
   userWaitingFriendsSlice,
   nameSlice,
 } from "../../redux/userSlice";
+
+import Socket from "./socket";
+
 import { notificationListSlice } from "../../redux/notificationSlice";
 
 function User() {
   const params = useParams();
   const dispatch = useDispatch();
+
+  if (Socket.getSocket() === undefined) {
+    console.log("init socket");
+    Socket.init(params.userid);
+  }
 
   useEffect(() => {
     function findUserById() {

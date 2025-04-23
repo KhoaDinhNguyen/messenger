@@ -254,7 +254,7 @@ module.exports = {
             action: "create",
             notification: newNotification,
           });
-          console.log(`emit to ${receiverId}`);
+          console.log(`emit to ${receiverId} -- id: foundSocket.socketId`);
         } catch (err) {
           console.log(err);
         }
@@ -295,7 +295,7 @@ module.exports = {
           action: "decline",
           notification: newNotification,
         });
-        console.log(`emit to ${receiverId}`);
+        console.log(`emit to ${receiverId} -- id: foundSocket.socketId`);
       }
 
       return newNotification;
@@ -364,7 +364,7 @@ module.exports = {
           action: "accept",
           notification: newNotification,
         });
-        console.log(`emit to ${receiverId}`);
+        console.log(`emit to ${receiverId} -- id: foundSocket.socketId`);
       }
       return newNotification;
     } catch (err) {
