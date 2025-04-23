@@ -36,18 +36,16 @@ function SearchUsersForm({ setUsersList, setLoading }) {
     myHeader.append("Content-type", "application/json");
 
     try {
-      setTimeout(async () => {
-        const jsonResponse = await fetch(process.env.REACT_APP_SERVER_API, {
-          method: "POST",
-          body: bodyJSON,
-          headers: myHeader,
-        });
+      const jsonResponse = await fetch(process.env.REACT_APP_SERVER_API, {
+        method: "POST",
+        body: bodyJSON,
+        headers: myHeader,
+      });
 
-        const response = await jsonResponse.json();
+      const response = await jsonResponse.json();
 
-        setUsersList(response.data.findUserByName);
-        setLoading(false);
-      }, 5000);
+      setUsersList(response.data.findUserByName);
+      setLoading(false);
     } catch (err) {
       console.log(err);
     }

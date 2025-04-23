@@ -1,0 +1,12 @@
+.rootContainer {
+  height: 100%;
+  display: flex;
+}
+.messagesList {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column-reverse;
+  max-height: 100%;
+  overflow: auto;
+  width: 100%;
+}

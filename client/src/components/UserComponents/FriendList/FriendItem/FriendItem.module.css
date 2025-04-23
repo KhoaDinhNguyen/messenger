@@ -3,6 +3,7 @@
   padding: 30px;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .image {

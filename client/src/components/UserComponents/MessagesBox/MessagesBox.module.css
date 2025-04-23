@@ -1,0 +1,8 @@
+.rootContainer {
+  display: grid;
+  grid-template-rows: 60px calc(100vh - 120px - 110px - 60px) 120px;
+}
+
+.messageInput {
+  grid-row: 3 / 4;
+}

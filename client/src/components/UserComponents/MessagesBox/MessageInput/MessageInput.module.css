@@ -1,0 +1,48 @@
+.rootContainer {
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+
+.formContainer {
+  display: flex;
+  align-items: center;
+}
+
+.messageContainer {
+  padding: 10px 20px;
+  border: 1px solid #6c757d;
+  border-radius: 30px;
+  width: 500px;
+}
+
+.messageInput {
+  border: 0;
+  outline: 0;
+  font-size: 18px;
+  font-weight: 300;
+  width: 100%;
+}
+
+.submitButton {
+  margin-left: 20px;
+}
+
+.image {
+  width: 20px;
+  height: auto;
+}
+
+.submitLabel {
+  width: max-content;
+  height: max-content;
+  display: flex;
+  align-items: center;
+  background-color: #246bce;
+  padding: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.submitInput {
+  display: none;
+  height: 0px;
+}

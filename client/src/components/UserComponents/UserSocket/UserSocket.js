@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Manager } from "socket.io-client";
 import { useDispatch } from "react-redux";
+import { useSearchParams } from "react-router";
 
 import { notificationListSlice } from "../../../redux/notificationSlice";
 import {
@@ -8,11 +9,13 @@ import {
   userWaitingFriendsSlice,
 } from "../../../redux/userSlice";
 
+import { currentMessageSlice } from "../../../redux/messageSlice";
+
 function UserSocket({ userid }) {
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    console.log("Call");
     const manager = new Manager(process.env.REACT_APP_SERVER_API, {
       autoConnect: true,
       query: {
@@ -52,7 +55,6 @@ function UserSocket({ userid }) {
           userWaitingFriendsSlice.actions.removeItem(notification.senderId)
         );
       } else if (action === "accept") {
-        console.log(notification);
         const { senderId } = notification;
         dispatch(notificationListSlice.actions.addNotification(notification));
         dispatch(
@@ -73,7 +75,21 @@ function UserSocket({ userid }) {
         );
       }
     });
-  }, [userid, dispatch]);
+
+    socket.on("message", (data) => {
+      const { action, message } = data;
+
+      if (action === "create") {
+        const friendId = searchParams.get("friendId");
+        if (
+          message.senderId === friendId &&
+          message.senderId !== message.receiverId
+        ) {
+          dispatch(currentMessageSlice.actions.addMessage(message));
+        }
+      }
+    });
+  }, [userid, dispatch, searchParams]);
 
   return <></>;
 }

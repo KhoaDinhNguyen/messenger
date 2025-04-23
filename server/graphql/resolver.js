@@ -1,5 +1,6 @@
 const userControllers = require("../controllers/userControllers");
 const notificationControllers = require("../controllers/notificationControllers");
+const messageControllers = require("../controllers/messageControllers");
 
 const {
   createUser,
@@ -18,6 +19,8 @@ const {
   dropNotificationBySenderAndReceiver,
 } = notificationControllers;
 
+const { createMessage, getMessage, getLatestMessages } = messageControllers;
+
 module.exports = {
   createUser,
   findUser,
@@ -30,6 +33,9 @@ module.exports = {
   dropFriendRequest,
   acceptFriendRequest,
   dropNotificationBySenderAndReceiver,
+  createMessage,
+  getMessage,
+  getLatestMessages,
   hello() {
     return "Hello world";
   },

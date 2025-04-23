@@ -116,8 +116,6 @@ function FriendRequest({ notification }) {
       .then((response) => {
         if (response.data === null) {
         } else {
-          const notification = response.data.acceptFriendRequest;
-
           dispatch(userWaitingFriendsSlice.actions.removeItem(senderId));
           dispatch(
             notificationListSlice.actions.removeNotification({
@@ -128,8 +126,8 @@ function FriendRequest({ notification }) {
           );
           dispatch(
             userFriendsSlice.actions.addItem({
-              friendId: notification.senderId,
-              friendName: notification.senderName,
+              friendId: senderId,
+              friendName: senderName,
             })
           );
         }

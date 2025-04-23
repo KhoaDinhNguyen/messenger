@@ -7,7 +7,7 @@ const NotificationInputSenderAndReceiver = `
 `;
 
 const NotificationInputType = `
-  input notificationInputType {
+  input NotificationInputType {
     type: String!
     message: String!
     senderId: String!
@@ -18,7 +18,7 @@ const NotificationInputType = `
 `;
 
 const NotificationType = `
-  type notificationType {
+  type NotificationType {
     _id: ID
     type: String
     message: String
@@ -30,7 +30,7 @@ const NotificationType = `
 `;
 
 const createNotification = `
-  createNotification(notificationInput: notificationInputType!) : notificationType
+  createNotification(notificationInput: NotificationInputType!) : NotificationType
 `;
 
 const dropNotificationBySenderAndReceiver = `
@@ -38,7 +38,7 @@ const dropNotificationBySenderAndReceiver = `
 `;
 
 const getNotificationsById = `
-  getNotificationsById(userInput: UserInputTypeId!) : [notificationType]
+  getNotificationsById(userInput: UserInputTypeId!) : [NotificationType]
 `;
 
 module.exports = {

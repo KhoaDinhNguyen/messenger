@@ -1,6 +1,7 @@
 const { buildSchema } = require("graphql");
-const userRoutes = require("../schema/userSchema");
-const notificationRouts = require("../schema/notificationSchema");
+const userSchema = require("../schema/userSchema");
+const notificationSchema = require("../schema/notificationSchema");
+const MessageSchema = require("../schema/messageSchema");
 
 const {
   UserInputTypeSignUp,
@@ -21,7 +22,7 @@ const {
   createFriendRequest,
   dropFriendRequest,
   acceptFriendRequest,
-} = userRoutes;
+} = userSchema;
 
 const {
   NotificationInputType,
@@ -30,7 +31,16 @@ const {
   createNotification,
   getNotificationsById,
   dropNotificationBySenderAndReceiver,
-} = notificationRouts;
+} = notificationSchema;
+
+const {
+  MessageInputType,
+  MessageType,
+  MessageInputTypeSenderAndReceiver,
+  createMessage,
+  getMessage,
+  getLatestMessages,
+} = MessageSchema;
 
 const schema = buildSchema(`
   ${UserInputTypeSignUp}
@@ -43,12 +53,16 @@ const schema = buildSchema(`
   ${NotificationInputType}
   ${NotificationInputSenderAndReceiver}
 
+  ${MessageInputType}
+  ${MessageInputTypeSenderAndReceiver}
+
   ${UserType}
   ${UserWaitingFriendsType}
   ${UserFriendsType}
 
   ${NotificationType}
   
+  ${MessageType}
 
   type RootMutation {
     ${createUser}
@@ -60,6 +74,8 @@ const schema = buildSchema(`
 
     ${createNotification}
     ${dropNotificationBySenderAndReceiver}
+
+    ${createMessage}
   }
 
   type RootQuery {
@@ -68,6 +84,8 @@ const schema = buildSchema(`
     ${findUserById}
     ${findUserByName}
     ${getNotificationsById}
+    ${getMessage}
+    ${getLatestMessages}
   }
   schema {
     query: RootQuery

@@ -101,11 +101,11 @@ const dropWaitingFriend = `
 `;
 
 const declineFriendRequest = `
-  declineFriendRequest(userInput: UserInputTypeFriendRequest): notificationType
+  declineFriendRequest(userInput: UserInputTypeFriendRequest): NotificationType
 `;
 
 const createFriendRequest = `
-  createFriendRequest(userInput: UserInputTypeFriendRequest): notificationType
+  createFriendRequest(userInput: UserInputTypeFriendRequest): NotificationType
 `;
 
 const dropFriendRequest = `
@@ -113,7 +113,7 @@ const dropFriendRequest = `
 `;
 
 const acceptFriendRequest = `
-  acceptFriendRequest(userInput: UserInputTypeFriendRequest): notificationType
+  acceptFriendRequest(userInput: UserInputTypeFriendRequest): NotificationType
 `;
 
 module.exports = {
