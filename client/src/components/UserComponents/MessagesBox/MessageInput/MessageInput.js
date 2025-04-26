@@ -6,7 +6,10 @@ import InputText from "../../../../components/Utils/InputText/InputText";
 import InputButton from "../../../Utils/InputButton/InputButton";
 
 import { nameSlice } from "../../../../redux/userSlice";
-import { currentMessageSlice } from "../../../../redux/messageSlice";
+import {
+  currentMessageSlice,
+  latestMessageSlice,
+} from "../../../../redux/messageSlice";
 
 import sendMessage from "../../../../asset/img/send.png";
 
@@ -44,6 +47,7 @@ function MessageInput({ searchParams }) {
           receiverId
           receiverName
           text
+          createdAt
         }
       }
       `,
@@ -70,6 +74,9 @@ function MessageInput({ searchParams }) {
         console.log(response);
         dispatch(
           currentMessageSlice.actions.addMessage(response.data.createMessage)
+        );
+        dispatch(
+          latestMessageSlice.actions.addMessage(response.data.createMessage)
         );
       })
       .catch((err) => {

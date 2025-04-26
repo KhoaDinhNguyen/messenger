@@ -31,7 +31,6 @@ app.all(
       if (!err.originalError) {
         return err;
       }
-      console.log(err);
       const message = err.message || "An error occured";
       const data = err.originalError.data || "";
       const code = err.originalError.code || 500;

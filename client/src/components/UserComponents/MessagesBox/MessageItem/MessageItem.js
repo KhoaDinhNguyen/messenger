@@ -33,7 +33,7 @@ function MessageItem({ message }) {
             : styles.receiverText
         }
       >
-        <p>{text}</p>
+        <p className={styles.text}>{text}</p>
       </div>
     </div>
   );

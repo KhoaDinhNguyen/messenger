@@ -20,7 +20,7 @@ function UserItem({ user, isAuth }) {
   const senderName = useSelector((state) => state[nameSlice.name]);
 
   const { _id, name, profileUrl, pronounce } = user;
-
+  console.log(_id);
   const onClickSeeDetails = () => {
     window.open(profileUrl, "_blank");
   };

@@ -43,6 +43,10 @@ const getLatestMessages = `
   getLatestMessages(userInput: UserInputTypeId!) : [MessageType]
 `;
 
+const updateHaveSeenMessages = `
+  updateHaveSeenMessages(messageInput: MessageInputTypeSenderAndReceiver!):  Boolean
+`;
+
 module.exports = {
   MessageInputType,
   MessageType,
@@ -50,4 +54,5 @@ module.exports = {
   createMessage,
   getMessage,
   getLatestMessages,
+  updateHaveSeenMessages,
 };

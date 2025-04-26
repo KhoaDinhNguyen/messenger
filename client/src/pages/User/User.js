@@ -15,6 +15,8 @@ import Socket from "./socket";
 
 import { notificationListSlice } from "../../redux/notificationSlice";
 
+import { latestMessageSlice } from "../../redux/messageSlice";
+
 function User() {
   const params = useParams();
   const dispatch = useDispatch();
@@ -118,8 +120,55 @@ function User() {
         });
     }
 
+    function getLastestMessage() {
+      const graphQLQuery = {
+        query: `
+          query GetLatestMessages($id: String!) {
+            getLatestMessages(userInput:{
+              id:$id
+            }) {
+              text
+              senderName
+              senderId
+              receiverName
+              receiverId
+              haveSeen
+              createdAt
+            }
+          }
+        `,
+        variables: {
+          id: params.userid,
+        },
+      };
+
+      const bodyJSON = JSON.stringify(graphQLQuery);
+      const myHeaders = new Headers();
+      myHeaders.append("Content-type", "application/json");
+
+      fetch(process.env.REACT_APP_SERVER_API, {
+        method: "POST",
+        body: bodyJSON,
+        headers: myHeaders,
+      })
+        .then((jsonResponse) => jsonResponse.json())
+        .then((response) => {
+          if (response.data === null) {
+          } else {
+            dispatch(
+              latestMessageSlice.actions.init(response.data.getLatestMessages)
+            );
+            console.log(response.data);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
     findUserById();
     getNotificationById();
+    getLastestMessage();
   }, [dispatch, params.userid]);
 
   return (

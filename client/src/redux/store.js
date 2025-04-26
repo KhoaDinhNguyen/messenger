@@ -6,7 +6,7 @@ import {
   nameSlice,
 } from "./userSlice";
 import { notificationListSlice } from "./notificationSlice";
-import { currentMessageSlice } from "./messageSlice";
+import { currentMessageSlice, latestMessageSlice } from "./messageSlice";
 
 const reducers = {
   [nameSlice.name]: nameSlice.reducer,
@@ -16,6 +16,7 @@ const reducers = {
   [notificationListSlice.name]: notificationListSlice.reducer,
 
   [currentMessageSlice.name]: currentMessageSlice.reducer,
+  [latestMessageSlice.name]: latestMessageSlice.reducer,
 };
 
 const rootReducer = combineReducers(reducers);

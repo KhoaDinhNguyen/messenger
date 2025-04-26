@@ -19,7 +19,8 @@ const {
   dropNotificationBySenderAndReceiver,
 } = notificationControllers;
 
-const { createMessage, getMessage, getLatestMessages } = messageControllers;
+const { createMessage, getMessage, getLatestMessages, updateHaveSeenMessages } =
+  messageControllers;
 
 module.exports = {
   createUser,
@@ -36,6 +37,7 @@ module.exports = {
   createMessage,
   getMessage,
   getLatestMessages,
+  updateHaveSeenMessages,
   hello() {
     return "Hello world";
   },

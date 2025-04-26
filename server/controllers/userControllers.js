@@ -138,6 +138,7 @@ module.exports = {
 
       if (!foundUser) {
         const error = new Error("User does not exist");
+        error.data = ["User does not exist"];
         error.status = 400;
         throw error;
       }
@@ -146,12 +147,13 @@ module.exports = {
 
       if (!match) {
         const error = new Error("Password is incorrect");
+        error.data = ["Password is incorrect"];
         error.status = 400;
         throw error;
       }
 
       return foundUser;
-    } catch (e) {
+    } catch (err) {
       throw err;
     }
   },
@@ -207,7 +209,7 @@ module.exports = {
   createFriendRequest: async function ({ userInput, req }) {
     const { senderId, receiverId, senderName, receiverName, message } =
       userInput;
-
+    console.log(receiverId);
     try {
       const [newNotification, ,] = await Promise.all([
         Notification.createNotification({
@@ -246,8 +248,9 @@ module.exports = {
           },
         }),
       ]);
-
+      console.log(receiverId);
       const foundSocket = Sockets.findSocketByUserId(receiverId);
+      console.log(foundSocket);
       if (foundSocket !== null) {
         try {
           io.getIO().to(foundSocket.socketId).emit("friendRequest", {
@@ -261,6 +264,7 @@ module.exports = {
       }
       return newNotification;
     } catch (err) {
+      console.log(err);
       throw err;
     }
   },

@@ -40,6 +40,7 @@ const {
   createMessage,
   getMessage,
   getLatestMessages,
+  updateHaveSeenMessages,
 } = MessageSchema;
 
 const schema = buildSchema(`
@@ -76,6 +77,7 @@ const schema = buildSchema(`
     ${dropNotificationBySenderAndReceiver}
 
     ${createMessage}
+    ${updateHaveSeenMessages}
   }
 
   type RootQuery {
