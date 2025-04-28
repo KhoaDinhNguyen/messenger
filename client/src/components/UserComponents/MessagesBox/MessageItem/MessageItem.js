@@ -2,6 +2,7 @@ import { useParams } from "react-router";
 import { useSelector } from "react-redux";
 
 import { nameSlice } from "../../../../redux/userSlice";
+import { currentSenderSlice } from "../../../../redux/messageSlice";
 
 import userpublic from "../../../../asset/img/userpublic.png";
 
@@ -12,9 +13,19 @@ function MessageItem({ message }) {
   const senderId = params.userid;
   const senderName = useSelector((state) => state[nameSlice.name]);
   const { receiverId, receiverName, text } = message;
+  const sender = useSelector((state) => state[currentSenderSlice.name]);
 
+  if (sender === null) {
+    return <></>;
+  }
   // if (receiverId !== senderId) this message belongs to current page user
 
+  const currentUserImage =
+    sender.friendImageURL && sender.friendImageURL !== ""
+      ? sender.friendImageURL
+      : userpublic;
+
+  const receiverImg = userpublic;
   return (
     <div
       className={
@@ -24,7 +35,15 @@ function MessageItem({ message }) {
       }
     >
       <div className={styles.imageContainer}>
-        <img src={userpublic} alt="user" className={styles.image} />
+        <img
+          src={
+            receiverId !== senderId || message.senderId === message.receiverId
+              ? currentUserImage
+              : receiverImg
+          }
+          alt="user"
+          className={styles.image}
+        />
       </div>
       <div
         className={
@@ -33,7 +52,7 @@ function MessageItem({ message }) {
             : styles.receiverText
         }
       >
-        <p>{text}</p>
+        <p className={styles.text}>{text}</p>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ const User = require("../models/user");
 
 const io = require("../socket");
 const Sockets = require("../models/socket");
+const { getImageFromS3 } = require("../s3");
 
 const Notification = require("./notificationControllers");
 
@@ -129,7 +130,52 @@ module.exports = {
 
     return newUser;
   },
+  updateUser: async function ({ userInput }, req) {
+    const {
+      id,
+      username,
+      password,
+      name,
+      gender,
+      pronounce,
+      dob,
+      phone,
+      email,
+      profileUrl,
+      profileImageName,
+    } = userInput;
 
+    const updateProfileParams = {};
+
+    for (const key in userInput) {
+      if (key === "id") {
+        continue;
+      } else if (key === "profileImageName") {
+        console.log("Have image name " + profileImageName);
+        updateProfileParams.profileImageURL = await getImageFromS3({
+          filename: userInput[key],
+        });
+      }
+      updateProfileParams[key] = userInput[key];
+    }
+
+    if (Object.keys(updateProfileParams).length === 0) {
+      return null;
+    }
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        id,
+        {
+          $set: updateProfileParams,
+        },
+        { new: true }
+      );
+
+      return updatedUser;
+    } catch (err) {
+      console.log(err);
+    }
+  },
   findUser: async function ({ userInput }, req) {
     const { username, password } = userInput;
 
@@ -138,6 +184,7 @@ module.exports = {
 
       if (!foundUser) {
         const error = new Error("User does not exist");
+        error.data = ["User does not exist"];
         error.status = 400;
         throw error;
       }
@@ -146,12 +193,13 @@ module.exports = {
 
       if (!match) {
         const error = new Error("Password is incorrect");
+        error.data = ["Password is incorrect"];
         error.status = 400;
         throw error;
       }
 
       return foundUser;
-    } catch (e) {
+    } catch (err) {
       throw err;
     }
   },
@@ -164,6 +212,12 @@ module.exports = {
       const error = new Error("User does not exist");
       error.status = 400;
       throw error;
+    }
+
+    if (foundUser.profileImageName && foundUser.profileImageName !== "") {
+      foundUser.profileImageURL = await getImageFromS3({
+        filename: foundUser.profileImageName,
+      });
     }
 
     return foundUser;
@@ -207,7 +261,7 @@ module.exports = {
   createFriendRequest: async function ({ userInput, req }) {
     const { senderId, receiverId, senderName, receiverName, message } =
       userInput;
-
+    console.log(receiverId);
     try {
       const [newNotification, ,] = await Promise.all([
         Notification.createNotification({
@@ -246,8 +300,9 @@ module.exports = {
           },
         }),
       ]);
-
+      console.log(receiverId);
       const foundSocket = Sockets.findSocketByUserId(receiverId);
+      console.log(foundSocket);
       if (foundSocket !== null) {
         try {
           io.getIO().to(foundSocket.socketId).emit("friendRequest", {
@@ -261,6 +316,7 @@ module.exports = {
       }
       return newNotification;
     } catch (err) {
+      console.log(err);
       throw err;
     }
   },
@@ -370,6 +426,24 @@ module.exports = {
     } catch (err) {
       console.log(err);
       throw err;
+    }
+  },
+  generateImageURLWithUserId: async function ({ userInput }, req) {
+    const { id } = userInput;
+
+    try {
+      const foundUser = await User.findById(id);
+
+      if (foundUser.profileImageName && foundUser.profileImageName !== "") {
+        const imageURL = await getImageFromS3({
+          filename: foundUser.profileImageName,
+        });
+        foundUser.profileImageURL = imageURL;
+      }
+
+      return foundUser;
+    } catch (err) {
+      console.log(err);
     }
   },
 };

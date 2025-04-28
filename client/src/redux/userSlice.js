@@ -10,6 +10,76 @@ const nameSlice = createSlice({
   },
 });
 
+const dobSlice = createSlice({
+  name: "dob",
+  initialState: "",
+  reducers: {
+    init(state, action) {
+      return action.payload;
+    },
+  },
+});
+
+const genderSlice = createSlice({
+  name: "gender",
+  initialState: "",
+  reducers: {
+    init(state, action) {
+      return action.payload;
+    },
+  },
+});
+
+const pronounceSlice = createSlice({
+  name: "pronounce",
+  initialState: "",
+  reducers: {
+    init(state, action) {
+      return action.payload;
+    },
+  },
+});
+
+const emailSlice = createSlice({
+  name: "email",
+  initialState: "",
+  reducers: {
+    init(state, action) {
+      return action.payload;
+    },
+  },
+});
+
+const phoneSlice = createSlice({
+  name: "phone",
+  initialState: "",
+  reducers: {
+    init(state, action) {
+      return action.payload;
+    },
+  },
+});
+
+const profileImageFileNameSlice = createSlice({
+  name: "profileImageFileName",
+  initialState: "",
+  reducers: {
+    init(state, action) {
+      return action.payload;
+    },
+  },
+});
+
+const profileImageFileURLSlice = createSlice({
+  name: "profileImageFileURL",
+  initialState: "",
+  reducers: {
+    init(state, action) {
+      return action.payload;
+    },
+  },
+});
+
 const userFriendsSlice = createSlice({
   name: "userFriends",
   initialState: [],
@@ -39,4 +109,15 @@ const userWaitingFriendsSlice = createSlice({
   },
 });
 
-export { userFriendsSlice, userWaitingFriendsSlice, nameSlice };
+export {
+  userFriendsSlice,
+  userWaitingFriendsSlice,
+  nameSlice,
+  dobSlice,
+  genderSlice,
+  pronounceSlice,
+  emailSlice,
+  phoneSlice,
+  profileImageFileNameSlice,
+  profileImageFileURLSlice,
+};

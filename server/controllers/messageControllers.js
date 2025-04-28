@@ -6,7 +6,7 @@ const io = require("../socket");
 
 module.exports = {
   createMessage: async function ({ messageInput }, req) {
-    const { senderId, senderName, receiverId, receiverName, text, haveSeen } =
+    const { senderId, senderName, receiverId, receiverName, text } =
       messageInput;
 
     const newMessage = new Message({
@@ -15,13 +15,13 @@ module.exports = {
       receiverId: receiverId,
       receiverName: receiverName,
       text: text,
-      haveSeen: haveSeen,
+      haveSeen: false,
     });
 
     try {
       await newMessage.save();
       newMessage._id = newMessage._id;
-
+      console.log(newMessage);
       const foundSocket = Sockets.findSocketByUserId(receiverId);
       if (foundSocket !== null) {
         io.getIO().to(foundSocket.socketId).emit("message", {
@@ -84,5 +84,20 @@ module.exports = {
       console.log(err);
       throw err;
     }
+  },
+  updateHaveSeenMessages: async function ({ messageInput }, req) {
+    const { senderId, senderName, receiverId, receiverName, text } =
+      messageInput;
+    try {
+      await Message.updateMany(
+        { senderId: senderId, receiverId: receiverId },
+        { $set: { haveSeen: true } }
+      );
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+
+    return true;
   },
 };

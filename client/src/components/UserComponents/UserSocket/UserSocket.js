@@ -10,7 +10,10 @@ import {
   userWaitingFriendsSlice,
 } from "../../../redux/userSlice";
 
-import { currentMessageSlice } from "../../../redux/messageSlice";
+import {
+  currentMessageSlice,
+  latestMessageSlice,
+} from "../../../redux/messageSlice";
 
 function UserSocket({ userid }) {
   const dispatch = useDispatch();
@@ -20,6 +23,7 @@ function UserSocket({ userid }) {
     function friendRequestHandler(data) {
       const { action, notification } = data;
       if (action === "create") {
+        console.log(notification);
         const { senderId, senderName } = notification;
 
         dispatch(notificationListSlice.actions.addNotification(notification));
@@ -70,14 +74,15 @@ function UserSocket({ userid }) {
 
     function messageHandler(data) {
       const { action, message } = data;
-
       if (action === "create") {
         const friendId = searchParams.get("friendId");
+        dispatch(latestMessageSlice.actions.addMessage(message));
         if (
           message.senderId === friendId &&
           message.senderId !== message.receiverId
         ) {
           dispatch(currentMessageSlice.actions.addMessage(message));
+          dispatch(latestMessageSlice.actions.updateHaveSeenMessage(message));
         }
       }
     }

@@ -11,6 +11,8 @@ const {
   createFriendRequest,
   dropFriendRequest,
   acceptFriendRequest,
+  updateUser,
+  generateImageURLWithUserId,
 } = userControllers;
 
 const {
@@ -19,10 +21,12 @@ const {
   dropNotificationBySenderAndReceiver,
 } = notificationControllers;
 
-const { createMessage, getMessage, getLatestMessages } = messageControllers;
+const { createMessage, getMessage, getLatestMessages, updateHaveSeenMessages } =
+  messageControllers;
 
 module.exports = {
   createUser,
+  updateUser,
   findUser,
   findUserById,
   findUserByName,
@@ -36,6 +40,8 @@ module.exports = {
   createMessage,
   getMessage,
   getLatestMessages,
+  updateHaveSeenMessages,
+  generateImageURLWithUserId,
   hello() {
     return "Hello world";
   },

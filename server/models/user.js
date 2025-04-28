@@ -32,6 +32,14 @@ const userSchema = new Schema(
       type: String,
       require: true,
     },
+    profileImageName: {
+      type: String,
+      require: true,
+    },
+    profileImageURL: {
+      type: String,
+      require: true,
+    },
   },
   { collection: "users" }
 );

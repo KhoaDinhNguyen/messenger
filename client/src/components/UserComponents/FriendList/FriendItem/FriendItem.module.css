@@ -1,9 +1,14 @@
 .rootContainer {
   border-top: 1px solid gray;
-  padding: 30px;
+  padding: 20px;
+  cursor: pointer;
+  max-width: 200px;
+  overflow: hidden;
+}
+
+.identityContainer {
   display: flex;
   align-items: center;
-  cursor: pointer;
 }
 
 .image {
@@ -11,12 +16,21 @@
 }
 
 .name {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 300;
 }
 
 .textContainer {
   display: flex;
   align-items: center;
-  margin-left: 20px;
+  margin-left: 10px;
+}
+
+.latestMessage {
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.haveNotSeenMessage {
+  font-weight: 500;
 }

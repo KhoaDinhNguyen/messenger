@@ -6,7 +6,10 @@ import InputText from "../../../../components/Utils/InputText/InputText";
 import InputButton from "../../../Utils/InputButton/InputButton";
 
 import { nameSlice } from "../../../../redux/userSlice";
-import { currentMessageSlice } from "../../../../redux/messageSlice";
+import {
+  currentMessageSlice,
+  latestMessageSlice,
+} from "../../../../redux/messageSlice";
 
 import sendMessage from "../../../../asset/img/send.png";
 
@@ -28,54 +31,61 @@ function MessageInput({ searchParams }) {
   const onSubmitForm = (event) => {
     event.preventDefault();
 
-    const graphQLQuery = {
-      query: `
-      mutation CreateMessage($senderId: String!, $senderName: String!, $receiverId: String!, $receiverName: String!, $text: String!){
-        createMessage(messageInput:{
-          senderId: $senderId
-          senderName: $senderName
-          receiverId: $receiverId
-          receiverName: $receiverName
-          text: $text
-        }) {
-          _id
-          senderId
-          senderName
-          receiverId
-          receiverName
-          text
+    if (receiverId !== null) {
+      const graphQLQuery = {
+        query: `
+        mutation CreateMessage($senderId: String!, $senderName: String!, $receiverId: String!, $receiverName: String!, $text: String!){
+          createMessage(messageInput:{
+            senderId: $senderId
+            senderName: $senderName
+            receiverId: $receiverId
+            receiverName: $receiverName
+            text: $text
+          }) {
+            _id
+            senderId
+            senderName
+            receiverId
+            receiverName
+            text
+            createdAt
+          }
         }
-      }
-      `,
-      variables: {
-        senderId: senderId,
-        senderName: senderName,
-        receiverId: receiverId,
-        receiverName: receiverName,
-        text: text,
-      },
-    };
+        `,
+        variables: {
+          senderId: senderId,
+          senderName: senderName,
+          receiverId: receiverId,
+          receiverName: receiverName,
+          text: text,
+        },
+      };
 
-    const bodyJSON = JSON.stringify(graphQLQuery);
-    const myHeaders = new Headers();
-    myHeaders.append("Content-type", "application/json");
+      const bodyJSON = JSON.stringify(graphQLQuery);
+      const myHeaders = new Headers();
+      myHeaders.append("Content-type", "application/json");
 
-    fetch(process.env.REACT_APP_SERVER_API, {
-      method: "POST",
-      body: bodyJSON,
-      headers: myHeaders,
-    })
-      .then((jsonResponse) => jsonResponse.json())
-      .then((response) => {
-        console.log(response);
-        dispatch(
-          currentMessageSlice.actions.addMessage(response.data.createMessage)
-        );
+      fetch(process.env.REACT_APP_SERVER_API, {
+        method: "POST",
+        body: bodyJSON,
+        headers: myHeaders,
       })
-      .catch((err) => {
-        console.log(err);
-      });
-
+        .then((jsonResponse) => jsonResponse.json())
+        .then((response) => {
+          console.log(response);
+          dispatch(
+            currentMessageSlice.actions.addMessage(response.data.createMessage)
+          );
+          dispatch(
+            latestMessageSlice.actions.addMessage(response.data.createMessage)
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      console.log("Do not have receiver");
+    }
     setText("");
   };
 

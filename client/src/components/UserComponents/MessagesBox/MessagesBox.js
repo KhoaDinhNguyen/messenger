@@ -17,11 +17,10 @@ function MessagesBox({ searchParams }) {
   const dispatch = useDispatch();
   const senderId = params.userid;
   const senderName = useSelector((state) => state[nameSlice.name]);
+  const receiverId = searchParams.get("friendId");
+  const receiverName = searchParams.get("friendName");
 
   useEffect(() => {
-    const receiverId = searchParams.get("friendId");
-    const receiverName = searchParams.get("friendName");
-
     if (receiverId !== null && receiverName !== null) {
       const graphQLQuery = {
         query: `
@@ -73,16 +72,12 @@ function MessagesBox({ searchParams }) {
           console.log(err);
         });
     }
-  }, [searchParams, senderId, senderName, dispatch]);
+  }, [senderId, senderName, dispatch, receiverId, receiverName]);
 
   return (
     <div className={styles.rootContainer}>
-      <div>
-        <CurrentFriend />
-      </div>
-      <div>
-        <MessageList />
-      </div>
+      <div>{receiverId !== null && <CurrentFriend />}</div>
+      <div>{receiverId !== null && <MessageList />}</div>
       <div className={styles.messageInput}>
         <MessageInput searchParams={searchParams} />
       </div>
