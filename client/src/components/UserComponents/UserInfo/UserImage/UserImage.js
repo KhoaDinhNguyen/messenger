@@ -102,11 +102,16 @@ function UserImage() {
       // TODO: Handle error
     }
   };
+  console.log(imageFileURL);
   return (
     <div className={styles.rootContainer}>
       <div className={styles.imageContainer}>
         <img
-          src={imageFileURL !== "" ? imageFileURL : userpublic}
+          src={
+            imageFileURL !== "" && imageFileURL !== null
+              ? imageFileURL
+              : userpublic
+          }
           alt="user"
           className={styles.image}
         />
