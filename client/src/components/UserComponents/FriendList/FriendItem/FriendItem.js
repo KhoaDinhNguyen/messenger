@@ -17,6 +17,7 @@ function FriendItem({ friend, setSearchParams, latestMessage }) {
     setSearchParams((prev) => {
       prev.set("friendId", friend.friendId);
       prev.set("friendName", friend.friendName);
+      prev.set("friendImage", friend.friendImageURL);
       return prev;
     });
     const graphQLQuery = {
@@ -38,7 +39,6 @@ function FriendItem({ friend, setSearchParams, latestMessage }) {
       },
     };
 
-    console.log(graphQLQuery);
     const bodyJSON = JSON.stringify(graphQLQuery);
     const myHeaders = new Headers();
     myHeaders.append("Content-type", "application/json");
@@ -74,7 +74,15 @@ function FriendItem({ friend, setSearchParams, latestMessage }) {
     <div className={styles.rootContainer} onClick={onClickFriendItem}>
       <div className={styles.identityContainer}>
         <div>
-          <img src={userpublic} alt="user" className={styles.image} />
+          <img
+            src={
+              friend.friendImageURL && friend.friendImageURL !== ""
+                ? friend.friendImageURL
+                : userpublic
+            }
+            alt="user"
+            className={styles.image}
+          />
         </div>
         <div className={styles.textContainer}>
           <p

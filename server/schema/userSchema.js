@@ -11,6 +11,21 @@ const UserInputTypeSignUp = `
   }
 `;
 
+const UserInputTypeUpdateProfile = `
+  input UserInputTypeUpdateProfile {
+    id: String!
+    username: String
+    password: String
+    name: String
+    gender: String
+    pronounce: String
+    dob: String
+    phone: String
+    email: String
+    profileUrl: String
+    profileImageName: String
+  }
+`;
 const UserInputTypeLogin = `
   input UserInputTypeLogin {
     username: String!
@@ -48,6 +63,12 @@ const UserInputTypeFriend = `
   }
 `;
 
+//TODO: redundancy
+const ImageInputType = `
+  input ImageInputType {
+    fileName: String!
+  }
+`;
 const UserWaitingFriendsType = `
   type UserWaitingFriendsType {
     friendId: String
@@ -77,11 +98,17 @@ const UserType = `
     friends: [UserFriendsType]
     waitingFriends: [UserWaitingFriendsType]
     profileUrl: String
+    profileImageName: String
+    profileImageURL: String
   }
 `;
 
 const createUser = `
   createUser(userInput: UserInputTypeSignUp): UserType!
+`;
+
+const updateUser = `
+  updateUser(userInput: UserInputTypeUpdateProfile): UserType
 `;
 
 const findUser = `
@@ -116,6 +143,18 @@ const acceptFriendRequest = `
   acceptFriendRequest(userInput: UserInputTypeFriendRequest): NotificationType
 `;
 
+const UserWithImageType = `
+  type UserWithImageType {
+    id: String
+    name: String
+    profileImageURL: String
+  }
+`;
+
+const generateImageURLWithUserId = `
+  generateImageURLWithUserId(userInput: UserInputTypeId): UserWithImageType
+`;
+
 module.exports = {
   createUser,
   UserType,
@@ -127,6 +166,8 @@ module.exports = {
   UserInputTypeName,
   UserInputTypeFriendRequest,
   UserInputTypeFriend,
+  UserInputTypeUpdateProfile,
+  ImageInputType,
   findUser,
   findUserById,
   findUserByName,
@@ -135,4 +176,7 @@ module.exports = {
   createFriendRequest,
   dropFriendRequest,
   acceptFriendRequest,
+  updateUser,
+  generateImageURLWithUserId,
+  UserWithImageType,
 };

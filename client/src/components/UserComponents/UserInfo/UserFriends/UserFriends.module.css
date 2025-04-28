@@ -1,0 +1,22 @@
+.rootContainer {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+}
+.image {
+  width: 32px;
+}
+
+.listContainer {
+  display: flex;
+  list-style: none;
+  flex-wrap: wrap;
+  max-width: 300px;
+  justify-content: flex-start;
+}
+
+.listItem {
+  margin-right: 10px;
+}

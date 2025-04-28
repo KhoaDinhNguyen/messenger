@@ -44,4 +44,15 @@ const latestMessageSlice = createSlice({
     },
   },
 });
-export { currentMessageSlice, latestMessageSlice };
+
+const currentSenderSlice = createSlice({
+  name: "currentSender",
+  initialState: null,
+  reducers: {
+    assign(state, action) {
+      return action.payload;
+    },
+  },
+});
+
+export { currentMessageSlice, latestMessageSlice, currentSenderSlice };

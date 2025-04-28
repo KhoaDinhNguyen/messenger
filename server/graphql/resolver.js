@@ -11,6 +11,8 @@ const {
   createFriendRequest,
   dropFriendRequest,
   acceptFriendRequest,
+  updateUser,
+  generateImageURLWithUserId,
 } = userControllers;
 
 const {
@@ -24,6 +26,7 @@ const { createMessage, getMessage, getLatestMessages, updateHaveSeenMessages } =
 
 module.exports = {
   createUser,
+  updateUser,
   findUser,
   findUserById,
   findUserByName,
@@ -38,6 +41,7 @@ module.exports = {
   getMessage,
   getLatestMessages,
   updateHaveSeenMessages,
+  generateImageURLWithUserId,
   hello() {
     return "Hello world";
   },

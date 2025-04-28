@@ -10,10 +10,12 @@ const {
   UserInputTypeName,
   UserInputTypeFriendRequest,
   UserInputTypeFriend,
+  UserInputTypeUpdateProfile,
   UserType,
   UserWaitingFriendsType,
   UserFriendsType,
   createUser,
+  updateUser,
   findUser,
   findUserById,
   findUserByName,
@@ -22,7 +24,11 @@ const {
   createFriendRequest,
   dropFriendRequest,
   acceptFriendRequest,
+  generateImageURLWithUserId,
+  ImageInputType,
+  UserWithImageType,
 } = userSchema;
+//TODO: ImageInputType??
 
 const {
   NotificationInputType,
@@ -44,12 +50,23 @@ const {
 } = MessageSchema;
 
 const schema = buildSchema(`
+  ${UserType}
+  ${UserWaitingFriendsType}
+  ${UserFriendsType}
+  ${UserWithImageType}
+  ${ImageInputType}
+
+  ${NotificationType}
+  
+  ${MessageType}
+
   ${UserInputTypeSignUp}
   ${UserInputTypeLogin}
   ${UserInputTypeId}
   ${UserInputTypeName}
   ${UserInputTypeFriendRequest}
   ${UserInputTypeFriend}
+  ${UserInputTypeUpdateProfile}
 
   ${NotificationInputType}
   ${NotificationInputSenderAndReceiver}
@@ -57,16 +74,10 @@ const schema = buildSchema(`
   ${MessageInputType}
   ${MessageInputTypeSenderAndReceiver}
 
-  ${UserType}
-  ${UserWaitingFriendsType}
-  ${UserFriendsType}
-
-  ${NotificationType}
-  
-  ${MessageType}
 
   type RootMutation {
     ${createUser}
+    ${updateUser}
     ${declineFriendRequest}
     ${createFriendRequest}
     ${dropFriendRequest}
@@ -88,6 +99,7 @@ const schema = buildSchema(`
     ${getNotificationsById}
     ${getMessage}
     ${getLatestMessages}
+    ${generateImageURLWithUserId}
   }
   schema {
     query: RootQuery

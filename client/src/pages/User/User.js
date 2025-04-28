@@ -9,13 +9,23 @@ import {
   userFriendsSlice,
   userWaitingFriendsSlice,
   nameSlice,
+  dobSlice,
+  genderSlice,
+  pronounceSlice,
+  emailSlice,
+  phoneSlice,
+  profileImageFileNameSlice,
+  profileImageFileURLSlice,
 } from "../../redux/userSlice";
 
 import Socket from "./socket";
 
 import { notificationListSlice } from "../../redux/notificationSlice";
 
-import { latestMessageSlice } from "../../redux/messageSlice";
+import {
+  currentSenderSlice,
+  latestMessageSlice,
+} from "../../redux/messageSlice";
 
 function User() {
   const params = useParams();
@@ -37,6 +47,7 @@ function User() {
             name,
             phone,
             dob,
+            email,
             friends{
               friendId,
               friendName,
@@ -46,7 +57,9 @@ function User() {
               friendName,
               type
             }
-          }
+            profileImageName
+            profileImageURL
+            }
         }
       `,
         variables: {
@@ -64,12 +77,82 @@ function User() {
         headers: myHeaders,
       })
         .then((jsonResponse) => jsonResponse.json())
-        .then((response) => {
-          const { friends, waitingFriends, name } = response.data.findUserById;
-          // console.log(response);
-          dispatch(userFriendsSlice.actions.init(friends));
+        .then(async (response) => {
+          const {
+            friends,
+            waitingFriends,
+            name,
+            gender,
+            pronounce,
+            email,
+            phone,
+            dob,
+            profileImageName,
+            profileImageURL,
+          } = response.data.findUserById;
+          console.log(response);
+          console.log(friends);
+
+          const friendsWithImagesPromises = friends.map(async (friend) => {
+            const friendRequest = {
+              query: `
+              query GenerateImageURLWithUserId($id: String!){
+                generateImageURLWithUserId(userInput:{id:$id}) {
+                  id
+                  name
+                  profileImageURL
+                }
+              }
+            `,
+              variables: {
+                id: friend.friendId,
+              },
+            };
+
+            const bodyJSONFriendRequest = JSON.stringify(friendRequest);
+            const myHeadersFriendRequest = new Headers();
+            myHeadersFriendRequest.append("Content-type", "application/json");
+
+            return fetch(process.env.REACT_APP_SERVER_API, {
+              method: "POST",
+              body: bodyJSONFriendRequest,
+              headers: myHeadersFriendRequest,
+            })
+              .then((jsonResponse) => jsonResponse.json())
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+          //console.log(friendsWithImages);
+
+          const friendsWithImages = await Promise.all(
+            friendsWithImagesPromises
+          );
+
+          const friendsWithImagesRedux = friendsWithImages.map((response) => {
+            const friend = response.data.generateImageURLWithUserId;
+            return {
+              friendId: friend.id,
+              friendName: friend.name,
+              friendImageURL: friend.profileImageURL,
+            };
+          });
+
+          const currentSenderRedux = friendsWithImagesRedux.filter(
+            (friend) => friend.friendId === params.userid
+          );
+
+          dispatch(userFriendsSlice.actions.init(friendsWithImagesRedux));
           dispatch(userWaitingFriendsSlice.actions.init(waitingFriends));
           dispatch(nameSlice.actions.init(name));
+          dispatch(dobSlice.actions.init(dob));
+          dispatch(genderSlice.actions.init(gender));
+          dispatch(pronounceSlice.actions.init(pronounce));
+          dispatch(emailSlice.actions.init(email));
+          dispatch(phoneSlice.actions.init(phone));
+          dispatch(profileImageFileNameSlice.actions.init(profileImageName));
+          dispatch(profileImageFileURLSlice.actions.init(profileImageURL));
+          dispatch(currentSenderSlice.actions.assign(currentSenderRedux[0]));
         })
         .catch((err) => {
           console.log(err);

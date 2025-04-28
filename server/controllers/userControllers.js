@@ -4,6 +4,7 @@ const User = require("../models/user");
 
 const io = require("../socket");
 const Sockets = require("../models/socket");
+const { getImageFromS3 } = require("../s3");
 
 const Notification = require("./notificationControllers");
 
@@ -129,7 +130,52 @@ module.exports = {
 
     return newUser;
   },
+  updateUser: async function ({ userInput }, req) {
+    const {
+      id,
+      username,
+      password,
+      name,
+      gender,
+      pronounce,
+      dob,
+      phone,
+      email,
+      profileUrl,
+      profileImageName,
+    } = userInput;
 
+    const updateProfileParams = {};
+
+    for (const key in userInput) {
+      if (key === "id") {
+        continue;
+      } else if (key === "profileImageName") {
+        console.log("Have image name " + profileImageName);
+        updateProfileParams.profileImageURL = await getImageFromS3({
+          filename: userInput[key],
+        });
+      }
+      updateProfileParams[key] = userInput[key];
+    }
+
+    if (Object.keys(updateProfileParams).length === 0) {
+      return null;
+    }
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        id,
+        {
+          $set: updateProfileParams,
+        },
+        { new: true }
+      );
+
+      return updatedUser;
+    } catch (err) {
+      console.log(err);
+    }
+  },
   findUser: async function ({ userInput }, req) {
     const { username, password } = userInput;
 
@@ -166,6 +212,12 @@ module.exports = {
       const error = new Error("User does not exist");
       error.status = 400;
       throw error;
+    }
+
+    if (foundUser.profileImageName && foundUser.profileImageName !== "") {
+      foundUser.profileImageURL = await getImageFromS3({
+        filename: foundUser.profileImageName,
+      });
     }
 
     return foundUser;
@@ -374,6 +426,24 @@ module.exports = {
     } catch (err) {
       console.log(err);
       throw err;
+    }
+  },
+  generateImageURLWithUserId: async function ({ userInput }, req) {
+    const { id } = userInput;
+
+    try {
+      const foundUser = await User.findById(id);
+
+      if (foundUser.profileImageName && foundUser.profileImageName !== "") {
+        const imageURL = await getImageFromS3({
+          filename: foundUser.profileImageName,
+        });
+        foundUser.profileImageURL = imageURL;
+      }
+
+      return foundUser;
+    } catch (err) {
+      console.log(err);
     }
   },
 };

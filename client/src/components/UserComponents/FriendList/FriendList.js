@@ -14,7 +14,7 @@ function FriendList({ setSearchParams }) {
   const friendsList = useSelector((state) => state[userFriendsSlice.name]);
   const latestMessages = useSelector((state) => state[latestMessageSlice.name]);
 
-  console.log(latestMessages);
+  //console.log(friendsList);
   const friendsMessageList = friendsList.map((friend) => {
     const latestMessage = latestMessages.filter((message) => {
       if (
@@ -28,7 +28,7 @@ function FriendList({ setSearchParams }) {
       return false;
     });
 
-    console.log(latestMessage.length);
+    //console.log(latestMessage.length);
     return {
       friend,
       latestMessage: latestMessage.length > 0 ? latestMessage[0] : null,
@@ -40,7 +40,7 @@ function FriendList({ setSearchParams }) {
     params.userid
   );
 
-  console.log(sortedFriendsMessageList);
+  //console.log(sortedFriendsMessageList);
   const friendsListRender = sortedFriendsMessageList.map((friendMessage) => {
     const { friend, latestMessage } = friendMessage;
     return (

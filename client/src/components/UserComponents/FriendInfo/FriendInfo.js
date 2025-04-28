@@ -12,7 +12,6 @@ function FriendInfo() {
   useEffect(() => {
     const friendId = searchParams.get("friendId");
     if (friendId === null) {
-      setFriend("");
     } else {
       const graphQLQuery = {
         query: `query FindUserById($id: String!) {
@@ -56,11 +55,21 @@ function FriendInfo() {
     return <></>;
   }
 
+  const friendImage = searchParams.get("friendImage");
+
   return (
     <div className={styles.rootContainer}>
       <div className={styles.infoContainer}>
         <div className={styles.imageContainer}>
-          <img src={userpublic} alt="User" className={styles.image} />
+          <img
+            src={
+              friendImage !== "null" && friendImage !== ""
+                ? friendImage
+                : userpublic
+            }
+            alt="user"
+            className={styles.image}
+          />
         </div>
         <div className={styles.textContainer}>
           <div className={styles.nameContainer}>
