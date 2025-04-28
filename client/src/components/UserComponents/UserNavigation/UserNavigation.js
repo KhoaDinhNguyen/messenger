@@ -53,7 +53,11 @@ function UserNavigation() {
       <div className={styles.userImageContainer}>
         <img
           className={styles.userImage}
-          src={imageFileURL === "" ? userpublic : imageFileURL}
+          src={
+            imageFileURL === "" || imageFileURL === null
+              ? userpublic
+              : imageFileURL
+          }
           alt="user"
           onClick={onClickOpenDropList}
         />
