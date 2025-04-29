@@ -8,10 +8,15 @@
   align-items: center;
 }
 
-.messageContainer {
-  padding: 10px 20px;
+.messageInputContainer {
+  display: flex;
+  align-items: center;
   border: 1px solid #6c757d;
   border-radius: 30px;
+  padding: 10px 20px;
+}
+
+.messageContainer {
   width: 500px;
 }
 
@@ -45,4 +50,26 @@
 .submitInput {
   display: none;
   height: 0px;
+}
+
+.emojiRoot {
+  position: relative;
+}
+.emojiPicker {
+  position: absolute;
+  bottom: 50%;
+}
+
+.emojiButtonContainer {
+  background-color: white;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.emojiButtonContainer:hover svg path,
+.emojiButtonContainer:hover svg ellipse,
+.emojiButtonContainerFocus svg path,
+.emojiButtonContainerFocus svg ellipse {
+  stroke: #246bce;
 }

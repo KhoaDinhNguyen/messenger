@@ -1,9 +1,12 @@
 import { useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
+import EmojiPicker from "emoji-picker-react";
 
 import InputText from "../../../../components/Utils/InputText/InputText";
 import InputButton from "../../../Utils/InputButton/InputButton";
+
+import { EmojiSVG } from "../../../../utils/svgConfigs/SVG";
 
 import { nameSlice } from "../../../../redux/userSlice";
 import {
@@ -19,6 +22,7 @@ function MessageInput({ searchParams }) {
   const params = useParams();
   const dispatch = useDispatch();
   const [text, setText] = useState("");
+  const [visiblePicker, setVisiblePicker] = useState(false);
   const senderId = params.userid;
   const senderName = useSelector((state) => state[nameSlice.name]);
   const receiverId = searchParams.get("friendId");
@@ -28,6 +32,13 @@ function MessageInput({ searchParams }) {
     setText(event.target.value);
   };
 
+  const onClickEmoji = (emoji) => {
+    setText((prevText) => prevText + emoji.emoji);
+    setVisiblePicker(false);
+  };
+  const onChangeVisiblePicker = () => {
+    setVisiblePicker((state) => !state);
+  };
   const onSubmitForm = (event) => {
     event.preventDefault();
 
@@ -96,13 +107,30 @@ function MessageInput({ searchParams }) {
   return (
     <div className={styles.rootContainer}>
       <form className={styles.formContainer} onSubmit={onSubmitForm}>
-        <InputText
-          id={"messageInput"}
-          rootContainer={styles.messageContainer}
-          inputContainer={styles.messageInput}
-          valueText={text}
-          onChangeText={onChangeText}
-        />
+        <div className={styles.messageInputContainer}>
+          <InputText
+            id={"messageInput"}
+            rootContainer={styles.messageContainer}
+            inputContainer={styles.messageInput}
+            valueText={text}
+            onChangeText={onChangeText}
+          />
+          <div
+            className={`${styles.emojiButtonContainer} ${
+              visiblePicker ? styles.emojiButtonContainerFocus : ""
+            }`}
+            onClick={onChangeVisiblePicker}
+          >
+            <EmojiSVG />
+          </div>
+        </div>
+        {visiblePicker && (
+          <div className={styles.emojiRoot}>
+            <div className={styles.emojiPicker}>
+              <EmojiPicker onEmojiClick={onClickEmoji} />
+            </div>
+          </div>
+        )}
         <InputButton
           id={"sendMessage"}
           type={"submit"}
