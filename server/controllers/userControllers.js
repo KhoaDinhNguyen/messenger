@@ -93,6 +93,8 @@ module.exports = {
       friends: [],
       waitingFriends: [],
       profileUrl: "",
+      profileImageName: "",
+      profileImageURL: "",
     });
 
     try {
