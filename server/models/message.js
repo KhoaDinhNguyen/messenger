@@ -13,6 +13,14 @@ const messageSchema = new Schema(
       type: String,
       require: true,
     },
+    senderEmoji: {
+      type: String,
+      require: true,
+    },
+    receiverEmoji: {
+      type: String,
+      require: true,
+    },
     receiverId: {
       type: Schema.ObjectId,
       ref: "User",

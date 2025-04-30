@@ -60,6 +60,8 @@ function MessageInput({ searchParams }) {
             receiverName
             text
             createdAt
+            senderEmoji
+            receiverEmoji
           }
         }
         `,
@@ -127,7 +129,7 @@ function MessageInput({ searchParams }) {
         {visiblePicker && (
           <div className={styles.emojiRoot}>
             <div className={styles.emojiPicker}>
-              <EmojiPicker onEmojiClick={onClickEmoji} />
+              <EmojiPicker onEmojiClick={onClickEmoji} emojiStyle="native" />
             </div>
           </div>
         )}

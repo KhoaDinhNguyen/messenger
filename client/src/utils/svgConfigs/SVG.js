@@ -49,54 +49,117 @@ const ErrorSignUpSVG = () => {
 const EmojiSVG = () => {
   return (
     <svg
-      width="30px"
-      height="30px"
-      viewBox="0 0 24 24"
+      viewBox="-2.4 -2.4 28.80 28.80"
+      width={"35px"}
+      height={"35px"}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      stroke="#ced4da"
     >
-      <g id="SVGRepo_bgCarrier" strokeWidth="0" />
+      <g id="SVGRepo_bgCarrier" strokeWidth="0">
+        <rect
+          x="-2.4"
+          y="-2.4"
+          width="28.80"
+          height="28.80"
+          rx="14.4"
+          fill="#ced4da"
+          strokeWidth="0"
+        ></rect>
+      </g>
       <g
         id="SVGRepo_tracerCarrier"
         strokeLinecap="round"
         strokeLinejoin="round"
-      />
+      ></g>
       <g id="SVGRepo_iconCarrier">
         <path
           d="M8.9126 15.9336C10.1709 16.249 11.5985 16.2492 13.0351 15.8642C14.4717 15.4793 15.7079 14.7653 16.64 13.863"
-          stroke="#adb5bd"
+          stroke="#ffffff"
           strokeWidth="1.5"
           strokeLinecap="round"
-        />
+        ></path>
         <ellipse
           cx="14.5094"
           cy="9.77405"
           rx="1"
           ry="1.5"
           transform="rotate(-15 14.5094 9.77405)"
-          fill="#adb5bd"
-        />
+          fill="#ffffff"
+        ></ellipse>
         <ellipse
           cx="8.71402"
           cy="11.3278"
           rx="1"
           ry="1.5"
           transform="rotate(-15 8.71402 11.3278)"
-          fill="#adb5bd"
-        />
+          fill="#ffffff"
+        ></ellipse>
         <path
           d="M13 16.0004L13.478 16.9742C13.8393 17.7104 14.7249 18.0198 15.4661 17.6689C16.2223 17.311 16.5394 16.4035 16.1708 15.6524L15.7115 14.7168"
-          stroke="#adb5bd"
+          stroke="#ffffff"
           strokeWidth="1.5"
-        />
+        ></path>
         <path
           d="M4.92847 4.92663C6.12901 3.72408 7.65248 2.81172 9.41185 2.34029C14.7465 0.910876 20.2299 4.0767 21.6593 9.41136C23.0887 14.746 19.9229 20.2294 14.5882 21.6588C9.25357 23.0882 3.7702 19.9224 2.34078 14.5877C1.86936 12.8284 1.89775 11.0528 2.33892 9.41186"
-          stroke="#adb5bd"
+          stroke="#ffffff"
           strokeWidth="1.5"
           strokeLinecap="round"
-        />
+        ></path>
       </g>
     </svg>
   );
 };
-export { ErrorSignUpSVG, EmojiSVG };
+
+function DotMenuSVG() {
+  return (
+    <svg
+      fill="#000000"
+      width="35px"
+      height="35px"
+      viewBox="-3.2 -3.2 38.40 38.40"
+      enableBackground="new 0 0 32 32"
+      id="Glyph"
+      version="1.1"
+      xmlSpace="preserve"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+    >
+      <g id="SVGRepo_bgCarrier" strokeWidth="0">
+        <rect
+          x="-3.2"
+          y="-3.2"
+          width="38.40"
+          height="38.40"
+          rx="19.2"
+          fill="#ffffff"
+          strokeWidth="0"
+        />
+      </g>
+
+      <g
+        id="SVGRepo_tracerCarrier"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+
+      <g id="SVGRepo_iconCarrier">
+        <path
+          d="M13,16c0,1.654,1.346,3,3,3s3-1.346,3-3s-1.346-3-3-3S13,14.346,13,16z"
+          id="XMLID_294_"
+        />
+
+        <path
+          d="M13,26c0,1.654,1.346,3,3,3s3-1.346,3-3s-1.346-3-3-3S13,24.346,13,26z"
+          id="XMLID_295_"
+        />
+
+        <path
+          d="M13,6c0,1.654,1.346,3,3,3s3-1.346,3-3s-1.346-3-3-3S13,4.346,13,6z"
+          id="XMLID_297_"
+        />
+      </g>
+    </svg>
+  );
+}
+export { ErrorSignUpSVG, EmojiSVG, DotMenuSVG };

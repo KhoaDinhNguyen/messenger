@@ -67,6 +67,15 @@
   cursor: pointer;
 }
 
+.emojiButtonContainer svg path,
+.emojiButtonContainer svg ellipse {
+  stroke: #6c757d;
+}
+
+.emojiButtonContainer rect {
+  fill: white;
+}
+
 .emojiButtonContainer:hover svg path,
 .emojiButtonContainer:hover svg ellipse,
 .emojiButtonContainerFocus svg path,

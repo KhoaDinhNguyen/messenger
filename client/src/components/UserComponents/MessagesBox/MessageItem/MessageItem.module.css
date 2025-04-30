@@ -1,17 +1,17 @@
-.senderContainer {
-  justify-self: flex-end;
+.rootContainer {
+  margin-bottom: 20px;
   display: flex;
   align-items: center;
+}
+
+.senderContainer {
+  justify-self: flex-end;
   flex-direction: row-reverse;
-  margin-bottom: 10px;
 }
 
 .receiverContainer {
   justify-self: flex-start;
-  display: flex;
-  align-items: center;
   flex-direction: row;
-  margin-bottom: 10px;
 }
 
 .imageContainer {
@@ -30,8 +30,10 @@
   padding: 10px 15px;
   border-radius: 20px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin-right: 5px;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .receiverText {
@@ -39,11 +41,91 @@
   padding: 10px 20px;
   border-radius: 20px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   margin-left: 5px;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .text {
   max-width: 500px;
   word-wrap: break-word;
+}
+
+.buttonsContainer {
+  visibility: hidden;
+  align-items: center;
+  display: flex;
+}
+
+.senderContainer .buttonsContainer {
+  flex-direction: row;
+}
+
+.receiverContainer .buttonsContainer {
+  flex-direction: row-reverse;
+}
+.rootContainer:hover .buttonsContainer {
+  visibility: visible;
+}
+
+.emojiButtonContainer {
+  cursor: pointer;
+  display: flex;
+  margin: 0x 10px;
+}
+
+.emojiButtonContainer svg path,
+.emojiButtonContainer svg ellipse {
+  stroke: black;
+}
+
+.emojiButtonContainer rect {
+  fill: white;
+}
+
+.dotMenuContainer {
+  display: flex;
+  cursor: pointer;
+}
+
+.emojiContainer {
+  position: relative;
+}
+.emojiText {
+  position: absolute;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 0px 5px;
+  display: flex;
+}
+
+.emoji {
+  font-size: 15px;
+}
+
+.emojiPickerRoot {
+  position: relative;
+}
+
+.senderContainer .emojiPickerContainer {
+  position: absolute;
+  right: 100%;
+}
+
+.senderContainer .emojiText {
+  right: 100%;
+}
+
+.receiverContainer .emojiText {
+  left: 100%;
+}
+.receiverContainer .emojiPickerContainer {
+  position: absolute;
+  left: 100%;
+}
+
+.emojiLength {
+  color: black;
 }
