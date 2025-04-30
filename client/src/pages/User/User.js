@@ -16,6 +16,7 @@ import {
   phoneSlice,
   profileImageFileNameSlice,
   profileImageFileURLSlice,
+  profileUrlSlice,
 } from "../../redux/userSlice";
 
 import Socket from "./socket";
@@ -57,6 +58,7 @@ function User() {
               friendName,
               type
             }
+            profileUrl
             profileImageName
             profileImageURL
             }
@@ -89,6 +91,7 @@ function User() {
             dob,
             profileImageName,
             profileImageURL,
+            profileUrl,
           } = response.data.findUserById;
           console.log(response);
           console.log(friends);
@@ -138,18 +141,81 @@ function User() {
             };
           });
 
+          const waitingFriendsWithImagesPromises = waitingFriends.map(
+            async (friend) => {
+              const friendRequest = {
+                query: `
+              query GenerateImageURLWithUserId($id: String!){
+                generateImageURLWithUserId(userInput:{id:$id}) {
+                  id
+                  name
+                  profileImageURL
+                }
+              }
+            `,
+                variables: {
+                  id: friend.friendId,
+                },
+              };
+
+              const bodyJSONWaitingFriendRequest =
+                JSON.stringify(friendRequest);
+              const myHeadersWaitingFriendRequest = new Headers();
+              myHeadersWaitingFriendRequest.append(
+                "Content-type",
+                "application/json"
+              );
+
+              return fetch(process.env.REACT_APP_SERVER_API, {
+                method: "POST",
+                body: bodyJSONWaitingFriendRequest,
+                headers: myHeadersWaitingFriendRequest,
+              })
+                .then((jsonResponse) => jsonResponse.json())
+                .catch((err) => {
+                  console.log(err);
+                });
+            }
+          );
+          //console.log(friendsWithImages);
+
+          const waitingFriendsWithImages = await Promise.all(
+            waitingFriendsWithImagesPromises
+          );
+
+          const waitingFriendsWithImagesRedux = waitingFriendsWithImages.map(
+            (response) => {
+              //TODO: Improve complexity
+              const friend = response.data.generateImageURLWithUserId;
+              const friendType = waitingFriends.filter((friendItem) => {
+                return friendItem.friendId === friend.id;
+              })[0].type;
+
+              return {
+                friendId: friend.id,
+                friendName: friend.name,
+                type: friendType,
+                friendImageUrl: friend.profileImageURL,
+              };
+            }
+          );
+
+          //TODO: ???
           const currentSenderRedux = friendsWithImagesRedux.filter(
             (friend) => friend.friendId === params.userid
           );
 
           dispatch(userFriendsSlice.actions.init(friendsWithImagesRedux));
-          dispatch(userWaitingFriendsSlice.actions.init(waitingFriends));
+          dispatch(
+            userWaitingFriendsSlice.actions.init(waitingFriendsWithImagesRedux)
+          );
           dispatch(nameSlice.actions.init(name));
           dispatch(dobSlice.actions.init(dob));
           dispatch(genderSlice.actions.init(gender));
           dispatch(pronounceSlice.actions.init(pronounce));
           dispatch(emailSlice.actions.init(email));
           dispatch(phoneSlice.actions.init(phone));
+          dispatch(profileUrlSlice.actions.init(profileUrl));
           dispatch(profileImageFileNameSlice.actions.init(profileImageName));
           dispatch(profileImageFileURLSlice.actions.init(profileImageURL));
           dispatch(currentSenderSlice.actions.assign(currentSenderRedux[0]));

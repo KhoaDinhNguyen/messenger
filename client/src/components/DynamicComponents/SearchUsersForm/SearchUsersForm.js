@@ -21,8 +21,10 @@ function SearchUsersForm({ setUsersList, setLoading }) {
           findUserByName(userInput: {name: $name}) {
             _id,
             name,
-            profileUrl,
-            pronounce,
+            profileUrl
+            pronounce
+            profileImageURL
+            profileImageName
           }
         }
       `,
@@ -43,7 +45,6 @@ function SearchUsersForm({ setUsersList, setLoading }) {
       });
 
       const response = await jsonResponse.json();
-
       setUsersList(response.data.findUserByName);
       setLoading(false);
     } catch (err) {

@@ -13,10 +13,10 @@ function WaitingFriendItem({ friend }) {
   const params = useParams();
   const dispatch = useDispatch();
 
-  const { friendName, friendId } = friend;
+  console.log(friend);
+  const { friendName, friendId, friendImageUrl } = friend;
 
-  console.log(params.userid);
-
+  console.log(friendImageUrl);
   const onClickRemoveFriendRequest = async () => {
     const graphQLQuery = {
       query: `
@@ -57,28 +57,41 @@ function WaitingFriendItem({ friend }) {
   };
   return (
     <div className={styles.rootContainer}>
-      <div className={styles.imageContainer}>
-        <img src={userpublic} alt="user" className={styles.image} />
-      </div>
-      <div className={styles.textContainer}>
-        {friend.type === "sender" && (
-          <p className={styles.text}>
-            {friendName} have sent you a friend request
-          </p>
-        )}
-        {friend.type === "receiver" && (
-          <>
+      <div className={styles.titleContainer}>
+        <div className={styles.imageContainer}>
+          <img
+            src={
+              friendImageUrl && friendImageUrl !== ""
+                ? friendImageUrl
+                : userpublic
+            }
+            alt="user"
+            className={styles.image}
+          />
+        </div>
+        <div className={styles.textContainer}>
+          {friend.type === "sender" && (
+            <p className={styles.text}>
+              {friendName} have sent you a friend request
+            </p>
+          )}
+          {friend.type === "receiver" && (
             <p className={styles.text}>
               You have sent a friend request to {friendName}
             </p>
-            <InputButton
-              type="button"
-              valueButton={"Remove"}
-              id="removeFriendRequest"
-              onClickHandler={onClickRemoveFriendRequest}
-              inputContainer={styles.removeInput}
-            />
-          </>
+          )}
+        </div>
+      </div>
+
+      <div className={styles.buttonContainer}>
+        {friend.type === "receiver" && (
+          <InputButton
+            type="button"
+            valueButton={"Remove"}
+            id="removeFriendRequest"
+            onClickHandler={onClickRemoveFriendRequest}
+            inputContainer={styles.removeInput}
+          />
         )}
       </div>
     </div>

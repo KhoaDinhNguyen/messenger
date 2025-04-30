@@ -11,6 +11,7 @@ import {
   phoneSlice,
   profileImageFileURLSlice,
   profileImageFileNameSlice,
+  profileUrlSlice,
 } from "./userSlice";
 import { notificationListSlice } from "./notificationSlice";
 import {
@@ -26,6 +27,7 @@ const reducers = {
   [pronounceSlice.name]: pronounceSlice.reducer,
   [emailSlice.name]: emailSlice.reducer,
   [phoneSlice.name]: phoneSlice.reducer,
+  [profileUrlSlice.name]: profileUrlSlice.reducer,
   [profileImageFileURLSlice.name]: profileImageFileURLSlice.reducer,
   [profileImageFileNameSlice.name]: profileImageFileNameSlice.reducer,
 

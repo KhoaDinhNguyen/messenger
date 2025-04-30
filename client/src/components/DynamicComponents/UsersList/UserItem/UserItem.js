@@ -19,8 +19,7 @@ function UserItem({ user, isAuth }) {
   const senderId = params.userid;
   const senderName = useSelector((state) => state[nameSlice.name]);
 
-  const { _id, name, profileUrl, pronounce } = user;
-  console.log(_id);
+  const { _id, name, profileUrl, pronounce, profileImageURL } = user;
   const onClickSeeDetails = () => {
     window.open(profileUrl, "_blank");
   };
@@ -64,12 +63,12 @@ function UserItem({ user, isAuth }) {
     })
       .then((jsonResponse) => jsonResponse.json())
       .then((respnose) => {
-        console.log(respnose);
         dispatch(
           userWaitingFriendsSlice.actions.addItem({
             friendId: _id,
             friendName: name,
             type: "receiver",
+            friendImageUrl: profileImageURL,
           })
         );
       })
@@ -80,13 +79,24 @@ function UserItem({ user, isAuth }) {
 
   return (
     <div className={styles.rootContainer}>
-      <div>
-        <img src={userpublic} alt="user" className={styles.image} />
+      <div className={styles.titleContainer}>
+        <div>
+          <img
+            src={
+              profileImageURL && profileImageURL !== ""
+                ? profileImageURL
+                : userpublic
+            }
+            alt="user"
+            className={styles.image}
+          />
+        </div>
+        <div className={styles.textContainer}>
+          <p className={styles.title}>{name}</p>
+          <p className={styles.pronounce}>{pronounce}</p>
+        </div>
       </div>
-      <div className={styles.textContainer}>
-        <p className={styles.title}>{name}</p>
-        <p className={styles.pronounce}>{pronounce}</p>
-      </div>
+
       <div className={styles.buttonsContainer}>
         <InputButton
           type={"button"}
