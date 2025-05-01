@@ -20,6 +20,9 @@ function UserSocket({ userid }) {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
+    if (Socket.getSocket() === undefined) {
+      Socket.init();
+    }
     function friendRequestHandler(data) {
       const { action, notification } = data;
       if (action === "create") {
@@ -84,11 +87,20 @@ function UserSocket({ userid }) {
           dispatch(currentMessageSlice.actions.addMessage(message));
           dispatch(latestMessageSlice.actions.updateHaveSeenMessage(message));
         }
+      } else if (action === "updateEmoji") {
+        console.log(message);
+        dispatch(
+          currentMessageSlice.actions.updateEmoji({
+            messageId: message._id,
+            emoji: data.emoji,
+            commentId: data.commentId,
+          })
+        );
       }
+      //TODO: UPDATE EMOJI
     }
 
     if (Socket.getSocket() !== undefined) {
-      //console.log("CALL");
       Socket.getSocket().on("friendRequest", friendRequestHandler);
       Socket.getSocket().on("message", messageHandler);
     }

@@ -80,6 +80,16 @@ const profileImageFileURLSlice = createSlice({
   },
 });
 
+const profileUrlSlice = createSlice({
+  name: "profileUrl",
+  initialState: "",
+  reducers: {
+    init(state, action) {
+      return action.payload;
+    },
+  },
+});
+
 const userFriendsSlice = createSlice({
   name: "userFriends",
   initialState: [],
@@ -120,4 +130,5 @@ export {
   phoneSlice,
   profileImageFileNameSlice,
   profileImageFileURLSlice,
+  profileUrlSlice,
 };

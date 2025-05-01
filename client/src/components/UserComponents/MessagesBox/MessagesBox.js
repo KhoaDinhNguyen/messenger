@@ -39,6 +39,8 @@ function MessagesBox({ searchParams }) {
               senderName
               createdAt
               updatedAt
+              senderEmoji
+              receiverEmoji
             }
           }
         `,

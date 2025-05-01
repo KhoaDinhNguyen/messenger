@@ -16,12 +16,14 @@ module.exports = {
       receiverName: receiverName,
       text: text,
       haveSeen: false,
+      senderEmoji: "",
+      receiverEmoji: "",
     });
 
     try {
       await newMessage.save();
       newMessage._id = newMessage._id;
-      console.log(newMessage);
+
       const foundSocket = Sockets.findSocketByUserId(receiverId);
       if (foundSocket !== null) {
         io.getIO().to(foundSocket.socketId).emit("message", {
@@ -99,5 +101,50 @@ module.exports = {
     }
 
     return true;
+  },
+  updateMessageEmoji: async function ({ messageInput }, req) {
+    const { messageId, emoji, commentId } = messageInput;
+
+    try {
+      const foundMessage = await Message.findById(messageId);
+
+      let query;
+
+      if (foundMessage.senderId.toString() === commentId) {
+        query = { senderEmoji: emoji };
+      } else {
+        query = { receiverEmoji: emoji };
+      }
+
+      const updatedMessage = await foundMessage.updateOne(
+        { $set: query },
+        { new: true }
+      );
+
+      if (
+        foundMessage.receiverId.toString() !== foundMessage.senderId.toString()
+      ) {
+        const foundSocket = Sockets.findSocketByUserId(
+          commentId === foundMessage.senderId.toString()
+            ? foundMessage.receiverId.toString()
+            : foundMessage.senderId.toString()
+        );
+
+        if (foundSocket !== null) {
+          io.getIO().to(foundSocket.socketId).emit("message", {
+            action: "updateEmoji",
+            message: foundMessage,
+            commentId: commentId,
+            emoji: emoji,
+          });
+        }
+      }
+
+      //TODO: the foundMessgage does not return updatedMessage
+      return foundMessage;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   },
 };

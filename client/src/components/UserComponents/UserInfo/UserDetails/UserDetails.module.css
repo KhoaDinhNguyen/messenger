@@ -1,5 +1,50 @@
+.rootContainer {
+  margin-left: 50px;
+}
+
+.name {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.profileUrlContainer {
+  display: flex;
+  align-items: center;
+  margin-top: -10px;
+}
+
+.profileUrlText {
+  color: #adb5bd;
+}
+.profileLabel {
+  cursor: pointer;
+  width: max-content;
+  height: max-content;
+}
+.profileInput {
+  display: none;
+}
+
+.pronounce {
+  color: #adb5bd;
+  font-style: italic;
+}
+
+.infoTitle {
+  font-size: 20px;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
 .textInfo {
   display: grid;
-  grid-template-columns: 100px 1fr;
+  grid-template-columns: 150px 1fr;
   width: max-content;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.textTitle {
+  display: flex;
+  align-items: center;
 }

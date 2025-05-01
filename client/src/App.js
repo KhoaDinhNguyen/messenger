@@ -5,6 +5,7 @@ import {
   createRoutesFromElements,
 } from "react-router";
 import { Provider } from "react-redux";
+
 import { CookiesProvider, Cookies } from "react-cookie";
 
 import Root from "./pages/Root";

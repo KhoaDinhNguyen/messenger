@@ -93,6 +93,8 @@ module.exports = {
       friends: [],
       waitingFriends: [],
       profileUrl: "",
+      profileImageName: "",
+      profileImageURL: "",
     });
 
     try {
@@ -226,7 +228,21 @@ module.exports = {
     const { name } = userInput;
     const foundUsers = await User.find({ $text: { $search: name } });
 
-    return foundUsers;
+    //TODO: Fix promise all
+    const foundUsersWithImages = foundUsers.map(async (user) => {
+      console.log(user.profileImageName);
+      if (user.profileImageName && user.profileImageName !== "") {
+        user.profileImageURL = await getImageFromS3({
+          filename: user.profileImageName,
+        });
+      }
+
+      return user;
+    });
+
+    //await Promise.all(foundUsersWithImages);
+
+    return foundUsersWithImages;
   },
   dropFriendRequest: async function ({ userInput, req }) {
     const { senderId, receiverId } = userInput;

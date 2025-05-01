@@ -7,6 +7,14 @@ const MessageInputTypeSenderAndReceiver = `
   }
 `;
 
+const MessageInputTypeEmoji = `
+  input MessageInputTypeEmoji {
+    messageId: String!
+    emoji: String
+    commentId: String!
+  }
+`;
+
 const MessageInputType = `
   input MessageInputType {
     senderId: String!
@@ -28,6 +36,8 @@ const MessageType = `
     createdAt: String
     updatedAt: String
     haveSeen: Boolean
+    senderEmoji: String
+    receiverEmoji: String
   }
 `;
 
@@ -47,12 +57,18 @@ const updateHaveSeenMessages = `
   updateHaveSeenMessages(messageInput: MessageInputTypeSenderAndReceiver!):  Boolean
 `;
 
+const updateMessageEmoji = `
+  updateMessageEmoji(messageInput: MessageInputTypeEmoji!): MessageType
+`;
+
 module.exports = {
   MessageInputType,
+  MessageInputTypeEmoji,
   MessageType,
   MessageInputTypeSenderAndReceiver,
   createMessage,
   getMessage,
   getLatestMessages,
   updateHaveSeenMessages,
+  updateMessageEmoji,
 };

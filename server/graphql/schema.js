@@ -41,12 +41,14 @@ const {
 
 const {
   MessageInputType,
+  MessageInputTypeEmoji,
   MessageType,
   MessageInputTypeSenderAndReceiver,
   createMessage,
   getMessage,
   getLatestMessages,
   updateHaveSeenMessages,
+  updateMessageEmoji,
 } = MessageSchema;
 
 const schema = buildSchema(`
@@ -73,7 +75,7 @@ const schema = buildSchema(`
 
   ${MessageInputType}
   ${MessageInputTypeSenderAndReceiver}
-
+  ${MessageInputTypeEmoji}
 
   type RootMutation {
     ${createUser}
@@ -89,6 +91,7 @@ const schema = buildSchema(`
 
     ${createMessage}
     ${updateHaveSeenMessages}
+    ${updateMessageEmoji}
   }
 
   type RootQuery {

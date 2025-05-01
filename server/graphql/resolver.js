@@ -21,8 +21,13 @@ const {
   dropNotificationBySenderAndReceiver,
 } = notificationControllers;
 
-const { createMessage, getMessage, getLatestMessages, updateHaveSeenMessages } =
-  messageControllers;
+const {
+  createMessage,
+  getMessage,
+  getLatestMessages,
+  updateHaveSeenMessages,
+  updateMessageEmoji,
+} = messageControllers;
 
 module.exports = {
   createUser,
@@ -42,6 +47,7 @@ module.exports = {
   getLatestMessages,
   updateHaveSeenMessages,
   generateImageURLWithUserId,
+  updateMessageEmoji,
   hello() {
     return "Hello world";
   },

@@ -10,6 +10,32 @@ const currentMessageSlice = createSlice({
     addMessage(state, action) {
       return [action.payload, ...state];
     },
+    updateEmoji(state, action) {
+      const { messageId, emoji, commentId } = action.payload;
+
+      state.forEach((message) => {
+        if (message._id === messageId) {
+          if (message.senderId === commentId) {
+            if (message.senderEmoji === emoji) {
+              message.senderEmoji = "";
+            } else {
+              message.senderEmoji = emoji;
+            }
+          } else {
+            if (message.receiverEmoji === emoji) {
+              message.receiverEmoji = "";
+            } else {
+              console.log("Expected");
+              message.receiverEmoji = emoji;
+            }
+          }
+        }
+
+        return message;
+      });
+
+      return state;
+    },
   },
 });
 

@@ -5,8 +5,12 @@
   border-radius: 10px;
   padding: 20px 30px;
   margin-top: 20px;
+  justify-content: space-between;
 }
 
+.titleContainer {
+  display: flex;
+}
 .image {
   width: 64px;
   height: auto;
