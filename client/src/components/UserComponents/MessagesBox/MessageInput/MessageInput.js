@@ -85,7 +85,6 @@ function MessageInput({ searchParams }) {
       })
         .then((jsonResponse) => jsonResponse.json())
         .then((response) => {
-          console.log(response);
           dispatch(
             currentMessageSlice.actions.addMessage(response.data.createMessage)
           );

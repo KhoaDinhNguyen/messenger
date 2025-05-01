@@ -230,7 +230,7 @@ module.exports = {
 
     //TODO: Fix promise all
     const foundUsersWithImages = foundUsers.map(async (user) => {
-      console.log(user.profileImageName);
+      //console.log(user.profileImageName);
       if (user.profileImageName && user.profileImageName !== "") {
         user.profileImageURL = await getImageFromS3({
           filename: user.profileImageName,
@@ -277,7 +277,7 @@ module.exports = {
   createFriendRequest: async function ({ userInput, req }) {
     const { senderId, receiverId, senderName, receiverName, message } =
       userInput;
-    console.log(receiverId);
+    //console.log(receiverId);
     try {
       const [newNotification, ,] = await Promise.all([
         Notification.createNotification({
@@ -316,9 +316,9 @@ module.exports = {
           },
         }),
       ]);
-      console.log(receiverId);
+      //console.log(receiverId);
       const foundSocket = Sockets.findSocketByUserId(receiverId);
-      console.log(foundSocket);
+      //console.log(foundSocket);
       if (foundSocket !== null) {
         try {
           io.getIO().to(foundSocket.socketId).emit("friendRequest", {

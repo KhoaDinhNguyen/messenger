@@ -37,7 +37,7 @@ app.post("/uploadImage", upload.single("image"), async (req, res) => {
       file: req.file,
       userid: req.body.userid,
     });
-    console.log(fileName);
+    //console.log(fileName);
     const fileURL = await getImageFromS3({
       filename: fileName,
     });

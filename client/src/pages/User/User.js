@@ -93,8 +93,8 @@ function User() {
             profileImageURL,
             profileUrl,
           } = response.data.findUserById;
-          console.log(response);
-          console.log(friends);
+          //console.log(response);
+          //console.log(friends);
 
           const friendsWithImagesPromises = friends.map(async (friend) => {
             const friendRequest = {
@@ -307,7 +307,7 @@ function User() {
             dispatch(
               latestMessageSlice.actions.init(response.data.getLatestMessages)
             );
-            console.log(response.data);
+            //console.log(response.data);
           }
         })
         .catch((err) => {

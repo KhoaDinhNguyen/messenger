@@ -47,7 +47,6 @@ function UserImage() {
 
         const responseUploadAWS = await jsonResponseUploadAWS.json();
 
-        console.log(responseUploadAWS.fileName);
         if (jsonResponseUploadAWS.ok) {
           const graphQLQuery = {
             query: `
@@ -102,7 +101,6 @@ function UserImage() {
       // TODO: Handle error
     }
   };
-  console.log(imageFileURL);
   return (
     <div className={styles.rootContainer}>
       <div className={styles.imageContainer}>

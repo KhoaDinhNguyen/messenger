@@ -11,7 +11,7 @@ function WaitingFriendList() {
     (state) => state[userWaitingFriendsSlice.name]
   );
 
-  console.log(waitingFriendsList);
+  //console.log(waitingFriendsList);
   const waitingFriendsListRender = waitingFriendsList.map((friend) => {
     return (
       <li key={friend.friendId}>
