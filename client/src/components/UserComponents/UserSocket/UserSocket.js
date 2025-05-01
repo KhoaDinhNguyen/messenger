@@ -20,6 +20,9 @@ function UserSocket({ userid }) {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
+    if (Socket.getSocket() === undefined) {
+      Socket.init();
+    }
     function friendRequestHandler(data) {
       const { action, notification } = data;
       if (action === "create") {

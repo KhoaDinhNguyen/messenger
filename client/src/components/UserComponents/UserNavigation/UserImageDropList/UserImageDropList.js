@@ -1,11 +1,13 @@
 import { NavLink, useNavigate } from "react-router";
 
+import Socket from "../../../../pages/User/socket";
 import styles from "./UserImageDropList.module.css";
 
 function UserImageDropList() {
   const navigate = useNavigate();
 
   const onClickLogOut = () => {
+    Socket.disconnect();
     navigate("/home/login");
   };
   return (

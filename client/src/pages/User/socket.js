@@ -17,6 +17,11 @@ const Socket = {
   getSocket: function () {
     return socket;
   },
+  disconnect: function () {
+    socket.disconnect();
+
+    return true;
+  },
 };
 
 export default Socket;
