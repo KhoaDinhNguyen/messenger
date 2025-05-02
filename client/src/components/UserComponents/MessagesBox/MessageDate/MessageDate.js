@@ -5,6 +5,7 @@ import { formatDateString } from "../../../../utils/dateConfigs/format";
 import styles from "./MessageDate.module.css";
 
 function MessageDate({ date, messagesList }) {
+  console.log(date);
   const messagesListRender = messagesList.map((message) => (
     <li key={message._id}>
       <MessageItem message={message} />

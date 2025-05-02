@@ -57,16 +57,15 @@ function FriendInfo() {
 
   const friendImage = searchParams.get("friendImage");
 
+  const hasFriendImage =
+    friendImage !== "undefined" && friendImage !== "null" && friendImage !== "";
+
   return (
     <div className={styles.rootContainer}>
       <div className={styles.infoContainer}>
         <div className={styles.imageContainer}>
           <img
-            src={
-              friendImage !== "null" && friendImage !== ""
-                ? friendImage
-                : userpublic
-            }
+            src={hasFriendImage ? friendImage : userpublic}
             alt="user"
             className={styles.image}
           />

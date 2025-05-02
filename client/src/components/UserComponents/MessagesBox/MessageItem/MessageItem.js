@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import Picker from "emoji-picker-react";
@@ -19,6 +19,7 @@ import styles from "./MessageItem.module.css";
 
 function MessageItem({ message }) {
   const params = useParams();
+  const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
   const senderId = params.userid;
   const senderName = useSelector((state) => state[nameSlice.name]);
@@ -31,7 +32,7 @@ function MessageItem({ message }) {
     receiverEmoji,
     createdAt,
   } = message;
-
+  const friendImage = searchParams.get("friendImage");
   const sender = useSelector((state) => state[currentSenderSlice.name]);
   const [visiblePicker, setVisiblePicker] = useState(false);
   const onChangeVisiblePicker = () => {
@@ -99,7 +100,10 @@ function MessageItem({ message }) {
       ? sender.friendImageURL
       : userpublic;
 
-  const receiverImg = userpublic;
+  const receiverImg =
+    friendImage !== "undefined" && friendImage !== "null" && friendImage !== ""
+      ? friendImage
+      : userpublic;
   const isCurrentPage =
     receiverId !== senderId || message.senderId === message.receiverId;
 
@@ -129,6 +133,7 @@ function MessageItem({ message }) {
     );
   });
 
+  console.log(typeof createdAt);
   return (
     <div
       className={`${
@@ -163,9 +168,7 @@ function MessageItem({ message }) {
           )}
         </div>
         <div className={styles.messageTime}>
-          <p className={styles.timeText}>
-            {getHoursMinute(new Date(Number(createdAt)))}
-          </p>
+          <p className={styles.timeText}>{getHoursMinute(createdAt)}</p>
         </div>
       </div>
 

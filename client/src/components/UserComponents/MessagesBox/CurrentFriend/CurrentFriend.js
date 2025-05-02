@@ -14,15 +14,16 @@ function CurrentFriend() {
   const friendName = searchParams.get("friendName");
   const friendImage = searchParams.get("friendImage");
 
+  console.log(friendImage);
+
+  const hasFriendImage =
+    friendImage !== "undefined" && friendImage !== "null" && friendImage !== "";
+
   return (
     <div className={styles.rootContainer}>
       <div>
         <img
-          src={
-            friendImage !== "null" && friendImage !== ""
-              ? friendImage
-              : userpublic
-          }
+          src={hasFriendImage ? friendImage : userpublic}
           alt="user"
           className={styles.image}
         />

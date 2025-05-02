@@ -16,8 +16,14 @@ function formatDates(date, month, year) {
 }
 
 function getHoursMinute(date) {
-  let hourString = String(date.getHours());
-  let minuteString = String(date.getMinutes());
+  let inputDate = date;
+  if (isNaN(Number(date))) {
+    inputDate = new Date(date);
+  } else {
+    inputDate = new Date(Number(date));
+  }
+  let hourString = String(inputDate.getHours());
+  let minuteString = String(inputDate.getMinutes());
 
   if (hourString.length === 1) {
     hourString = "0" + hourString;

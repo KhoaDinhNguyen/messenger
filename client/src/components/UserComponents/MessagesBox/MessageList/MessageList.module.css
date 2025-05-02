@@ -10,3 +10,66 @@
   overflow: auto;
   width: 100%;
 }
+
+.noMessageContainer {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.noMessageButtonContainers {
+  display: flex;
+  margin-top: 20px;
+}
+
+.image {
+  width: 64px;
+  height: auto;
+}
+
+.friendImageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.friendName {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.newFriendTitle {
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.newFriendContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.buttonInput {
+  display: none;
+}
+
+.buttonLabel {
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.buttonContainer {
+  margin-left: 20px;
+  padding: 10px 15px;
+  border: 1px solid black;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.buttonContainer:hover {
+  background-color: #dcdcdc;
+}

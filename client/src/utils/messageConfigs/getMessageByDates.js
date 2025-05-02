@@ -10,7 +10,12 @@ function getMessageByDates(messages) {
   const messagesFilterByDates = [];
 
   for (const message of messages) {
-    const formatDate = getDate(new Date(Number(message.createdAt)));
+    let createdAt = message.createdAt;
+    if (isNaN(Number(createdAt))) {
+      createdAt = new Date(createdAt).getTime();
+    }
+
+    const formatDate = getDate(new Date(Number(createdAt)));
     if (formatDate === currentDate) {
       messagesFilterByDates[currentIdx].messages.push(message);
     } else {
