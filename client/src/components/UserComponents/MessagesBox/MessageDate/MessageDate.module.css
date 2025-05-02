@@ -1,0 +1,30 @@
+.rootContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.dateContainer {
+  align-self: center;
+  margin: 10px 0px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  user-select: none;
+}
+
+.dateContainer p {
+  color: #7d8389;
+}
+.dateContainer div {
+  flex-grow: 1;
+  text-decoration: line-through;
+  border: 1px solid #dbe4ed;
+  height: 2px;
+}
+
+.messagesList {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column-reverse;
+}

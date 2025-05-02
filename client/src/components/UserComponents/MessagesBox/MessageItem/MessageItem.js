@@ -11,6 +11,8 @@ import {
 
 import { EmojiSVG, DotMenuSVG } from "../../../../utils/svgConfigs/SVG";
 
+import { getHoursMinute } from "../../../../utils/dateConfigs/format";
+
 import userpublic from "../../../../asset/img/userpublic.png";
 
 import styles from "./MessageItem.module.css";
@@ -20,8 +22,16 @@ function MessageItem({ message }) {
   const dispatch = useDispatch();
   const senderId = params.userid;
   const senderName = useSelector((state) => state[nameSlice.name]);
-  const { receiverId, receiverName, text, senderEmoji, _id, receiverEmoji } =
-    message;
+  const {
+    receiverId,
+    receiverName,
+    text,
+    senderEmoji,
+    _id,
+    receiverEmoji,
+    createdAt,
+  } = message;
+
   const sender = useSelector((state) => state[currentSenderSlice.name]);
   const [visiblePicker, setVisiblePicker] = useState(false);
   const onChangeVisiblePicker = () => {
@@ -132,19 +142,33 @@ function MessageItem({ message }) {
           className={styles.image}
         />
       </div>
-      <div className={isCurrentPage ? styles.senderText : styles.receiverText}>
-        <div>
-          <p className={styles.text}>{text}</p>
-        </div>
-        {emojiArray.length > 0 && (
-          <div className={styles.emojiContainer}>
-            <div className={styles.emojiText}>
-              {emojiesRender}
-              <p className={styles.emojiLength}>{emojiLength}</p>
-            </div>
+      <div
+        className={
+          isCurrentPage ? styles.senderMessage : styles.receiverMessage
+        }
+      >
+        <div
+          className={isCurrentPage ? styles.senderText : styles.receiverText}
+        >
+          <div>
+            <p className={styles.text}>{text}</p>
           </div>
-        )}
+          {emojiArray.length > 0 && (
+            <div className={styles.emojiContainer}>
+              <div className={styles.emojiText}>
+                {emojiesRender}
+                <p className={styles.emojiLength}>{emojiLength}</p>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className={styles.messageTime}>
+          <p className={styles.timeText}>
+            {getHoursMinute(new Date(Number(createdAt)))}
+          </p>
+        </div>
       </div>
+
       <div className={styles.buttonsContainer}>
         <div className={styles.dotMenuContainer}>
           <DotMenuSVG />
