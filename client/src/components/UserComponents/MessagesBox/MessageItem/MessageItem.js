@@ -13,7 +13,7 @@ import MessageImage from "./MessageImage/MessageImage";
 
 import { EmojiSVG, DotMenuSVG } from "../../../../utils/svgConfigs/SVG";
 
-import { getHoursMinute } from "../../../../utils/dateConfigs/format";
+import { getTimeInDay } from "../../../../utils/dateConfigs/format";
 
 import userpublic from "../../../../asset/img/userpublic.png";
 
@@ -175,7 +175,7 @@ function MessageItem({ message }) {
           )}
         </div>
         <div className={styles.messageTime}>
-          <p className={styles.timeText}>{getHoursMinute(createdAt)}</p>
+          <p className={styles.timeText}>{getTimeInDay(createdAt)}</p>
         </div>
       </div>
 

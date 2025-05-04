@@ -1,4 +1,4 @@
-import { getDate } from "../dateConfigs/format";
+import { getDayInYear } from "../dateConfigs/format";
 
 function getMessageByDates(messages) {
   if (messages.length == 0) {
@@ -11,11 +11,8 @@ function getMessageByDates(messages) {
 
   for (const message of messages) {
     let createdAt = message.createdAt;
-    if (isNaN(Number(createdAt))) {
-      createdAt = new Date(createdAt).getTime();
-    }
 
-    const formatDate = getDate(new Date(Number(createdAt)));
+    const formatDate = getDayInYear(new Date(Number(createdAt)));
     if (formatDate === currentDate) {
       messagesFilterByDates[currentIdx].messages.push(message);
     } else {

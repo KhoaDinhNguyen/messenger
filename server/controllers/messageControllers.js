@@ -33,7 +33,7 @@ module.exports = {
 
     try {
       await newMessage.save();
-      newMessage._id = newMessage._id;
+      //newMessage._id = newMessage._id;
 
       const foundSocket = Sockets.findSocketByUserId(receiverId);
       if (foundSocket !== null) {

@@ -11,7 +11,7 @@ import LoadingModal from "../../Utils/Modal/LoadingModal/LoadingModal";
 
 import { dates, months, years } from "../../../utils/dateConfigs/date";
 import { formatName } from "../../../utils/nameConfigs/format";
-import { formatDates } from "../../../utils/dateConfigs/format";
+import { formatDate } from "../../../utils/dateConfigs/format";
 import { getPronounce } from "../../../utils/genderConfigs/format";
 import { convertMonthToNum } from "../../../utils/dateConfigs/converNumToDates";
 
@@ -68,6 +68,8 @@ function SignUpForm() {
   };
 
   const onChangeDate = (event) => {
+    console.log(event.target.value);
+    console.log(typeof event.target.value);
     setDate(event.target.value);
   };
 
@@ -134,7 +136,7 @@ function SignUpForm() {
         username: account,
         password: password,
         name: formatName(firstName, middleName, lastName),
-        dob: formatDates(date, convertMonthToNum(month), year),
+        dob: formatDate(date, convertMonthToNum(month), year),
         gender: gender,
         email: email,
         phone: phone,

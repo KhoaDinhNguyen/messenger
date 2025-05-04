@@ -35,20 +35,6 @@ function sortFriendsByLatestMessage(friendList, userid) {
       return 1;
     }
 
-    if (
-      isNaN(new Date(friend1.latestMessage.createdAt)) ||
-      isNaN(new Date(friend2.latestMessage.createdAt))
-    ) {
-      const dateFriend1 = !isNaN(new Date(friend1.latestMessage.createdAt))
-        ? new Date(friend1.latestMessage.createdAt).getTime()
-        : friend1.latestMessage.createdAt;
-      const dateFriend2 = !isNaN(new Date(friend2.latestMessage.createdAt))
-        ? new Date(friend2.latestMessage.createdAt).getTime()
-        : friend2.latestMessage.createdAt;
-
-      return dateFriend2 - dateFriend1;
-    }
-
     return friend2.latestMessage.createdAt - friend1.latestMessage.createdAt;
   });
 }

@@ -76,14 +76,21 @@ function UserSocket({ userid }) {
     function messageHandler(data) {
       const { action, message } = data;
       if (action === "create") {
+        const formatedMessage = message;
+        formatedMessage.createdAt = new Date(formatedMessage.createdAt)
+          .getTime()
+          .toString();
+
         const friendId = searchParams.get("friendId");
-        dispatch(latestMessageSlice.actions.addMessage(message));
+        dispatch(latestMessageSlice.actions.addMessage(formatedMessage));
         if (
           message.senderId === friendId &&
           message.senderId !== message.receiverId
         ) {
-          dispatch(currentMessageSlice.actions.addMessage(message));
-          dispatch(latestMessageSlice.actions.updateHaveSeenMessage(message));
+          dispatch(currentMessageSlice.actions.addMessage(formatedMessage));
+          dispatch(
+            latestMessageSlice.actions.updateHaveSeenMessage(formatedMessage)
+          );
         }
       } else if (action === "updateEmoji") {
         dispatch(
@@ -94,7 +101,6 @@ function UserSocket({ userid }) {
           })
         );
       }
-      //TODO: UPDATE EMOJI
     }
 
     if (Socket.getSocket() !== undefined) {
