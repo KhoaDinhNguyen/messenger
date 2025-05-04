@@ -93,8 +93,6 @@ function User() {
             profileImageURL,
             profileUrl,
           } = response.data.findUserById;
-          //console.log(response);
-          //console.log(friends);
 
           const friendsWithImagesPromises = friends.map(async (friend) => {
             const friendRequest = {
@@ -126,7 +124,6 @@ function User() {
                 console.log(err);
               });
           });
-          //console.log(friendsWithImages);
 
           const friendsWithImages = await Promise.all(
             friendsWithImagesPromises
@@ -177,7 +174,6 @@ function User() {
                 });
             }
           );
-          //console.log(friendsWithImages);
 
           const waitingFriendsWithImages = await Promise.all(
             waitingFriendsWithImagesPromises
@@ -283,6 +279,7 @@ function User() {
               receiverId
               haveSeen
               createdAt
+              images
             }
           }
         `,
@@ -307,7 +304,6 @@ function User() {
             dispatch(
               latestMessageSlice.actions.init(response.data.getLatestMessages)
             );
-            //console.log(response.data);
           }
         })
         .catch((err) => {

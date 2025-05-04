@@ -13,10 +13,8 @@ function WaitingFriendItem({ friend }) {
   const params = useParams();
   const dispatch = useDispatch();
 
-  //console.log(friend);
   const { friendName, friendId, friendImageUrl } = friend;
 
-  //console.log(friendImageUrl);
   const onClickRemoveFriendRequest = async () => {
     const graphQLQuery = {
       query: `

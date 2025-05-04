@@ -153,7 +153,7 @@ module.exports = {
       if (key === "id") {
         continue;
       } else if (key === "profileImageName") {
-        console.log("Have image name " + profileImageName);
+        //console.log("Have image name " + profileImageName);
         updateProfileParams.profileImageURL = await getImageFromS3({
           filename: userInput[key],
         });
@@ -230,7 +230,6 @@ module.exports = {
 
     //TODO: Fix promise all
     const foundUsersWithImages = foundUsers.map(async (user) => {
-      //console.log(user.profileImageName);
       if (user.profileImageName && user.profileImageName !== "") {
         user.profileImageURL = await getImageFromS3({
           filename: user.profileImageName,
@@ -277,7 +276,6 @@ module.exports = {
   createFriendRequest: async function ({ userInput, req }) {
     const { senderId, receiverId, senderName, receiverName, message } =
       userInput;
-    //console.log(receiverId);
     try {
       const [newNotification, ,] = await Promise.all([
         Notification.createNotification({
@@ -316,16 +314,14 @@ module.exports = {
           },
         }),
       ]);
-      //console.log(receiverId);
       const foundSocket = Sockets.findSocketByUserId(receiverId);
-      //console.log(foundSocket);
       if (foundSocket !== null) {
         try {
           io.getIO().to(foundSocket.socketId).emit("friendRequest", {
             action: "create",
             notification: newNotification,
           });
-          console.log(`emit to ${receiverId} -- id: foundSocket.socketId`);
+          //console.log(`emit to ${receiverId} -- id: foundSocket.socketId`);
         } catch (err) {
           console.log(err);
         }
@@ -360,14 +356,13 @@ module.exports = {
         }),
       ]);
 
-      // console.log(receiverId);
       const foundSocket = Sockets.findSocketByUserId(receiverId);
       if (foundSocket !== null) {
         io.getIO().to(foundSocket.socketId).emit("friendRequest", {
           action: "decline",
           notification: newNotification,
         });
-        console.log(`emit to ${receiverId} -- id: foundSocket.socketId`);
+        //console.log(`emit to ${receiverId} -- id: foundSocket.socketId`);
       }
 
       return newNotification;
@@ -436,7 +431,7 @@ module.exports = {
           action: "accept",
           notification: newNotification,
         });
-        console.log(`emit to ${receiverId} -- id: foundSocket.socketId`);
+        c; //onsole.log(`emit to ${receiverId} -- id: foundSocket.socketId`);
       }
       return newNotification;
     } catch (err) {

@@ -51,7 +51,6 @@ function FriendItem({ friend, setSearchParams, latestMessage }) {
       .then((jsonResponse) => jsonResponse.json())
       .then((response) => {
         if (response.data === null) {
-          console.log("Update failed");
         } else {
           dispatch(
             latestMessageSlice.actions.updateHaveSeenMessage({
@@ -70,6 +69,17 @@ function FriendItem({ friend, setSearchParams, latestMessage }) {
     latestMessage.senderId !== params.userid &&
     latestMessage.haveSeen === false;
 
+  let text = "";
+
+  if (latestMessage !== null && latestMessage.text !== "") {
+    text = latestMessage.text;
+  } else if (
+    latestMessage !== null &&
+    latestMessage.text === "" &&
+    latestMessage.images.length > 0
+  ) {
+    text = "Send image(s)";
+  }
   return (
     <div className={styles.rootContainer} onClick={onClickFriendItem}>
       <div className={styles.identityContainer}>
@@ -99,10 +109,15 @@ function FriendItem({ friend, setSearchParams, latestMessage }) {
           <p
             className={`${styles.latestMessage} ${
               haveNotSeenMessage ? styles.haveNotSeenMessage : ""
+            }
+            ${
+              text === "Send image(s)" && latestMessage.text === ""
+                ? styles.sendImages
+                : ""
             }`}
           >
             {params.userid === latestMessage.senderId ? "You: " : ""}
-            {latestMessage.text}
+            {text}
           </p>
         )}
       </div>

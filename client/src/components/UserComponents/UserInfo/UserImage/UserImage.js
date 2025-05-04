@@ -24,7 +24,6 @@ function UserImage() {
 
   const onChangeImage = async (event) => {
     const newImage = event.target.files[0];
-    // fetch(process.env.REACT_APP_SERVER_API, { method: "POST" });
     if (newImage && validFileTypes.find((type) => type === newImage.type)) {
       const formData = new FormData();
       const myHeaders = new Headers();

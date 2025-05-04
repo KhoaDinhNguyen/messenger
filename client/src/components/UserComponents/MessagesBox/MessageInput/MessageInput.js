@@ -5,8 +5,10 @@ import EmojiPicker from "emoji-picker-react";
 
 import InputText from "../../../../components/Utils/InputText/InputText";
 import InputButton from "../../../Utils/InputButton/InputButton";
+import InputFile from "../../../Utils/InputFile/InputFile";
+import ImageList from "./ImageList/ImageList";
 
-import { EmojiSVG } from "../../../../utils/svgConfigs/SVG";
+import { EmojiSVG, UploadImageSVG } from "../../../../utils/svgConfigs/SVG";
 
 import { nameSlice } from "../../../../redux/userSlice";
 import {
@@ -15,13 +17,16 @@ import {
 } from "../../../../redux/messageSlice";
 
 import sendMessage from "../../../../asset/img/send.png";
-
 import styles from "./MessageInput.module.css";
+
+const validFileTypes = ["image/png", "image/jpeg", "image/png"];
 
 function MessageInput({ searchParams }) {
   const params = useParams();
   const dispatch = useDispatch();
   const [text, setText] = useState("");
+  const [images, setImages] = useState([]);
+  const [imagesFile, setImagesFile] = useState([]);
   const [visiblePicker, setVisiblePicker] = useState(false);
   const senderId = params.userid;
   const senderName = useSelector((state) => state[nameSlice.name]);
@@ -39,19 +44,78 @@ function MessageInput({ searchParams }) {
   const onChangeVisiblePicker = () => {
     setVisiblePicker((state) => !state);
   };
-  const onSubmitForm = (event) => {
+
+  const onChangeDeleteImage = (fileUrl, fileName) => {
+    setImagesFile((state) => state.filter((image) => image.name !== fileName));
+    setImages((state) => state.filter((image) => image.url !== fileUrl));
+  };
+  const onChangeInsertImage = (event) => {
+    const newImage = event.target.files[0];
+    // TODO: handle image with same name
+    const newImageUrl = [];
+
+    for (const file of event.target.files) {
+      newImageUrl.push({
+        url: URL.createObjectURL(file),
+        fileName: file.name,
+      });
+    }
+
+    setImages((state) => [...state, ...newImageUrl]);
+    setImagesFile((state) => [...state, ...event.target.files]);
+  };
+
+  const onSubmitForm = async (event) => {
     event.preventDefault();
 
     if (receiverId !== null) {
+      let images = [];
+      if (imagesFile.length > 0) {
+        const failedImage = imagesFile.filter((file) => {
+          return !(file && validFileTypes.find((type) => (type = file.type)));
+        });
+
+        if (failedImage.length === 0) {
+          const formData = new FormData();
+          const myHeaders = new Headers();
+          for (const file of imagesFile) {
+            formData.append("images", file);
+          }
+          formData.append("userid", params.userid);
+          myHeaders.append(
+            "Content-Type",
+            `multipart/form-data; boundary=${process.env.REACT_APP_BOUNDARY}`
+          );
+
+          const jsonResponseUploadAWS = await fetch(
+            process.env.REACT_APP_UPLOAD_IMAGES,
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
+          const responseImage = await jsonResponseUploadAWS.json();
+          images = responseImage.files.map((file) => {
+            return file.fileName;
+          });
+          if (jsonResponseUploadAWS.ok) {
+            //sendMessage
+          } else {
+            throw new Error("Cannot upload images");
+          }
+        }
+      }
+
       const graphQLQuery = {
         query: `
-        mutation CreateMessage($senderId: String!, $senderName: String!, $receiverId: String!, $receiverName: String!, $text: String!){
+        mutation CreateMessage($senderId: String!, $senderName: String!, $receiverId: String!, $receiverName: String!, $text: String!, $images: [String]){
           createMessage(messageInput:{
             senderId: $senderId
             senderName: $senderName
             receiverId: $receiverId
             receiverName: $receiverName
             text: $text
+            images: $images
           }) {
             _id
             senderId
@@ -62,6 +126,8 @@ function MessageInput({ searchParams }) {
             createdAt
             senderEmoji
             receiverEmoji
+            images
+            imagesUrl
           }
         }
         `,
@@ -71,6 +137,7 @@ function MessageInput({ searchParams }) {
           receiverId: receiverId,
           receiverName: receiverName,
           text: text,
+          images: images,
         },
       };
 
@@ -85,12 +152,16 @@ function MessageInput({ searchParams }) {
       })
         .then((jsonResponse) => jsonResponse.json())
         .then((response) => {
-          dispatch(
-            currentMessageSlice.actions.addMessage(response.data.createMessage)
-          );
-          dispatch(
-            latestMessageSlice.actions.addMessage(response.data.createMessage)
-          );
+          if (response.data !== null) {
+            dispatch(
+              currentMessageSlice.actions.addMessage(
+                response.data.createMessage
+              )
+            );
+            dispatch(
+              latestMessageSlice.actions.addMessage(response.data.createMessage)
+            );
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -99,6 +170,8 @@ function MessageInput({ searchParams }) {
       console.log("Do not have receiver");
     }
     setText("");
+    setImages([]);
+    setImagesFile([]);
   };
 
   const imageButton = (
@@ -108,14 +181,39 @@ function MessageInput({ searchParams }) {
   return (
     <div className={styles.rootContainer}>
       <form className={styles.formContainer} onSubmit={onSubmitForm}>
+        <InputFile
+          id={"uploadImages"}
+          accept={".jpg, .jpeg, .png"}
+          labelText={
+            <div className={styles.uploadImageContainer}>
+              <UploadImageSVG />
+            </div>
+          }
+          inputContainer={styles.fileInput}
+          labelContainer={styles.fileLabel}
+          rootContainer={styles.imageUploadContainer}
+          mutiple={true}
+          onChangeFile={onChangeInsertImage}
+        />
         <div className={styles.messageInputContainer}>
-          <InputText
-            id={"messageInput"}
-            rootContainer={styles.messageContainer}
-            inputContainer={styles.messageInput}
-            valueText={text}
-            onChangeText={onChangeText}
-          />
+          <div>
+            <div>
+              {images.length > 0 && (
+                <ImageList
+                  images={images}
+                  onClickDeleteImage={onChangeDeleteImage}
+                />
+              )}
+            </div>
+            <InputText
+              id={"messageInput"}
+              rootContainer={styles.messageContainer}
+              inputContainer={styles.messageInput}
+              valueText={text}
+              onChangeText={onChangeText}
+            />
+          </div>
+
           <div
             className={`${styles.emojiButtonContainer} ${
               visiblePicker ? styles.emojiButtonContainerFocus : ""

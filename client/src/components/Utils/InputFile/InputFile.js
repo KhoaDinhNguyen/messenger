@@ -8,10 +8,11 @@ function InputFile({
   valueFile,
   onChangeFile,
   accept,
+  mutiple,
 }) {
   const labelConfig = !labelText ? "" : labelText;
   const requireConfig = !required ? false : required;
-
+  const multipleConfig = !mutiple ? false : mutiple;
   return (
     <div className={rootContainer}>
       {labelConfig && (
@@ -28,6 +29,7 @@ function InputFile({
         onChange={onChangeFile}
         className={inputContainer}
         accept={accept}
+        multiple={multipleConfig}
       />
     </div>
   );

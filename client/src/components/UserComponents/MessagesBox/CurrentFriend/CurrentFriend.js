@@ -1,7 +1,4 @@
-import { useSelector } from "react-redux";
 import { useSearchParams } from "react-router";
-
-import { userFriendsSlice } from "../../../../redux/userSlice";
 
 import userpublic from "../../../../asset/img/userpublic.png";
 
@@ -9,12 +6,9 @@ import styles from "./CurrentFriend.module.css";
 
 function CurrentFriend() {
   const [searchParams] = useSearchParams();
-  const friendsList = useSelector((state) => state[userFriendsSlice.name]);
 
   const friendName = searchParams.get("friendName");
   const friendImage = searchParams.get("friendImage");
-
-  console.log(friendImage);
 
   const hasFriendImage =
     friendImage !== "undefined" && friendImage !== "null" && friendImage !== "";

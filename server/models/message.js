@@ -38,6 +38,14 @@ const messageSchema = new Schema(
       type: Boolean,
       require: true,
     },
+    images: {
+      type: [String],
+      require: true,
+    },
+    imagesUrl: {
+      type: [String],
+      require: true,
+    },
   },
   { collection: "messages", timestamps: true }
 );

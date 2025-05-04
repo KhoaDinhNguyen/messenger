@@ -28,24 +28,56 @@ app.get("/", (req, res) => {
 });
 
 app.post("/uploadImage", upload.single("image"), async (req, res) => {
-  // console.log("who call this");
-  // console.log(req.file);
-  // console.log(req.body.userid);
-  // console.log(new Date().getTime());
   try {
     const fileName = await uploadToS3({
       file: req.file,
       userid: req.body.userid,
     });
-    //console.log(fileName);
     const fileURL = await getImageFromS3({
       filename: fileName,
     });
-    // console.log(url);
     res.status(200).send({
       message: "File uploaded successfully",
       fileName: fileName,
       fileURL: fileURL,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.post("/uploadImages", upload.array("images"), async (req, res) => {
+  const images = req.files;
+  try {
+    const uploadPromises = images.map((image) =>
+      uploadToS3({
+        file: image,
+        userid: req.body.userid,
+      })
+    );
+
+    const fileNames = await Promise.all(uploadPromises);
+
+    const fileUrlPromises = fileNames.map((fileName) =>
+      getImageFromS3({
+        filename: fileName,
+      })
+    );
+
+    const fileUrls = await Promise.all(fileUrlPromises);
+
+    const files = [];
+
+    for (let i = 0; i < fileNames.length; ++i) {
+      files.push({
+        fileName: fileNames[i],
+        fileURL: fileUrls[i],
+      });
+    }
+
+    res.status(200).send({
+      message: "Files uploaded successfully",
+      files: files,
     });
   } catch (err) {
     console.log(err);
@@ -61,7 +93,7 @@ app.all(
       if (!err.originalError) {
         return err;
       }
-      console.log(err);
+
       const message = err.message || "An error occured";
       const data = err.originalError.data || "";
       const code = err.originalError.code || 500;
@@ -87,7 +119,6 @@ mongoose
         Sockets.deleteSocketByUserId(socket.handshake.query.userid);
       }
       console.log(`${socket.handshake.query.userid} connect`);
-      console.log(socket.id);
       Sockets.insertSocket(socket.handshake.query.userid, socket.id);
       //Sockets.findSocketByUserId("");
       socket.on("disconnect", () => {

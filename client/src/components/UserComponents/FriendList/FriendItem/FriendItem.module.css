@@ -34,3 +34,7 @@
 .haveNotSeenMessage {
   font-weight: 500;
 }
+
+.sendImages {
+  font-style: italic;
+}

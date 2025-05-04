@@ -26,7 +26,6 @@ function UserSocket({ userid }) {
     function friendRequestHandler(data) {
       const { action, notification } = data;
       if (action === "create") {
-        //console.log(notification);
         const { senderId, senderName } = notification;
 
         dispatch(notificationListSlice.actions.addNotification(notification));
@@ -48,7 +47,6 @@ function UserSocket({ userid }) {
         );
         dispatch(userWaitingFriendsSlice.actions.removeItem(senderId));
       } else if (action === "decline") {
-        //console.log(notification);
         dispatch(notificationListSlice.actions.addNotification(notification));
         dispatch(
           userWaitingFriendsSlice.actions.removeItem(notification.senderId)
@@ -88,7 +86,6 @@ function UserSocket({ userid }) {
           dispatch(latestMessageSlice.actions.updateHaveSeenMessage(message));
         }
       } else if (action === "updateEmoji") {
-        //console.log(message);
         dispatch(
           currentMessageSlice.actions.updateEmoji({
             messageId: message._id,

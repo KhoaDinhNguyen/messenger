@@ -41,6 +41,8 @@ function MessagesBox({ searchParams }) {
               updatedAt
               senderEmoji
               receiverEmoji
+              images
+              imagesUrl
             }
           }
         `,

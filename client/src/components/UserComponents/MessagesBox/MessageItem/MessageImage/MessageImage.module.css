@@ -1,0 +1,9 @@
+.image {
+  max-width: 200px;
+}
+
+.imageList {
+  display: flex;
+  flex-wrap: wrap;
+  list-style-type: none;
+}

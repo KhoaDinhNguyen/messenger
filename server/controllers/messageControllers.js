@@ -4,11 +4,20 @@ const Sockets = require("../models/socket");
 
 const io = require("../socket");
 
+const { getImageFromS3 } = require("../s3");
+
 module.exports = {
   createMessage: async function ({ messageInput }, req) {
-    const { senderId, senderName, receiverId, receiverName, text } =
+    const { senderId, senderName, receiverId, receiverName, text, images } =
       messageInput;
 
+    const generateImagesUrlPromises = images.map((image) =>
+      getImageFromS3({ filename: image })
+    );
+
+    const imagesUrl = await Promise.all(generateImagesUrlPromises);
+
+    //TODO: check have seen
     const newMessage = new Message({
       senderId: senderId,
       senderName: senderName,
@@ -18,6 +27,8 @@ module.exports = {
       haveSeen: false,
       senderEmoji: "",
       receiverEmoji: "",
+      images: images,
+      imagesUrl: imagesUrl,
     });
 
     try {
@@ -30,7 +41,7 @@ module.exports = {
           action: "create",
           message: newMessage,
         });
-        console.log(`emit to ${receiverId} -- id: ${foundSocket.socketId}`);
+        //console.log(`emit to ${receiverId} -- id: ${foundSocket.socketId}`);
       }
     } catch (err) {
       console.log(err);
@@ -43,14 +54,30 @@ module.exports = {
     const { senderId, receiverId } = messageInput;
 
     try {
-      const messages = Message.find({
+      const messages = await Message.find({
         $or: [
           { senderId: senderId, receiverId: receiverId },
           { senderId: receiverId, receiverId: senderId },
         ],
       }).sort({ createdAt: -1 });
 
-      return messages;
+      //TODO: fix this
+      const promises = messages.map(async (message) => {
+        const images = message.images;
+        if (images.length > 0) {
+          const generateImagesUrlPromises = images.map((image) =>
+            getImageFromS3({ filename: image })
+          );
+          const imagesUrl = await Promise.all(generateImagesUrlPromises);
+          message.imagesUrl = imagesUrl;
+        }
+
+        return message;
+      });
+
+      const returnedMessages = await Promise.all(promises);
+
+      return returnedMessages;
     } catch (err) {
       console.log(err);
       throw err;

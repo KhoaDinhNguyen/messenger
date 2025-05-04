@@ -34,7 +34,6 @@ function MessageList() {
         : userpublic;
 
     const onClickSendFirstMessage = (message) => {
-      console.log(message);
       if (friendId !== null) {
         const graphQLQuery = {
           query: `
@@ -78,7 +77,6 @@ function MessageList() {
         })
           .then((jsonResponse) => jsonResponse.json())
           .then((response) => {
-            console.log(response.data);
             if (response.data !== null) {
               dispatch(
                 currentMessageSlice.actions.addMessage(
@@ -135,10 +133,8 @@ function MessageList() {
     );
   }
   const messagesDates = getMessageByDates(messagesList);
-  console.log(messagesDates);
 
   const messagesDateListRender = messagesDates.map((messageDate) => {
-    console.log(messageDate);
     return (
       <li key={messageDate.date}>
         <MessageDate

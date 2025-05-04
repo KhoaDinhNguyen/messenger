@@ -22,6 +22,7 @@ const MessageInputType = `
     receiverId: String!
     receiverName: String!
     text: String!
+    images: [String]
   }
 `;
 
@@ -38,6 +39,8 @@ const MessageType = `
     haveSeen: Boolean
     senderEmoji: String
     receiverEmoji: String
+    images: [String]
+    imagesUrl: [String]
   }
 `;
 
@@ -61,6 +64,9 @@ const updateMessageEmoji = `
   updateMessageEmoji(messageInput: MessageInputTypeEmoji!): MessageType
 `;
 
+const generateImagesUrl = `
+
+`;
 module.exports = {
   MessageInputType,
   MessageInputTypeEmoji,

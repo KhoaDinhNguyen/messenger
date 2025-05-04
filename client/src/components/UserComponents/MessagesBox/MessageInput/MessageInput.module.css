@@ -82,3 +82,27 @@
 .emojiButtonContainerFocus svg ellipse {
   stroke: #246bce;
 }
+
+.fileLabel {
+  background-color: white;
+  cursor: pointer;
+}
+
+.fileInput {
+  display: none;
+}
+
+.uploadImageContainer {
+  padding: 10px;
+  background-color: white;
+  border-radius: 50%;
+  border: 1px solid black;
+  display: flex;
+}
+
+.uploadImageContainer:hover {
+  background-color: #dcdcdc;
+}
+.imageUploadContainer {
+  margin-right: 10px;
+}

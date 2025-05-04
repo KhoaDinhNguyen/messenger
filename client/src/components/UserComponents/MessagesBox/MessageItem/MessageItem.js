@@ -9,6 +9,8 @@ import {
   currentMessageSlice,
 } from "../../../../redux/messageSlice";
 
+import MessageImage from "./MessageImage/MessageImage";
+
 import { EmojiSVG, DotMenuSVG } from "../../../../utils/svgConfigs/SVG";
 
 import { getHoursMinute } from "../../../../utils/dateConfigs/format";
@@ -31,7 +33,10 @@ function MessageItem({ message }) {
     _id,
     receiverEmoji,
     createdAt,
+    images,
+    imagesUrl,
   } = message;
+
   const friendImage = searchParams.get("friendImage");
   const sender = useSelector((state) => state[currentSenderSlice.name]);
   const [visiblePicker, setVisiblePicker] = useState(false);
@@ -133,7 +138,6 @@ function MessageItem({ message }) {
     );
   });
 
-  console.log(typeof createdAt);
   return (
     <div
       className={`${
@@ -155,6 +159,9 @@ function MessageItem({ message }) {
         <div
           className={isCurrentPage ? styles.senderText : styles.receiverText}
         >
+          {images.length > 0 && (
+            <MessageImage images={images} imagesUrl={imagesUrl} />
+          )}
           <div>
             <p className={styles.text}>{text}</p>
           </div>
