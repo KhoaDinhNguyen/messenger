@@ -8,6 +8,8 @@ import InputButton from "../../../Utils/InputButton/InputButton";
 import InputFile from "../../../Utils/InputFile/InputFile";
 import ImageList from "./ImageList/ImageList";
 
+import { getRandomString } from "../../../../utils/fileConfigs/format";
+
 import { EmojiSVG, UploadImageSVG } from "../../../../utils/svgConfigs/SVG";
 
 import { nameSlice } from "../../../../redux/userSlice";
@@ -25,8 +27,8 @@ function MessageInput({ searchParams }) {
   const params = useParams();
   const dispatch = useDispatch();
   const [text, setText] = useState("");
-  const [images, setImages] = useState([]);
-  const [imagesFile, setImagesFile] = useState([]);
+  const [renderedImages, setRenderedImages] = useState([]);
+  const [storedImages, setStoredImages] = useState([]);
   const [visiblePicker, setVisiblePicker] = useState(false);
   const senderId = params.userid;
   const senderName = useSelector((state) => state[nameSlice.name]);
@@ -46,23 +48,35 @@ function MessageInput({ searchParams }) {
   };
 
   const onChangeDeleteImage = (fileUrl, fileName) => {
-    setImagesFile((state) => state.filter((image) => image.name !== fileName));
-    setImages((state) => state.filter((image) => image.url !== fileUrl));
+    setStoredImages((state) =>
+      state.filter((image) => image.name !== fileName)
+    );
+    setRenderedImages((state) =>
+      state.filter((image) => image.url !== fileUrl)
+    );
   };
   const onChangeInsertImage = (event) => {
-    const newImage = event.target.files[0];
-    // TODO: handle image with same name
     const newImageUrl = [];
+    const newFiles = event.target.files;
+    const selectedFiles = [];
 
-    for (const file of event.target.files) {
-      newImageUrl.push({
-        url: URL.createObjectURL(file),
-        fileName: file.name,
+    for (const originalFile of newFiles) {
+      const newFileName = `${getRandomString(32)}_${originalFile.name}`;
+      const newFile = new File([originalFile], newFileName, {
+        type: originalFile.type,
+        lastModified: originalFile.lastModified,
       });
+
+      newImageUrl.push({
+        url: URL.createObjectURL(newFile),
+        fileName: newFile.name,
+      });
+      selectedFiles.push(newFile);
     }
 
-    setImages((state) => [...state, ...newImageUrl]);
-    setImagesFile((state) => [...state, ...event.target.files]);
+    setRenderedImages((prevFiles) => [...prevFiles, ...newImageUrl]);
+    setStoredImages((prevFiles) => [...prevFiles, ...selectedFiles]);
+    event.target.value = "";
   };
 
   const onSubmitForm = async (event) => {
@@ -70,15 +84,15 @@ function MessageInput({ searchParams }) {
 
     if (receiverId !== null) {
       let images = [];
-      if (imagesFile.length > 0) {
-        const failedImage = imagesFile.filter((file) => {
+      if (storedImages.length > 0) {
+        const failedImage = storedImages.filter((file) => {
           return !(file && validFileTypes.find((type) => (type = file.type)));
         });
 
         if (failedImage.length === 0) {
           const formData = new FormData();
           const myHeaders = new Headers();
-          for (const file of imagesFile) {
+          for (const file of storedImages) {
             formData.append("images", file);
           }
           formData.append("userid", params.userid);
@@ -170,8 +184,8 @@ function MessageInput({ searchParams }) {
       console.log("Do not have receiver");
     }
     setText("");
-    setImages([]);
-    setImagesFile([]);
+    setRenderedImages([]);
+    setStoredImages([]);
   };
 
   const imageButton = (
@@ -198,9 +212,9 @@ function MessageInput({ searchParams }) {
         <div className={styles.messageInputContainer}>
           <div>
             <div>
-              {images.length > 0 && (
+              {renderedImages.length > 0 && (
                 <ImageList
-                  images={images}
+                  images={renderedImages}
                   onClickDeleteImage={onChangeDeleteImage}
                 />
               )}

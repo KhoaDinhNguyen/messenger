@@ -5,7 +5,7 @@ function MessageImage({ imagesUrl, images }) {
 
   for (let i = 0; i < images.length; ++i) {
     imagesListRender.push(
-      <li key={imagesUrl[i]}>
+      <li key={imagesUrl[i]} className={styles.imageContainer}>
         <a href={imagesUrl[i]} target="_blank" rel="noreferrer">
           <img src={imagesUrl[i]} alt={images[i]} className={styles.image} />
         </a>

@@ -7,3 +7,13 @@
   flex-wrap: wrap;
   list-style-type: none;
 }
+
+.imageContainer {
+  padding: 5px;
+  background-color: #dcdcdc;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
