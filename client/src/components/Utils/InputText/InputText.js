@@ -12,6 +12,7 @@ function InputText({
   labelContainer,
   autoComplete,
   pattern,
+  onFocusText,
 }) {
   const labelConfig = !labelText ? "" : labelText;
   const autoCompleteConfig = !autoComplete ? "off" : autoComplete;
@@ -34,6 +35,7 @@ function InputText({
         maxLength={maxLength}
         value={valueText}
         onChange={onChangeText}
+        onFocus={onFocusText}
         className={inputContainer}
         autoComplete={autoCompleteConfig}
         autoSave="off"

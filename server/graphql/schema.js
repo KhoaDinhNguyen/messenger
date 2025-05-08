@@ -2,6 +2,7 @@ const { buildSchema } = require("graphql");
 const userSchema = require("../schema/userSchema");
 const notificationSchema = require("../schema/notificationSchema");
 const MessageSchema = require("../schema/messageSchema");
+const postSchema = require("../schema/postSchema");
 
 const {
   UserInputTypeSignUp,
@@ -51,11 +52,14 @@ const {
   updateMessageEmoji,
 } = MessageSchema;
 
+const { PostType, PostInputType, createPost, getPost } = postSchema;
+
 const schema = buildSchema(`
   ${UserType}
   ${UserWaitingFriendsType}
   ${UserFriendsType}
   ${UserWithImageType}
+  ${PostType}
   ${ImageInputType}
 
   ${NotificationType}
@@ -77,6 +81,8 @@ const schema = buildSchema(`
   ${MessageInputTypeSenderAndReceiver}
   ${MessageInputTypeEmoji}
 
+  ${PostInputType}
+
   type RootMutation {
     ${createUser}
     ${updateUser}
@@ -92,6 +98,8 @@ const schema = buildSchema(`
     ${createMessage}
     ${updateHaveSeenMessages}
     ${updateMessageEmoji}
+
+    ${createPost}
   }
 
   type RootQuery {
@@ -103,6 +111,7 @@ const schema = buildSchema(`
     ${getMessage}
     ${getLatestMessages}
     ${generateImageURLWithUserId}
+    ${getPost}
   }
   schema {
     query: RootQuery

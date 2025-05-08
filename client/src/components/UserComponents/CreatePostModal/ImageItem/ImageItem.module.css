@@ -1,0 +1,32 @@
+.rootContainer {
+  padding: 5px;
+  background-color: #e7e7e7;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  width: max-content;
+  height: max-content;
+}
+.buttonInput {
+  display: none;
+}
+
+.image {
+  max-width: 256px;
+  max-height: 256px;
+}
+
+.buttonLabel {
+  padding: 5px 10px;
+  margin-bottom: 5px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: flex-end;
+  font-weight: 500;
+  cursor: pointer;
+}

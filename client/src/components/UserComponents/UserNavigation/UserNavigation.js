@@ -10,9 +10,11 @@ import {
   FriendSVG,
   MessageSVG,
   NotificationSVG,
+  PostsSVG,
 } from "../../../utils/svgConfigs/SVG";
 
 import userpublic from "../../../asset/img/userpublic.png";
+import pageIcon from "../../../asset/img/pageIcon.jpg";
 
 import styles from "./UserNavigation.module.css";
 
@@ -40,9 +42,19 @@ function UserNavigation() {
   };
   return (
     <div className={styles.rootContainer}>
-      <div></div>
+      <div className={styles.pageIconContainer}>
+        <img src={pageIcon} alt="page" className={styles.pageIcon} />
+      </div>
       <nav>
         <ul className={styles.linkContainers}>
+          <li className={styles.linkContainer}>
+            <div className={styles.postsSVG}>
+              <PostsSVG />
+            </div>
+            <NavLink to={"posts"} className={linkActive}>
+              Posts
+            </NavLink>
+          </li>
           <li className={styles.linkContainer}>
             <div className={styles.messageSVG}>
               <MessageSVG />

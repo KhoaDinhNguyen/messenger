@@ -6,6 +6,16 @@
   margin-bottom: 50px;
 }
 
+.pageIconContainer {
+  margin-left: 5px;
+  padding: 5px;
+  padding-bottom: 0px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.pageIcon {
+  width: 48px;
+}
 .linkContainers {
   list-style: none;
   display: flex;
@@ -42,6 +52,9 @@
   stroke: #246bce;
 }
 
+.linkContainer:has(a:hover) .postsSVG path {
+  fill: #246bce;
+}
 .linkContainer a:hover {
   color: #246bce;
 }

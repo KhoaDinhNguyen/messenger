@@ -14,11 +14,14 @@ import {
   profileUrlSlice,
 } from "./userSlice";
 import { notificationListSlice } from "./notificationSlice";
+
 import {
   currentMessageSlice,
   currentSenderSlice,
   latestMessageSlice,
 } from "./messageSlice";
+
+import { postsSlice } from "./postSlice";
 
 const reducers = {
   [nameSlice.name]: nameSlice.reducer,
@@ -39,6 +42,8 @@ const reducers = {
   [currentMessageSlice.name]: currentMessageSlice.reducer,
   [latestMessageSlice.name]: latestMessageSlice.reducer,
   [currentSenderSlice.name]: currentSenderSlice.reducer,
+
+  [postsSlice.name]: postsSlice.reducer,
 };
 
 const rootReducer = combineReducers(reducers);
