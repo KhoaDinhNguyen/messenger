@@ -1,4 +1,4 @@
-import InputButton from "../../../Utils/InputButton/InputButton";
+import InputButton from "../../../../Utils/InputButton/InputButton";
 
 import styles from "./ImageItem.module.css";
 

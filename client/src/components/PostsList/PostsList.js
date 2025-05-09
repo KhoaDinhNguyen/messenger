@@ -18,7 +18,7 @@ function PostsList() {
   });
 
   return (
-    <div>
+    <div className={styles.rootContainer}>
       <ul className={styles.postList}>{postsRender}</ul>
     </div>
   );

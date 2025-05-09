@@ -13,6 +13,14 @@ const postSchema = new Schema(
       type: String,
       require: true,
     },
+    creatorImage: {
+      type: String,
+      require: true,
+    },
+    creatorImageUrl: {
+      type: String,
+      require: true,
+    },
     title: {
       type: String,
     },

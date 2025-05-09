@@ -54,4 +54,42 @@
   display: flex;
   justify-content: space-between;
   border-top: 1px solid #eaeaea;
+  margin-top: 20px;
+  padding-top: 10px;
+  align-items: center;
+}
+
+.emojiContainer {
+  display: flex;
+  align-items: center;
+}
+
+.emojiButton {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.emojiButton path,
+.emojiButton ellipse {
+  stroke: #6c757d;
+}
+
+.emojiButton rect {
+  width: 0;
+  height: 0;
+  rx: 0;
+}
+
+.emojiPickerContainer {
+  position: relative;
+}
+
+.emojiPicker {
+  position: absolute;
+  transform: translateY(-50%);
+  top: 0%;
+}
+
+.commentText {
+  color: #6c757d;
 }

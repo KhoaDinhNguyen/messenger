@@ -1,14 +1,37 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
+import Picker from "emoji-picker-react";
+import { useSelector } from "react-redux";
+
+import ImageList from "./ImageList/ImageList";
+import InputText from "../../Utils/InputText/InputText";
+import CommentForm from "./CommentForm/CommentForm";
 
 import { getDayInYear, getTimeInDay } from "../../../utils/dateConfigs/format";
 import { getRandomString } from "../../../utils/fileConfigs/format";
 
+import { profileImageFileURLSlice } from "../../../redux/userSlice";
+
+import { EmojiSVG } from "../../../utils/svgConfigs/SVG";
 import userpublic from "../../../asset/img/userpublic.png";
 
 import styles from "./PostItem.module.css";
 
 function PostItem({ post }) {
-  const { content, title, createdAt, imagesUrl, creatorName } = post;
+  const {
+    content,
+    title,
+    createdAt,
+    imagesUrl,
+    images,
+    creatorName,
+    creatorImageUrl,
+  } = post;
+
+  const [visibleEmoji, setVisibleEmoji] = useState(false);
+
+  const onChangeVisibleEmoji = () => {
+    setVisibleEmoji((state) => !state);
+  };
 
   const renderedContent = content.split("\n").map((subStr) => {
     return (
@@ -19,12 +42,26 @@ function PostItem({ post }) {
     );
   });
 
+  const postImages = [];
+
+  for (let i = 0; i < images.length; ++i) {
+    postImages.push({ url: imagesUrl[i], fileName: images[i] });
+  }
+
   return (
     <div className={styles.rootContainer}>
       <div className={styles.postHeaderContainer}>
         <div className={styles.creatorProfile}>
           <div className={styles.imageContainer}>
-            <img src={userpublic} alt="user" className={styles.image} />
+            <img
+              src={
+                creatorImageUrl && creatorImageUrl !== ""
+                  ? creatorImageUrl
+                  : userpublic
+              }
+              alt="user"
+              className={styles.image}
+            />
           </div>
           <div>
             <p className={styles.name}>{creatorName}</p>
@@ -39,13 +76,35 @@ function PostItem({ post }) {
         <p className={styles.title}>{title}</p>
         <p>{renderedContent}</p>
       </div>
+      {postImages.length > 0 && (
+        <div>
+          <ImageList images={postImages} />
+        </div>
+      )}
       <div className={styles.buttonsContainer}>
-        <div>
-          <p>Emoji</p>
+        <div className={styles.emojiContainer}>
+          <div onClick={onChangeVisibleEmoji} className={styles.emojiButton}>
+            <EmojiSVG />
+          </div>
+          {visibleEmoji && (
+            <div className={styles.emojiPickerContainer}>
+              <div className={styles.emojiPicker}>
+                <Picker
+                  reactions={["1f496", "1f44d", "1f602", "1f62d", "1f621"]}
+                  reactionsDefaultOpen={true}
+                  emojiStyle="native"
+                  allowExpandReactions={false}
+                />
+              </div>
+            </div>
+          )}
         </div>
         <div>
-          <p>Comment</p>
+          <p className={styles.commentText}>Comment</p>
         </div>
+      </div>
+      <div>
+        <CommentForm />
       </div>
     </div>
   );

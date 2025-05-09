@@ -2,6 +2,7 @@ const PostInputType = `
   input PostInputType {
     creatorId: String!
     creatorName: String!
+    creatorImage: String
     title: String
     content: String!
     modifiers: String!
@@ -15,6 +16,8 @@ const PostType = `
     _id: ID
     creatorId: String
     creatorName: String
+    creatorImage: String
+    creatorImageUrl: String
     title: String
     content: String
     comments: [String]

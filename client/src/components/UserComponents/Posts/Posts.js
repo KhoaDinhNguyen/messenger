@@ -19,6 +19,8 @@ function Posts() {
             title
             content
             creatorName
+            creatorId
+            creatorImageUrl
             createdAt
             images
             imagesUrl

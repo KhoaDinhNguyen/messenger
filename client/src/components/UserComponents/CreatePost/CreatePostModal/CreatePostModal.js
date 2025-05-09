@@ -2,25 +2,29 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useParams } from "react-router";
 
-import Modal from "../../Utils/Modal/Modal/Modal";
-import InputButton from "../../Utils/InputButton/InputButton";
-import InputText from "../../Utils/InputText/InputText";
-import InputTextArea from "../../Utils/InputTextArea/InputTextArea";
-import InputFile from "../../Utils/InputFile/InputFile";
-import InputSelect from "../../Utils/InputSelect/InputSelect";
+import Modal from "../../../Utils/Modal/Modal/Modal";
+import InputButton from "../../../Utils/InputButton/InputButton";
+import InputText from "../../../Utils/InputText/InputText";
+import InputTextArea from "../../../Utils/InputTextArea/InputTextArea";
+import InputFile from "../../../Utils/InputFile/InputFile";
+import InputSelect from "../../../Utils/InputSelect/InputSelect";
 import ImageList from "./ImageList/ImageList";
 
-import { getRandomString } from "../../../utils/fileConfigs/format";
+import { getRandomString } from "../../../../utils/fileConfigs/format";
 
-import { nameSlice, profileImageFileURLSlice } from "../../../redux/userSlice";
+import {
+  nameSlice,
+  profileImageFileNameSlice,
+  profileImageFileURLSlice,
+} from "../../../../redux/userSlice";
 
 import {
   CloseModalSVG,
   UploadImageSVG,
   EmojiSVG,
-} from "../../../utils/svgConfigs/SVG";
+} from "../../../../utils/svgConfigs/SVG";
 
-import userpublic from "../../../asset/img/userpublic.png";
+import userpublic from "../../../../asset/img/userpublic.png";
 
 import styles from "./CreatePostModal.module.css";
 import EmojiPicker from "emoji-picker-react";
@@ -31,6 +35,9 @@ function CreatePostModal({ createPostModal, onClickClosePostModal }) {
   const params = useParams();
   const name = useSelector((state) => state[nameSlice.name]);
   const imageUrl = useSelector((state) => state[profileImageFileURLSlice.name]);
+  const userImage = useSelector(
+    (state) => state[profileImageFileNameSlice.name]
+  );
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [modifiers, setModifers] = useState("Friends");
@@ -142,7 +149,15 @@ function CreatePostModal({ createPostModal, onClickClosePostModal }) {
 
     const graphQLQuery = {
       query: `
-        mutation CreatePost($creatorId: String!, $creatorName: String!, $title: String, $content: String!, $modifiers: String!, $images: [String]) {
+        mutation CreatePost(
+          $creatorId: String!,
+          $creatorName: String!,
+          $title: String,
+          $content: String!,
+          $modifiers: String!, 
+          $images: [String],
+          $creatorImage: String
+        ) {
           createPost(postInput:{
             creatorId: $creatorId
             creatorName: $creatorName
@@ -150,9 +165,12 @@ function CreatePostModal({ createPostModal, onClickClosePostModal }) {
             title: $title
             content: $content
             images: $images
+            creatorImage: $creatorImage
           }) {
             creatorId
             creatorName
+            creatorImage
+            creatorImageUrl
             title
             content
             modifiers
@@ -164,6 +182,7 @@ function CreatePostModal({ createPostModal, onClickClosePostModal }) {
       variables: {
         creatorId: params.userid,
         creatorName: name,
+        creatorImage: userImage,
         modifiers: modifiers,
         title: title,
         content: content,

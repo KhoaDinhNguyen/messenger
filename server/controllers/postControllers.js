@@ -5,17 +5,30 @@ const { getImageFromS3 } = require("../s3");
 
 module.exports = {
   createPost: async function ({ postInput }, req) {
-    const { creatorId, creatorName, title, content, modifiers, images } =
-      postInput;
+    const {
+      creatorId,
+      creatorName,
+      creatorImage,
+      title,
+      content,
+      modifiers,
+      images,
+    } = postInput;
     const generateImagesUrlPromises = images.map((image) =>
       getImageFromS3({ filename: image })
     );
 
     const imagesUrl = await Promise.all(generateImagesUrlPromises);
 
+    const creatorImageUrl = await getImageFromS3({
+      filename: creatorImage,
+    });
+
     const newPost = new Post({
       creatorId: creatorId,
       creatorName: creatorName,
+      creatorImage: creatorImage,
+      creatorImageUrl: creatorImageUrl,
       title: title,
       content: content,
       modifiers: modifiers,
@@ -56,7 +69,15 @@ module.exports = {
         ],
       }).sort({ createdAt: -1 });
 
-      return posts;
+      const newPost = posts.map(async (post) => {
+        post.creatorImageUrl = await getImageFromS3({
+          filename: post.creatorImage,
+        });
+
+        return post;
+      });
+
+      return newPost;
     } catch (err) {
       console.log(err);
       throw err;

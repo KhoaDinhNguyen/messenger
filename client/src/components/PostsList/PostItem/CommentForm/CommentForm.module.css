@@ -1,0 +1,33 @@
+.rootContainer {
+  margin-top: 20px;
+  display: flex;
+}
+
+.commentFormContainer {
+  width: 100%;
+}
+.commentContainer {
+  width: 100%;
+}
+
+.commentInput {
+  width: 100%;
+  padding: 10px 20px;
+  border-radius: 10px;
+  outline: 0;
+  border: 0;
+  background-color: #dee2e6;
+}
+
+.userImageContainer {
+  margin-right: 10px;
+}
+
+.userImage {
+  width: 32px;
+  height: auto;
+}
+
+.commentForm {
+  width: 100%;
+}

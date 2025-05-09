@@ -4,7 +4,7 @@
 
 .formContainer {
   position: absolute;
-  transform: translate(-50%);
+  transform: translateX(-50%);
   top: 10%;
   left: 50%;
   width: 500px;
@@ -134,17 +134,17 @@
   stroke: #2d6a4f;
 }
 
-.postEmojiContainer rect {
-  width: 0;
-  height: 0;
-  rx: 0;
-}
-
 .postEmojiContainer {
   cursor: pointer;
   margin-right: 10px;
   display: flex;
   align-items: center;
+}
+
+.postEmojiContainer rect {
+  width: 0;
+  height: 0;
+  rx: 0;
 }
 
 .postEmojiContainer path,
