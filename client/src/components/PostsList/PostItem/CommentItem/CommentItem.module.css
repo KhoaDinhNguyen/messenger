@@ -1,0 +1,36 @@
+.rootContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.imageContainer {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.userImage {
+  width: 32px;
+  height: auto;
+}
+
+.textContainer {
+  background-color: #dee2e6;
+  padding: 5px 15px;
+  border-radius: 10px;
+}
+
+.creatorNameContainer {
+  margin-bottom: 5%;
+}
+
+.creatorName {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.time {
+  font-size: 12px;
+  color: #6c757d;
+}

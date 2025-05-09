@@ -10,6 +10,7 @@ function Posts() {
   const dispatch = useDispatch();
   const params = useParams();
 
+  //TODO: move to User.js
   useEffect(() => {
     const graphQLQuery = {
       query: `
@@ -24,6 +25,7 @@ function Posts() {
             createdAt
             images
             imagesUrl
+            comments
           }
         }
       `,

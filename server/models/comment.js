@@ -10,7 +10,7 @@ const commentSchema = new Schema(
       require: true,
     },
     creatorName: {
-      type: Schema.String,
+      type: String,
       require: true,
     },
     comments: {

@@ -1,20 +1,17 @@
 import { Fragment, useState } from "react";
 import Picker from "emoji-picker-react";
-import { useSelector } from "react-redux";
 
 import ImageList from "./ImageList/ImageList";
-import InputText from "../../Utils/InputText/InputText";
 import CommentForm from "./CommentForm/CommentForm";
 
 import { getDayInYear, getTimeInDay } from "../../../utils/dateConfigs/format";
 import { getRandomString } from "../../../utils/fileConfigs/format";
 
-import { profileImageFileURLSlice } from "../../../redux/userSlice";
-
 import { EmojiSVG } from "../../../utils/svgConfigs/SVG";
 import userpublic from "../../../asset/img/userpublic.png";
 
 import styles from "./PostItem.module.css";
+import CommnetList from "./CommentList/CommentList";
 
 function PostItem({ post }) {
   const {
@@ -25,6 +22,8 @@ function PostItem({ post }) {
     images,
     creatorName,
     creatorImageUrl,
+    _id,
+    comments,
   } = post;
 
   const [visibleEmoji, setVisibleEmoji] = useState(false);
@@ -103,8 +102,14 @@ function PostItem({ post }) {
           <p className={styles.commentText}>Comment</p>
         </div>
       </div>
+      {comments.length > 0 && (
+        <div>
+          <CommnetList comments={comments} />
+        </div>
+      )}
+
       <div>
-        <CommentForm />
+        <CommentForm postId={_id} />
       </div>
     </div>
   );

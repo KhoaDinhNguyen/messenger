@@ -3,6 +3,7 @@ const userSchema = require("../schema/userSchema");
 const notificationSchema = require("../schema/notificationSchema");
 const MessageSchema = require("../schema/messageSchema");
 const postSchema = require("../schema/postSchema");
+const commentSchema = require("../schema/commentSchema");
 
 const {
   UserInputTypeSignUp,
@@ -54,18 +55,25 @@ const {
 
 const { PostType, PostInputType, createPost, getPost } = postSchema;
 
+const {
+  CommentInputTypePost,
+  CommentType,
+  createCommentFromPost,
+  CommentInputTypeId,
+  getComments,
+} = commentSchema;
+
 const schema = buildSchema(`
   ${UserType}
   ${UserWaitingFriendsType}
   ${UserFriendsType}
   ${UserWithImageType}
-  ${PostType}
-  ${ImageInputType}
-
   ${NotificationType}
-  
   ${MessageType}
+  ${PostType}
+  ${CommentType}
 
+  ${ImageInputType}
   ${UserInputTypeSignUp}
   ${UserInputTypeLogin}
   ${UserInputTypeId}
@@ -82,6 +90,9 @@ const schema = buildSchema(`
   ${MessageInputTypeEmoji}
 
   ${PostInputType}
+
+  ${CommentInputTypePost}
+  ${CommentInputTypeId}
 
   type RootMutation {
     ${createUser}
@@ -100,6 +111,8 @@ const schema = buildSchema(`
     ${updateMessageEmoji}
 
     ${createPost}
+
+    ${createCommentFromPost}
   }
 
   type RootQuery {
@@ -112,6 +125,7 @@ const schema = buildSchema(`
     ${getLatestMessages}
     ${generateImageURLWithUserId}
     ${getPost}
+    ${getComments}
   }
   schema {
     query: RootQuery

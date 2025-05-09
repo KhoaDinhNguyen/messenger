@@ -4,6 +4,7 @@ function InputTextArea({
   valueText,
   onChangeText,
   onFocusText,
+  onKeyDown,
   placeholder,
   labelText,
   minLength,
@@ -11,10 +12,11 @@ function InputTextArea({
   rootContainer,
   labelContainer,
   inputContainer,
+  row,
 }) {
   const placeHolderModifiers = placeholder === undefined ? "" : placeholder;
   const requiredModifers = required === undefined ? false : required;
-
+  const rowModifiers = row === undefined ? 10 : row;
   return (
     <div className={rootContainer}>
       {labelText !== undefined && labelText !== "" && (
@@ -33,8 +35,10 @@ function InputTextArea({
         placeholder={placeHolderModifiers}
         minLength={minLength}
         maxLength={maxLength}
-        rows={10}
+        rows={rowModifiers}
         className={inputContainer}
+        onKeyDown={onKeyDown}
+        wrap="soft"
       />
     </div>
   );
