@@ -15,10 +15,7 @@ function FriendList({ setSearchParams }) {
   const latestMessages = useSelector((state) => state[latestMessageSlice.name]);
 
   const friendsMessageList = friendsList.map((friend) => {
-    console.log(friend);
-    console.log(latestMessages);
     const latestMessage = latestMessages.filter((message) => {
-      console.log(message);
       if (
         (message &&
           message.senderId === friend.friendId &&

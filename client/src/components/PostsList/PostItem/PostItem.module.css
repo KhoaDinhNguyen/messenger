@@ -38,7 +38,7 @@
 }
 
 .textContainer {
-  padding: 20px 0px;
+  padding: 10px 0px;
 }
 
 .title {
@@ -47,8 +47,7 @@
 }
 
 .content {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 10px;
   word-break: break-all;
   width: 100%;
 }
