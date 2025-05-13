@@ -67,6 +67,7 @@ function MessagesBox({ searchParams }) {
         .then((response) => {
           if (response.data === null) {
           } else {
+            console.log(response.data);
             dispatch(
               currentMessageSlice.actions.init(response.data.getMessage)
             );

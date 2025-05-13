@@ -37,25 +37,28 @@ function MessageList() {
       if (friendId !== null) {
         const graphQLQuery = {
           query: `
-          mutation CreateMessage($senderId: String!, $senderName: String!, $receiverId: String!, $receiverName: String!, $text: String!){
-            createMessage(messageInput:{
-              senderId: $senderId
-              senderName: $senderName
-              receiverId: $receiverId
-              receiverName: $receiverName
-              text: $text
-            }) {
-              _id
-              senderId
-              senderName
-              receiverId
-              receiverName
-              text
-              createdAt
-              senderEmoji
-              receiverEmoji
-            }
+          mutation CreateMessage($senderId: String!, $senderName: String!, $receiverId: String!, $receiverName: String!, $text: String!, $images: [String]){
+          createMessage(messageInput:{
+            senderId: $senderId
+            senderName: $senderName
+            receiverId: $receiverId
+            receiverName: $receiverName
+            text: $text
+            images: $images
+          }) {
+            _id
+            senderId
+            senderName
+            receiverId
+            receiverName
+            text
+            createdAt
+            senderEmoji
+            receiverEmoji
+            images
+            imagesUrl
           }
+        }
           `,
           variables: {
             senderId: sender.friendId,
@@ -63,6 +66,7 @@ function MessageList() {
             receiverId: friendId,
             receiverName: friendName,
             text: message,
+            images: [],
           },
         };
 
@@ -77,7 +81,8 @@ function MessageList() {
         })
           .then((jsonResponse) => jsonResponse.json())
           .then((response) => {
-            if (response.data !== null) {
+            console.log(response);
+            if (response.data.createMessage !== null) {
               dispatch(
                 currentMessageSlice.actions.addMessage(
                   response.data.createMessage

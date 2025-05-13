@@ -11,6 +11,7 @@ module.exports = {
       text: text,
       comments: [],
       images: [],
+      level: 0,
     });
 
     try {
@@ -35,6 +36,31 @@ module.exports = {
       );
 
       return foundComments;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+  createCommentFromComment: async function ({ commentInput }, req) {
+    const { commentId, creatorId, creatorName, text, level } = commentInput;
+
+    const newComment = new Comment({
+      creatorId: creatorId,
+      creatorName: creatorName,
+      text: text,
+      comments: [],
+      images: [],
+      level: level,
+    });
+
+    try {
+      await newComment.save();
+
+      await Comment.findById(commentId).updateOne({
+        $push: { comments: newComment.id },
+      });
+
+      return newComment;
     } catch (err) {
       console.log(err);
       throw err;

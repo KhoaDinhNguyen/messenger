@@ -45,10 +45,6 @@
   width: 100%;
 }
 
-.buttonsContainer {
-  display: none;
-}
-
 .focusForm .buttonsContainer {
   display: flex;
   align-items: center;

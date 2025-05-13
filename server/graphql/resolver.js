@@ -33,7 +33,8 @@ const {
 
 const { createPost, getPost } = postController;
 
-const { createCommentFromPost, getComments } = commentControllers;
+const { createCommentFromPost, getComments, createCommentFromComment } =
+  commentControllers;
 
 module.exports = {
   createUser,
@@ -58,6 +59,7 @@ module.exports = {
   getPost,
   createCommentFromPost,
   getComments,
+  createCommentFromComment,
   hello() {
     return "Hello world";
   },

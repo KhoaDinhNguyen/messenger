@@ -64,6 +64,7 @@ function FriendItem({ friend, setSearchParams, latestMessage }) {
       });
   };
 
+  console.log(latestMessage);
   const haveNotSeenMessage =
     latestMessage !== null &&
     latestMessage.senderId !== params.userid &&

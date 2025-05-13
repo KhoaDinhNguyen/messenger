@@ -14,6 +14,7 @@ module.exports = {
       modifiers,
       images,
     } = postInput;
+
     const generateImagesUrlPromises = images.map((image) =>
       getImageFromS3({ filename: image })
     );
@@ -70,6 +71,13 @@ module.exports = {
       }).sort({ createdAt: -1 });
 
       const newPost = posts.map(async (post) => {
+        const generateImagesUrlPromises = post.images.map((image) =>
+          getImageFromS3({ filename: image })
+        );
+
+        const imagesUrl = await Promise.all(generateImagesUrlPromises);
+
+        post.imagesUrl = imagesUrl;
         post.creatorImageUrl = await getImageFromS3({
           filename: post.creatorImage,
         });

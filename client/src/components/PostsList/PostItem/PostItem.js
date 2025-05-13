@@ -73,7 +73,7 @@ function PostItem({ post }) {
       </div>
       <div className={styles.textContainer}>
         <p className={styles.title}>{title}</p>
-        <p>{renderedContent}</p>
+        <p className={styles.content}>{renderedContent}</p>
       </div>
       {postImages.length > 0 && (
         <div>

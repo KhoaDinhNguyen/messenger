@@ -1,19 +1,24 @@
 import { useEffect, useState, Fragment } from "react";
 import userpublic from "../../../../asset/img/userpublic.png";
 
-import {
-  getDayInYear,
-  getTimeInDay,
-} from "../../../../utils/dateConfigs/format";
+import { getDiffTime } from "../../../../utils/dateConfigs/format";
+
+import CommentForm from "../CommentForm/CommentForm";
+import CommnetList from "../CommentList/CommentList";
 
 import { getRandomString } from "../../../../utils/fileConfigs/format";
 
 import styles from "./CommentItem.module.css";
 
 function CommentItem({ comment }) {
-  const { creatorId, creatorName, text, createdAt } = comment;
+  const { creatorId, creatorName, text, createdAt, id, comments, level } =
+    comment;
   const [creatorImage, setCreatorImage] = useState("");
+  const [visibleCommentForm, setVisibleCommentForm] = useState(false);
 
+  const onChangeVisibleComment = () => {
+    setVisibleCommentForm((state) => !state);
+  };
   const renderedText = text.split("\n").map((subStr) => {
     return (
       <Fragment key={getRandomString(64)}>
@@ -60,31 +65,68 @@ function CommentItem({ comment }) {
       });
   });
 
+  console.log(level);
   return (
     <div className={styles.rootContainer}>
-      <div className={styles.imageContainer}>
-        <img
-          src={creatorImage && creatorImage !== "" ? creatorImage : userpublic}
-          alt="user"
-          className={styles.userImage}
-        />
-      </div>
-      <div>
-        <div className={styles.textContainer}>
-          <div className={styles.creatorNameContainer}>
-            <p className={styles.creatorName}>{creatorName}</p>
+      <div className={styles.thisCommentContainer}>
+        <div className={styles.imageContainer}>
+          <img
+            src={
+              creatorImage && creatorImage !== "" ? creatorImage : userpublic
+            }
+            alt="user"
+            className={styles.userImage}
+          />
+        </div>
+        <div className={styles.commentFooter}>
+          <div className={styles.textContainer}>
+            <div className={styles.creatorNameContainer}>
+              <p className={styles.creatorName}>{creatorName}</p>
+            </div>
+            <div className={styles.contentContainer}>
+              <p className={styles.text}>{renderedText}</p>
+            </div>
           </div>
-          <div>
-            <p>{renderedText}</p>
+          <div className={styles.buttonsContainer}>
+            <div>
+              <p className={styles.time}>
+                {getDiffTime(new Date(Number(createdAt)))}
+              </p>
+            </div>
+            <div className={styles.buttonContainer}>
+              <p className={styles.like}>Like</p>
+            </div>
+            {level < 2 && (
+              <div
+                onClick={onChangeVisibleComment}
+                className={`${styles.commentButton} ${styles.buttonContainer}`}
+              >
+                <p className={styles.comment}>Comment</p>
+              </div>
+            )}
           </div>
         </div>
-        <div>
-          <p className={styles.time}>
-            {getDayInYear(new Date(Number(createdAt)))} -{" "}
-            {getTimeInDay(createdAt)}
-          </p>
-        </div>
       </div>
+
+      {comments.length > 0 && (
+        <div className={styles.otherComments}>
+          <div className={styles.commentsList}>
+            <CommnetList
+              comments={comments}
+              onChangeVisibleComment={onChangeVisibleComment}
+            />
+          </div>
+        </div>
+      )}
+      {visibleCommentForm && (
+        <div className={styles.commentForm}>
+          <CommentForm
+            commentId={id}
+            onChangeVisibleComment={onChangeVisibleComment}
+            level={level + 1}
+          />
+        </div>
+      )}
     </div>
   );
 }

@@ -27,6 +27,9 @@ const commentSchema = new Schema(
     imagesUrl: {
       type: [String],
     },
+    level: {
+      type: Number,
+    },
   },
   { collection: "comments", timestamps: true }
 );

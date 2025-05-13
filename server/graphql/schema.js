@@ -61,6 +61,8 @@ const {
   createCommentFromPost,
   CommentInputTypeId,
   getComments,
+  CommentInputTypeComment,
+  createCommentFromComment,
 } = commentSchema;
 
 const schema = buildSchema(`
@@ -93,6 +95,7 @@ const schema = buildSchema(`
 
   ${CommentInputTypePost}
   ${CommentInputTypeId}
+  ${CommentInputTypeComment}
 
   type RootMutation {
     ${createUser}
@@ -113,6 +116,7 @@ const schema = buildSchema(`
     ${createPost}
 
     ${createCommentFromPost}
+    ${createCommentFromComment}
   }
 
   type RootQuery {

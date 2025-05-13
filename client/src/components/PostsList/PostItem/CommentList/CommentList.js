@@ -7,8 +7,6 @@ import styles from "./CommentList.module.css";
 function CommnetList({ comments }) {
   const [commentList, setCommentList] = useState([]);
 
-  console.log(commentList);
-
   useEffect(() => {
     const graphQLQuery = {
       query: `
@@ -20,6 +18,7 @@ function CommnetList({ comments }) {
             creatorId
             comments
             createdAt
+            level
           }
         }
       `,

@@ -22,8 +22,9 @@ import userpublic from "../../../../asset/img/userpublic.png";
 
 import styles from "./CommentForm.module.css";
 
-function CommentForm({ postId }) {
+function CommentForm({ postId, commentId, onChangeVisibleComment, level }) {
   const params = useParams();
+  const commentFormId = postId !== undefined ? postId : commentId;
   const [comment, setComment] = useState("");
   const [visileEmoji, setVisibleEmoji] = useState(false);
   const [hasFocus, setHasFocus] = useState(false);
@@ -81,8 +82,10 @@ function CommentForm({ postId }) {
   const onSubmitForm = (event) => {
     event.preventDefault();
 
-    const graphQLQuery = {
-      query: `
+    let graphQLQuery;
+    if (postId !== undefined) {
+      graphQLQuery = {
+        query: `
         mutation createCommentFromPost($postId: String!, $creatorId: String!, $creatorName: String, $text: String){
           createCommentFromPost(postInput: {
             postId: $postId
@@ -95,13 +98,38 @@ function CommentForm({ postId }) {
           }
         }
       `,
-      variables: {
-        postId: postId,
-        creatorId: params.userid,
-        creatorName: creatorName,
-        text: comment,
-      },
-    };
+        variables: {
+          postId: postId,
+          creatorId: params.userid,
+          creatorName: creatorName,
+          text: comment,
+        },
+      };
+    } else if (commentId !== undefined) {
+      graphQLQuery = {
+        query: `
+        mutation CreateCommentFromComment($commentId: String!, $creatorId: String!, $creatorName: String, $text: String, $level: Int){
+          createCommentFromComment(commentInput: {
+            commentId: $commentId
+            creatorId: $creatorId
+            creatorName: $creatorName
+            text: $text
+            level: $level
+          }) {
+            creatorName
+            text
+          }
+        }
+      `,
+        variables: {
+          commentId: commentId,
+          creatorId: params.userid,
+          creatorName: creatorName,
+          text: comment,
+          level: level,
+        },
+      };
+    }
 
     const bodyJSON = JSON.stringify(graphQLQuery);
     const myHeaders = new Headers();
@@ -114,7 +142,8 @@ function CommentForm({ postId }) {
     })
       .then((jsonResponse) => jsonResponse.json())
       .then((response) => {
-        if (response.data === null) {
+        console.log(response);
+        if (response.data === undefined) {
         }
       })
       .catch((err) => {
@@ -123,12 +152,25 @@ function CommentForm({ postId }) {
 
     setComment((text) => "");
     setTextAreaNumRows(1);
+    if (commentId !== undefined) {
+      onChangeVisibleComment();
+    }
   };
 
-  const onChangeFocus = (isFocus) => {
-    setHasFocus(isFocus);
+  const onFocusHandler = (event) => {
+    if (event.target !== event.currentTarget) {
+      setHasFocus(true);
+      console.log("Call");
+    }
   };
-  //TODO: onBlur has problems
+
+  const onBlurHandler = (event) => {
+    if (event.target === event.currentTarget) {
+      setHasFocus(false);
+      console.log("Call 2");
+    }
+  };
+
   return (
     <div className={styles.rootContainer}>
       <div className={styles.userImageContainer}>
@@ -142,17 +184,18 @@ function CommentForm({ postId }) {
         className={`${styles.commentFormContainer} ${
           hasFocus ? styles.focusForm : ""
         }`}
-        tabIndex="1"
-        onFocus={onChangeFocus.bind(null, true)}
-        onBlur={onChangeFocus.bind(null, false)}
       >
         <form
           className={styles.commentForm}
           onSubmit={onSubmitForm}
           ref={formRef}
+          id={`commentForm_${postId}`}
+          tabIndex="1"
+          onFocus={onFocusHandler}
+          onBlur={onBlurHandler}
         >
           <InputTextArea
-            id={"comment"}
+            id={`commentText_${postId}`}
             rootContainer={styles.commentContainer}
             inputContainer={styles.commentInput}
             placeholder={"Comment this post..."}
@@ -162,42 +205,47 @@ function CommentForm({ postId }) {
             required={true}
             row={textAreaNumRows}
           />
-          <div className={styles.buttonsContainer}>
-            <div className={styles.commentFeaturesContainer}>
-              <div className={styles.emojiButton} onClick={onClickVisibleEmoji}>
-                <EmojiSVG />
-              </div>
-              {visileEmoji && (
-                <div className={styles.emojiPickerContainer}>
-                  <div className={styles.emojiPicker}>
-                    <EmojiPicker
-                      emojiStyle="native"
-                      onEmojiClick={onClickEmoji}
-                    />
-                  </div>
+          {hasFocus && (
+            <div className={styles.buttonsContainer}>
+              <div className={styles.commentFeaturesContainer}>
+                <div
+                  className={styles.emojiButton}
+                  onClick={onClickVisibleEmoji}
+                >
+                  <EmojiSVG />
                 </div>
-              )}
-              <div className={styles.imageButton}>
-                <InputFile
-                  id="commentImages"
-                  labelText={<UploadImageSVG />}
-                  inputContainer={styles.imageInput}
-                  labelContainer={styles.imageLabel}
-                  rootContainer={styles.imageContainer}
-                  accept={".jpg, .jpeg, .png"}
-                  mutiple={true}
-                />
+                {visileEmoji && (
+                  <div className={styles.emojiPickerContainer}>
+                    <div className={styles.emojiPicker}>
+                      <EmojiPicker
+                        emojiStyle="native"
+                        onEmojiClick={onClickEmoji}
+                      />
+                    </div>
+                  </div>
+                )}
+                <div className={styles.imageButton}>
+                  <InputFile
+                    id={`commentImages_${postId}`}
+                    labelText={<UploadImageSVG />}
+                    inputContainer={styles.imageInput}
+                    labelContainer={styles.imageLabel}
+                    rootContainer={styles.imageContainer}
+                    accept={".jpg, .jpeg, .png"}
+                    mutiple={true}
+                  />
+                </div>
               </div>
+              <InputButton
+                id={`commentSumit_${postId}`}
+                type={"submit"}
+                inputContainer={styles.submitInput}
+                labelContainer={styles.submitLabel}
+                rootContainer={styles.submitContainer}
+                labelText={<SendSVG />}
+              />
             </div>
-            <InputButton
-              id="submitComment"
-              type={"submit"}
-              inputContainer={styles.submitInput}
-              labelContainer={styles.submitLabel}
-              rootContainer={styles.submitContainer}
-              labelText={<SendSVG />}
-            />
-          </div>
+          )}
         </form>
       </div>
     </div>
