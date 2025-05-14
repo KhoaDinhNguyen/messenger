@@ -4,14 +4,17 @@ import { useParams } from "react-router";
 
 import PostsList from "../../PostsList/PostsList";
 
+import { fetchGetCommentsInitial } from "../../../fetch/fetchComment/fetchGetComment";
+
 import { postsSlice } from "../../../redux/postSlice";
+import { commentSlice } from "../../../redux/commentSlice";
 
 function Posts() {
   const dispatch = useDispatch();
   const params = useParams();
 
-  //TODO: move to User.js
   useEffect(() => {
+    dispatch(commentSlice.actions.cleanComments());
     const graphQLQuery = {
       query: `
         query getPost($id: String!){
@@ -45,16 +48,25 @@ function Posts() {
     })
       .then((jsonResponse) => jsonResponse.json())
       .then((response) => {
-        console.log(response);
         if (response.data === null) {
         } else {
-          dispatch(postsSlice.actions.init(response.data.getPost));
+          const postsList = response.data.getPost;
+          dispatch(postsSlice.actions.init(postsList));
+          if (postsList.length > 0) {
+            postsList.forEach(async (post) => {
+              const returnedComments = await fetchGetCommentsInitial(
+                post.comments
+              );
+              dispatch(commentSlice.actions.init(returnedComments));
+            });
+          }
         }
       })
       .catch((err) => {
         console.log(err);
       });
-  });
+  }, [dispatch, params.userid]);
+
   return (
     <div>
       <PostsList />

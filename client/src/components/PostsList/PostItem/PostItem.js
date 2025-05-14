@@ -25,9 +25,7 @@ function PostItem({ post }) {
     _id,
     comments,
   } = post;
-
   const [visibleEmoji, setVisibleEmoji] = useState(false);
-
   const onChangeVisibleEmoji = () => {
     setVisibleEmoji((state) => !state);
   };

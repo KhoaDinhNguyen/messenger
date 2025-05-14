@@ -23,6 +23,8 @@ import {
 
 import { postsSlice } from "./postSlice";
 
+import { commentSlice } from "./commentSlice";
+
 const reducers = {
   [nameSlice.name]: nameSlice.reducer,
   [dobSlice.name]: dobSlice.reducer,
@@ -44,6 +46,7 @@ const reducers = {
   [currentSenderSlice.name]: currentSenderSlice.reducer,
 
   [postsSlice.name]: postsSlice.reducer,
+  [commentSlice.name]: commentSlice.reducer,
 };
 
 const rootReducer = combineReducers(reducers);

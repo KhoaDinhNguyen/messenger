@@ -1,5 +1,5 @@
-import { useSelector } from "react-redux";
-import { useState, useRef, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useRef } from "react";
 import { useParams } from "react-router";
 import EmojiPicker from "emoji-picker-react";
 
@@ -12,6 +12,8 @@ import {
   nameSlice,
 } from "../../../../redux/userSlice";
 
+import { commentSlice } from "../../../../redux/commentSlice";
+
 import {
   SendSVG,
   EmojiSVG,
@@ -21,8 +23,10 @@ import {
 import userpublic from "../../../../asset/img/userpublic.png";
 
 import styles from "./CommentForm.module.css";
+import { postsSlice } from "../../../../redux/postSlice";
 
-function CommentForm({ postId, commentId, onChangeVisibleComment, level }) {
+function CommentForm({ postId, commentId, onChangeVisibleCommentForm, level }) {
+  const dispatch = useDispatch();
   const params = useParams();
   const commentFormId = postId !== undefined ? postId : commentId;
   const [comment, setComment] = useState("");
@@ -95,6 +99,12 @@ function CommentForm({ postId, commentId, onChangeVisibleComment, level }) {
           }) {
             creatorName
             text
+            createdAt
+            updatedAt
+            id
+            creatorId
+            comments
+            level
           }
         }
       `,
@@ -118,6 +128,12 @@ function CommentForm({ postId, commentId, onChangeVisibleComment, level }) {
           }) {
             creatorName
             text
+            createdAt
+            updatedAt
+            id
+            creatorId
+            comments
+            level
           }
         }
       `,
@@ -142,8 +158,31 @@ function CommentForm({ postId, commentId, onChangeVisibleComment, level }) {
     })
       .then((jsonResponse) => jsonResponse.json())
       .then((response) => {
-        console.log(response);
         if (response.data === undefined) {
+        } else if (postId !== undefined) {
+          dispatch(
+            commentSlice.actions.createComment(
+              response.data.createCommentFromPost
+            )
+          );
+          dispatch(
+            postsSlice.actions.updatePostFromCreatedComment({
+              postId: postId,
+              commentId: response.data.createCommentFromPost.id,
+            })
+          );
+        } else if (commentId !== undefined) {
+          dispatch(
+            commentSlice.actions.createComment(
+              response.data.createCommentFromComment
+            )
+          );
+          dispatch(
+            commentSlice.actions.updateCommentFromCreatedComment({
+              parentId: commentId,
+              childId: response.data.createCommentFromComment.id,
+            })
+          );
         }
       })
       .catch((err) => {
@@ -153,21 +192,19 @@ function CommentForm({ postId, commentId, onChangeVisibleComment, level }) {
     setComment((text) => "");
     setTextAreaNumRows(1);
     if (commentId !== undefined) {
-      onChangeVisibleComment();
+      onChangeVisibleCommentForm();
     }
   };
 
   const onFocusHandler = (event) => {
     if (event.target !== event.currentTarget) {
       setHasFocus(true);
-      console.log("Call");
     }
   };
 
   const onBlurHandler = (event) => {
     if (event.target === event.currentTarget) {
       setHasFocus(false);
-      console.log("Call 2");
     }
   };
 
@@ -189,13 +226,13 @@ function CommentForm({ postId, commentId, onChangeVisibleComment, level }) {
           className={styles.commentForm}
           onSubmit={onSubmitForm}
           ref={formRef}
-          id={`commentForm_${postId}`}
+          id={`commentForm_${commentFormId}`}
           tabIndex="1"
           onFocus={onFocusHandler}
           onBlur={onBlurHandler}
         >
           <InputTextArea
-            id={`commentText_${postId}`}
+            id={`commentText_${commentFormId}`}
             rootContainer={styles.commentContainer}
             inputContainer={styles.commentInput}
             placeholder={"Comment this post..."}
@@ -226,7 +263,7 @@ function CommentForm({ postId, commentId, onChangeVisibleComment, level }) {
                 )}
                 <div className={styles.imageButton}>
                   <InputFile
-                    id={`commentImages_${postId}`}
+                    id={`commentImages_${commentFormId}`}
                     labelText={<UploadImageSVG />}
                     inputContainer={styles.imageInput}
                     labelContainer={styles.imageLabel}
@@ -237,7 +274,7 @@ function CommentForm({ postId, commentId, onChangeVisibleComment, level }) {
                 </div>
               </div>
               <InputButton
-                id={`commentSumit_${postId}`}
+                id={`commentSumit_${commentFormId}`}
                 type={"submit"}
                 inputContainer={styles.submitInput}
                 labelContainer={styles.submitLabel}

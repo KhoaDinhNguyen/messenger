@@ -1,12 +1,12 @@
 import { useEffect, useState, Fragment } from "react";
-import userpublic from "../../../../asset/img/userpublic.png";
-
-import { getDiffTime } from "../../../../utils/dateConfigs/format";
 
 import CommentForm from "../CommentForm/CommentForm";
 import CommnetList from "../CommentList/CommentList";
 
+import { getDiffTime } from "../../../../utils/dateConfigs/format";
 import { getRandomString } from "../../../../utils/fileConfigs/format";
+
+import userpublic from "../../../../asset/img/userpublic.png";
 
 import styles from "./CommentItem.module.css";
 
@@ -16,7 +16,7 @@ function CommentItem({ comment }) {
   const [creatorImage, setCreatorImage] = useState("");
   const [visibleCommentForm, setVisibleCommentForm] = useState(false);
 
-  const onChangeVisibleComment = () => {
+  const onChangeVisibleCommentForm = () => {
     setVisibleCommentForm((state) => !state);
   };
   const renderedText = text.split("\n").map((subStr) => {
@@ -63,9 +63,8 @@ function CommentItem({ comment }) {
       .catch((err) => {
         console.log(err);
       });
-  });
+  }, [comments, creatorId]);
 
-  console.log(level);
   return (
     <div className={styles.rootContainer}>
       <div className={styles.thisCommentContainer}>
@@ -98,7 +97,7 @@ function CommentItem({ comment }) {
             </div>
             {level < 2 && (
               <div
-                onClick={onChangeVisibleComment}
+                onClick={onChangeVisibleCommentForm}
                 className={`${styles.commentButton} ${styles.buttonContainer}`}
               >
                 <p className={styles.comment}>Comment</p>
@@ -111,10 +110,7 @@ function CommentItem({ comment }) {
       {comments.length > 0 && (
         <div className={styles.otherComments}>
           <div className={styles.commentsList}>
-            <CommnetList
-              comments={comments}
-              onChangeVisibleComment={onChangeVisibleComment}
-            />
+            <CommnetList comments={comments} />
           </div>
         </div>
       )}
@@ -122,7 +118,7 @@ function CommentItem({ comment }) {
         <div className={styles.commentForm}>
           <CommentForm
             commentId={id}
-            onChangeVisibleComment={onChangeVisibleComment}
+            onChangeVisibleCommentForm={onChangeVisibleCommentForm}
             level={level + 1}
           />
         </div>

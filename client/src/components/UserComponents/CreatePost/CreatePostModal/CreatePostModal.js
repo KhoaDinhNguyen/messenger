@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { useParams } from "react-router";
 
@@ -18,6 +18,8 @@ import {
   profileImageFileURLSlice,
 } from "../../../../redux/userSlice";
 
+import { postsSlice } from "../../../../redux/postSlice";
+
 import {
   CloseModalSVG,
   UploadImageSVG,
@@ -33,6 +35,7 @@ const validFileTypes = ["image/png", "image/jpeg", "image/png"];
 
 function CreatePostModal({ createPostModal, onClickClosePostModal }) {
   const params = useParams();
+  const dispatch = useDispatch();
   const name = useSelector((state) => state[nameSlice.name]);
   const imageUrl = useSelector((state) => state[profileImageFileURLSlice.name]);
   const userImage = useSelector(
@@ -109,7 +112,6 @@ function CreatePostModal({ createPostModal, onClickClosePostModal }) {
   };
   const onSubmitCreatePost = async (event) => {
     event.preventDefault();
-    console.log(content);
     let images = []; // store images URL
     if (storedImages.length > 0) {
       const failedImage = storedImages.filter((file) => {
@@ -176,6 +178,10 @@ function CreatePostModal({ createPostModal, onClickClosePostModal }) {
             modifiers
             images
             imagesUrl
+            _id
+            createdAt
+            updatedAt
+            comments
           }
         }
       `,
@@ -205,7 +211,7 @@ function CreatePostModal({ createPostModal, onClickClosePostModal }) {
         if (reponse.data === null) {
           //TODO: handle error
         } else {
-          console.log(reponse.data);
+          dispatch(postsSlice.actions.createPost(reponse.data.createPost));
         }
       });
 
@@ -246,8 +252,8 @@ function CreatePostModal({ createPostModal, onClickClosePostModal }) {
               <div className={styles.creatorContainer}>
                 <img
                   src={imageUrl === "" ? userpublic : imageUrl}
-                  name="user"
                   className={styles.userImage}
+                  alt="user"
                 />
                 <p className={styles.name}>{name}</p>
               </div>
