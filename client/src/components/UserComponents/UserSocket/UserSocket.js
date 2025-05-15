@@ -158,7 +158,11 @@ function UserSocket({ userid }) {
       Socket.getSocket().on("comment", commentHandler);
     }
 
-    return () => {};
+    return () => {
+      Socket.getSocket().off("friendRequest", friendRequestHandler);
+      Socket.getSocket().off("message", messageHandler);
+      Socket.getSocket().off("comment", commentHandler);
+    };
   }, [userid, dispatch, searchParams]);
 
   return <></>;

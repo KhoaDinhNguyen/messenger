@@ -197,8 +197,6 @@ function CreatePostModal({ createPostModal, onClickClosePostModal }) {
       },
     };
 
-    console.log(graphQLQuery);
-
     const bodyJSON = JSON.stringify(graphQLQuery);
     const myHeaders = new Headers();
     myHeaders.append("Content-type", "application/json");
@@ -210,7 +208,6 @@ function CreatePostModal({ createPostModal, onClickClosePostModal }) {
     })
       .then((jsonResponse) => jsonResponse.json())
       .then((reponse) => {
-        console.log(reponse);
         if (reponse.data.createPost === null) {
           //TODO: handle error
         } else {

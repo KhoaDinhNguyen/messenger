@@ -68,8 +68,6 @@ function SignUpForm() {
   };
 
   const onChangeDate = (event) => {
-    console.log(event.target.value);
-    console.log(typeof event.target.value);
     setDate(event.target.value);
   };
 

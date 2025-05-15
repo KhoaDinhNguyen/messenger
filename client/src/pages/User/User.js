@@ -35,8 +35,10 @@ function User() {
   if (Socket.getSocket() === undefined) {
     console.log("init socket");
     Socket.init(params.userid);
+  } else if (Socket.getSocket().disconnected) {
+    console.log("reconnect socket");
+    Socket.init(params.userid);
   }
-
   useEffect(() => {
     function findUserById() {
       const graphQLQuery = {

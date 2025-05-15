@@ -13,7 +13,7 @@ function ImageItem({ url, fileName, onClickRemoveImage }) {
         labelText={"X"}
         labelContainer={styles.buttonLabel}
       />
-      <a href={url} target="_blank">
+      <a href={url} target="_blank" rel="noreferrer">
         <img src={url} alt={fileName} className={styles.image} />
       </a>
     </div>

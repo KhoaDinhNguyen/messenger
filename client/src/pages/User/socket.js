@@ -19,7 +19,6 @@ const Socket = {
   },
   disconnect: function () {
     socket.disconnect();
-    socket = undefined;
     return true;
   },
 };
