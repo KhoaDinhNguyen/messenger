@@ -79,68 +79,77 @@ function UserSocket({ userid }) {
 
     function messageHandler(data) {
       const { action, message } = data;
-      if (action === "create") {
-        const formatedMessage = message;
-        formatedMessage.createdAt = new Date(formatedMessage.createdAt)
-          .getTime()
-          .toString();
 
-        const friendId = searchParams.get("friendId");
-        dispatch(latestMessageSlice.actions.addMessage(formatedMessage));
-        if (
-          message.senderId === friendId &&
-          message.senderId !== message.receiverId
-        ) {
-          dispatch(currentMessageSlice.actions.addMessage(formatedMessage));
+      try {
+        if (action === "create") {
+          const formatedMessage = message;
+          formatedMessage.createdAt = new Date(message.createdAt)
+            .getTime()
+            .toString();
+
+          const friendId = searchParams.get("friendId");
+          dispatch(latestMessageSlice.actions.addMessage(formatedMessage));
+          if (
+            message.senderId === friendId &&
+            message.senderId !== message.receiverId
+          ) {
+            dispatch(currentMessageSlice.actions.addMessage(formatedMessage));
+            dispatch(
+              latestMessageSlice.actions.updateHaveSeenMessage(formatedMessage)
+            );
+          }
+        } else if (action === "updateEmoji") {
           dispatch(
-            latestMessageSlice.actions.updateHaveSeenMessage(formatedMessage)
+            currentMessageSlice.actions.updateEmoji({
+              messageId: message._id,
+              emoji: data.emoji,
+              commentId: data.commentId,
+            })
           );
         }
-      } else if (action === "updateEmoji") {
-        dispatch(
-          currentMessageSlice.actions.updateEmoji({
-            messageId: message._id,
-            emoji: data.emoji,
-            commentId: data.commentId,
-          })
-        );
+      } catch (err) {
+        console.log(err);
       }
     }
 
     function commentHandler(data) {
       const { comment, action } = data;
 
-      if (action === "createdFromPost") {
-        const { postId } = data;
-        const formatedComment = comment;
-        formatedComment.createdAt = new Date(formatedComment.createdAt)
-          .getTime()
-          .toString();
-        formatedComment.id = comment._id;
-        if (userid !== formatedComment.creatorId) {
+      try {
+        if (action === "createdFromPost") {
+          const { postId } = data;
+          const formatedComment = comment;
+          formatedComment.createdAt = new Date(formatedComment.createdAt)
+            .getTime()
+            .toString();
+          formatedComment.id = comment._id;
+          if (userid !== formatedComment.creatorId) {
+            dispatch(commentSlice.actions.createComment(formatedComment));
+            dispatch(
+              postsSlice.actions.updatePostFromCreatedComment({
+                postId: postId,
+                commentId: formatedComment._id,
+              })
+            );
+          }
+        }
+        if (action === "createdFromComment") {
+          const { parentId } = data;
+          const formatedComment = comment;
+          formatedComment.createdAt = new Date(formatedComment.createdAt)
+            .getTime()
+            .toString();
+          formatedComment.id = comment._id;
           dispatch(commentSlice.actions.createComment(formatedComment));
           dispatch(
-            postsSlice.actions.updatePostFromCreatedComment({
-              postId: postId,
-              commentId: formatedComment._id,
+            commentSlice.actions.updateCommentFromCreatedComment({
+              parentId: parentId,
+              childId: formatedComment.id,
             })
           );
         }
-      }
-      if (action === "createdFromComment") {
-        const { parentId } = data;
-        const formatedComment = comment;
-        formatedComment.createdAt = new Date(formatedComment.createdAt)
-          .getTime()
-          .toString();
-        formatedComment.id = comment._id;
-        dispatch(commentSlice.actions.createComment(formatedComment));
-        dispatch(
-          commentSlice.actions.updateCommentFromCreatedComment({
-            parentId: parentId,
-            childId: formatedComment.id,
-          })
-        );
+      } catch (err) {
+        console.log(err);
       }
     }
     if (Socket.getSocket() !== undefined) {
@@ -149,11 +158,7 @@ function UserSocket({ userid }) {
       Socket.getSocket().on("comment", commentHandler);
     }
 
-    return () => {
-      Socket.getSocket().off("friendRequest", friendRequestHandler);
-      Socket.getSocket().off("message", messageHandler);
-      Socket.getSocket().off("comment", commentHandler);
-    };
+    return () => {};
   }, [userid, dispatch, searchParams]);
 
   return <></>;

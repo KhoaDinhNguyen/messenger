@@ -81,7 +81,6 @@ function MessageList() {
         })
           .then((jsonResponse) => jsonResponse.json())
           .then((response) => {
-            console.log(response);
             if (response.data.createMessage !== null) {
               dispatch(
                 currentMessageSlice.actions.addMessage(
