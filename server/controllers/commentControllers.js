@@ -1,5 +1,9 @@
 const Post = require("../models/post");
 const Comment = require("../models/comment");
+const User = require("../models/user");
+
+const io = require("../socket");
+const Sockets = require("../models/socket");
 
 module.exports = {
   createCommentFromPost: async function ({ postInput }, req) {
@@ -15,12 +19,36 @@ module.exports = {
     });
 
     try {
-      await newComment.save();
+      const resComment = await newComment.save();
 
-      await Post.findById(postId).updateOne({
+      const updatedPost = await Post.findById(postId);
+
+      await updatedPost.updateOne({
         $push: { comments: newComment.id },
       });
 
+      if (updatedPost.modifiers !== "Private") {
+        const user = await User.findById(updatedPost.creatorId);
+
+        const allIds = user.friends.map((friend) => {
+          return friend.friendId;
+        });
+
+        const nonCreatorIds = allIds.filter(
+          (friendId) => friendId.toString() !== creatorId
+        );
+
+        nonCreatorIds.forEach((id) => {
+          const foundSocket = Sockets.findSocketByUserId(id.toString());
+          if (foundSocket !== null) {
+            io.getIO().to(foundSocket.socketId).emit("comment", {
+              action: "createdFromPost",
+              comment: resComment,
+              postId: postId,
+            });
+          }
+        });
+      }
       return newComment;
     } catch (err) {
       console.log(err);
@@ -54,10 +82,33 @@ module.exports = {
     });
 
     try {
-      await newComment.save();
+      const resComment = await newComment.save();
 
-      await Comment.findById(commentId).updateOne({
+      const updatedComment = await Comment.findById(commentId);
+
+      await updatedComment.updateOne({
         $push: { comments: newComment.id },
+      });
+
+      const user = await User.findById(updatedComment.creatorId);
+
+      const allIds = user.friends.map((friend) => {
+        return friend.friendId;
+      });
+
+      const nonCreatorIds = allIds.filter(
+        (friendId) => friendId.toString() !== creatorId
+      );
+
+      nonCreatorIds.forEach((id) => {
+        const foundSocket = Sockets.findSocketByUserId(id.toString());
+        if (foundSocket !== null) {
+          io.getIO().to(foundSocket.socketId).emit("comment", {
+            action: "createdFromComment",
+            parentId: updatedComment.id,
+            comment: resComment,
+          });
+        }
       });
 
       return newComment;

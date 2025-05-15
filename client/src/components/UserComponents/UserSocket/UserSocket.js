@@ -15,6 +15,10 @@ import {
   latestMessageSlice,
 } from "../../../redux/messageSlice";
 
+import { postsSlice } from "../../../redux/postSlice";
+
+import { commentSlice } from "../../../redux/commentSlice";
+
 function UserSocket({ userid }) {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
@@ -103,14 +107,52 @@ function UserSocket({ userid }) {
       }
     }
 
+    function commentHandler(data) {
+      const { comment, action } = data;
+
+      if (action === "createdFromPost") {
+        const { postId } = data;
+        const formatedComment = comment;
+        formatedComment.createdAt = new Date(formatedComment.createdAt)
+          .getTime()
+          .toString();
+        formatedComment.id = comment._id;
+        if (userid !== formatedComment.creatorId) {
+          dispatch(commentSlice.actions.createComment(formatedComment));
+          dispatch(
+            postsSlice.actions.updatePostFromCreatedComment({
+              postId: postId,
+              commentId: formatedComment._id,
+            })
+          );
+        }
+      }
+      if (action === "createdFromComment") {
+        const { parentId } = data;
+        const formatedComment = comment;
+        formatedComment.createdAt = new Date(formatedComment.createdAt)
+          .getTime()
+          .toString();
+        formatedComment.id = comment._id;
+        dispatch(commentSlice.actions.createComment(formatedComment));
+        dispatch(
+          commentSlice.actions.updateCommentFromCreatedComment({
+            parentId: parentId,
+            childId: formatedComment.id,
+          })
+        );
+      }
+    }
     if (Socket.getSocket() !== undefined) {
       Socket.getSocket().on("friendRequest", friendRequestHandler);
       Socket.getSocket().on("message", messageHandler);
+      Socket.getSocket().on("comment", commentHandler);
     }
 
     return () => {
       Socket.getSocket().off("friendRequest", friendRequestHandler);
       Socket.getSocket().off("message", messageHandler);
+      Socket.getSocket().off("comment", commentHandler);
     };
   }, [userid, dispatch, searchParams]);
 

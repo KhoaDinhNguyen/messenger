@@ -17,7 +17,6 @@ const commentSlice = createSlice({
       const { parentId, childId } = action.payload;
 
       const newState = state.forEach((comment) => {
-        console.log(comment);
         if (comment.id !== parentId) {
           return comment;
         }

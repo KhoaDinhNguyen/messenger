@@ -8,7 +8,6 @@ const postsSlice = createSlice({
       return action.payload;
     },
     createPost(state, action) {
-      console.log(action.payload);
       return [action.payload, ...state];
     },
     updatePostFromCreatedComment(state, action) {
@@ -18,7 +17,6 @@ const postsSlice = createSlice({
         if (postId !== post._id) {
           return post;
         }
-
         post.comments = [commentId, ...post.comments];
       });
 
