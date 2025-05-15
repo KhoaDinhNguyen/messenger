@@ -5,10 +5,10 @@ import LandingPage from "./LandingPage/LandingPage";
 function Root() {
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   navigate("home");
-  // });
-  return <LandingPage />;
+  useEffect(() => {
+    navigate("home");
+  });
+  return <></>;
 }
 
 export default Root;
