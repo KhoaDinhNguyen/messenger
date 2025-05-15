@@ -1,14 +1,13 @@
 .rootContainer {
   margin-bottom: 20px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   max-width: 500px;
 }
 
 .senderContainer {
   justify-self: flex-end;
   flex-direction: row-reverse;
-  align-items: flex-start;
 }
 
 .receiverContainer {

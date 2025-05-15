@@ -23,6 +23,7 @@ import User from "./pages/User/User";
 import UserNotification from "./pages/User/UserNotification/UserNotification";
 import UserMessages from "./pages/User/UserMessages/UserMessages";
 import UserProfile from "./pages/User/UserProfile/UserProfile";
+import UserPosts from "./pages/User/UserPosts/UserPosts";
 
 import SearchUsers from "./pages/DynamticPages/SearchUsers/SearchUsers";
 import UserPublic from "./pages/DynamticPages/UserPublic/UserPublic";
@@ -48,6 +49,7 @@ const router = createBrowserRouter(
         <Route path="notification" element={<UserNotification />} />
         <Route path="messenger" element={<UserMessages />} />
         <Route path="profile" element={<UserProfile />} />
+        <Route path="posts" element={<UserPosts />} />
       </Route>
       <Route path="signupsuccess" element={<SignUpSuccess />} />
       <Route path="userpublic" element={<UserPublic />} />

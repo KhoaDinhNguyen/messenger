@@ -1,6 +1,8 @@
 const userControllers = require("../controllers/userControllers");
 const notificationControllers = require("../controllers/notificationControllers");
 const messageControllers = require("../controllers/messageControllers");
+const postController = require("../controllers/postControllers");
+const commentControllers = require("../controllers/commentControllers");
 
 const {
   createUser,
@@ -29,6 +31,11 @@ const {
   updateMessageEmoji,
 } = messageControllers;
 
+const { createPost, getPost } = postController;
+
+const { createCommentFromPost, getComments, createCommentFromComment } =
+  commentControllers;
+
 module.exports = {
   createUser,
   updateUser,
@@ -48,6 +55,11 @@ module.exports = {
   updateHaveSeenMessages,
   generateImageURLWithUserId,
   updateMessageEmoji,
+  createPost,
+  getPost,
+  createCommentFromPost,
+  getComments,
+  createCommentFromComment,
   hello() {
     return "Hello world";
   },

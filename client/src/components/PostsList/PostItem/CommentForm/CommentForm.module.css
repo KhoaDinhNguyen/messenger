@@ -1,0 +1,150 @@
+.rootContainer {
+  margin-top: 20px;
+  display: flex;
+}
+
+.commentFormContainer {
+  width: 100%;
+  background-color: #dee2e6;
+  border: 1px solid transparent;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.focusForm {
+  background-color: white;
+  border: 1px solid black;
+}
+
+.commentContainer {
+  width: 100%;
+}
+
+.commentInput {
+  width: 100%;
+  outline: 0;
+  border: 0;
+  background-color: #dee2e6;
+  resize: none;
+  font-size: 16px;
+}
+
+.focusForm .commentInput {
+  background-color: white;
+}
+.userImageContainer {
+  margin-right: 10px;
+}
+
+.userImage {
+  width: 32px;
+  height: auto;
+}
+
+.commentForm {
+  width: 100%;
+}
+
+.focusForm .buttonsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.submitContainer {
+  width: max-content;
+  height: max-content;
+}
+.submitInput {
+  display: none;
+}
+
+.submitLabel {
+  cursor: pointer;
+  display: block;
+  height: 25px;
+}
+
+.submitLabel svg path {
+  fill: #adb5bd;
+}
+
+.focusForm .submitLabel svg path {
+  fill: #246bce;
+}
+
+.commentFeaturesContainer {
+  display: flex;
+  align-items: center;
+}
+
+.emojiButton {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-right: 5px;
+}
+
+.emojiButton path,
+.emojiButton ellipse {
+  stroke: #adb5bd;
+}
+
+.emojiButton rect {
+  width: 0;
+  height: 0;
+  rx: 0;
+}
+
+.focusForm .emojiButton path,
+.focusForm .emojiButton ellipse {
+  stroke: orange;
+}
+
+.emojiButton svg {
+  width: 28px;
+  height: 28px;
+}
+
+.imageButton {
+  display: flex;
+  align-items: center;
+}
+
+.imageInput {
+  display: none;
+}
+
+.imageContainer {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  height: max-content;
+}
+
+.imageLabel {
+  display: block;
+  height: 25px;
+  cursor: pointer;
+}
+.imageLabel svg {
+  width: 25px;
+  height: 25px;
+}
+
+.imageLabel path,
+.imageLabel circle {
+  stroke: #adb5bd;
+}
+
+.focusForm .imageLabel path,
+.focusForm .imageLabel circle {
+  stroke: #2d6a4f;
+}
+
+.emojiPickerContainer {
+  position: relative;
+}
+.emojiPicker {
+  position: absolute;
+}

@@ -1,0 +1,185 @@
+.modalContainer {
+  overflow: auto;
+}
+
+.formContainer {
+  position: absolute;
+  transform: translateX(-50%);
+  top: 10%;
+  left: 50%;
+  width: 500px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.formHeaderContainer {
+  display: grid;
+  grid-template-columns: 1fr 40px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.formTitleContainer {
+  grid-column: 1 /2;
+  display: flex;
+  justify-content: center;
+}
+
+.formTitle {
+  margin-left: 40px;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.closeContainer {
+  grid-column: 2 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeInput {
+  display: none;
+}
+
+.closeSVG rect {
+  fill: #ced4da;
+}
+
+.closeLabel {
+  cursor: pointer;
+}
+
+.modifiersContainer {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.creatorContainer {
+  display: flex;
+}
+
+.userImage {
+  width: 64px;
+  height: auto;
+}
+
+.selectStyles {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.name {
+  font-weight: 500;
+  margin-left: 10px;
+}
+
+.titleContainer {
+  width: 100%;
+}
+
+.titleInput {
+  width: 100%;
+  outline: 0;
+  border: 0;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  padding: 10px;
+  border-bottom: 2px solid transparent;
+}
+
+.titleInput:focus {
+  border-bottom: 2px solid black;
+}
+
+.contentContainer {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.contentInput {
+  width: 100%;
+  outline: 0;
+  border: 0;
+  font-size: 16px;
+  border: 2px solid transparent;
+  padding: 5px;
+  border-radius: 10px;
+  max-width: 460px;
+}
+
+.contentInput:focus {
+  border: 2px solid black;
+}
+
+.contentFeaturesContainer {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  width: max-content;
+  padding: 5px 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  justify-self: flex-start;
+  margin-bottom: 10px;
+}
+
+.postImageLabel path,
+.postImageLabel circle {
+  stroke: #2d6a4f;
+}
+
+.postEmojiContainer {
+  cursor: pointer;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.postEmojiContainer rect {
+  width: 0;
+  height: 0;
+  rx: 0;
+}
+
+.postEmojiContainer path,
+.postEmojiContainer ellipse {
+  stroke: orange;
+}
+
+.postImageInput {
+  display: none;
+}
+
+.postImageLabel {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.submitInput {
+  padding: 10px;
+  font-size: 20px;
+  background-color: #246bce;
+  cursor: pointer;
+  color: white;
+  border: 1px solid white;
+  border-radius: 10px;
+}
+
+.submitContainer {
+  justify-self: flex-end;
+}
+
+.emojiContainer {
+  position: relative;
+}
+
+.emojiPicker {
+  position: absolute;
+}

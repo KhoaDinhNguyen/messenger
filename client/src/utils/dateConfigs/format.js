@@ -52,4 +52,32 @@ function formatDateString(dateString) {
 
   return convertNumToMonth(monthNumber) + " " + dayString + " " + yearString;
 }
-export { formatDate, getTimeInDay, getDayInYear, formatDateString };
+
+function getDiffTime(date) {
+  const diffTime = new Date().getTime() - date.getTime();
+  let pluralNoun;
+  if (diffTime < 3600000) {
+    const minuteDiff = Math.floor(diffTime / 60000);
+    pluralNoun = minuteDiff <= 1 ? "minute" : "minutes";
+    return minuteDiff + ` ${pluralNoun}`;
+  } else if (diffTime < 86400000) {
+    const hourDiff = Math.floor(diffTime / 3600000);
+    pluralNoun = hourDiff <= 1 ? "hour" : "hours";
+    return hourDiff + ` ${pluralNoun}`;
+  } else if (diffTime < 2592000000) {
+    const dayDiff = Math.floor(diffTime / 86400000);
+    pluralNoun = dayDiff <= 1 ? "day" : "days";
+    return dayDiff + ` ${pluralNoun}`;
+  } else {
+    const monthDiff = Math.floor(diffTime / 2592000000);
+    pluralNoun = monthDiff <= 1 ? "month" : "months";
+    return monthDiff + ` ${pluralNoun}`;
+  }
+}
+export {
+  formatDate,
+  getTimeInDay,
+  getDayInYear,
+  formatDateString,
+  getDiffTime,
+};

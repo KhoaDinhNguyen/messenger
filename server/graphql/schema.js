@@ -2,6 +2,8 @@ const { buildSchema } = require("graphql");
 const userSchema = require("../schema/userSchema");
 const notificationSchema = require("../schema/notificationSchema");
 const MessageSchema = require("../schema/messageSchema");
+const postSchema = require("../schema/postSchema");
+const commentSchema = require("../schema/commentSchema");
 
 const {
   UserInputTypeSignUp,
@@ -51,17 +53,29 @@ const {
   updateMessageEmoji,
 } = MessageSchema;
 
+const { PostType, PostInputType, createPost, getPost } = postSchema;
+
+const {
+  CommentInputTypePost,
+  CommentType,
+  createCommentFromPost,
+  CommentInputTypeId,
+  getComments,
+  CommentInputTypeComment,
+  createCommentFromComment,
+} = commentSchema;
+
 const schema = buildSchema(`
   ${UserType}
   ${UserWaitingFriendsType}
   ${UserFriendsType}
   ${UserWithImageType}
-  ${ImageInputType}
-
   ${NotificationType}
-  
   ${MessageType}
+  ${PostType}
+  ${CommentType}
 
+  ${ImageInputType}
   ${UserInputTypeSignUp}
   ${UserInputTypeLogin}
   ${UserInputTypeId}
@@ -76,6 +90,12 @@ const schema = buildSchema(`
   ${MessageInputType}
   ${MessageInputTypeSenderAndReceiver}
   ${MessageInputTypeEmoji}
+
+  ${PostInputType}
+
+  ${CommentInputTypePost}
+  ${CommentInputTypeId}
+  ${CommentInputTypeComment}
 
   type RootMutation {
     ${createUser}
@@ -92,6 +112,11 @@ const schema = buildSchema(`
     ${createMessage}
     ${updateHaveSeenMessages}
     ${updateMessageEmoji}
+
+    ${createPost}
+
+    ${createCommentFromPost}
+    ${createCommentFromComment}
   }
 
   type RootQuery {
@@ -103,6 +128,8 @@ const schema = buildSchema(`
     ${getMessage}
     ${getLatestMessages}
     ${generateImageURLWithUserId}
+    ${getPost}
+    ${getComments}
   }
   schema {
     query: RootQuery

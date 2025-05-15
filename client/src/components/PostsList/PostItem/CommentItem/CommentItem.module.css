@@ -1,0 +1,87 @@
+.thisCommentContainer {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.otherComments {
+  margin-left: 40px;
+  border-left: 1px solid #dee2e6;
+}
+
+.commentsList {
+  margin-left: 5px;
+}
+.imageContainer {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.commentContainer {
+  width: 100%;
+}
+
+.userImage {
+  width: 32px;
+  height: auto;
+}
+
+.textContainer {
+  background-color: #dee2e6;
+  padding: 5px 15px;
+  border-radius: 10px;
+  width: max-content;
+  max-width: 100%;
+}
+
+.contentContainer {
+  width: 100%;
+}
+.text {
+  word-break: break-all;
+}
+.creatorNameContainer {
+  margin-bottom: 5%;
+}
+
+.creatorName {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.time,
+.comment,
+.like {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.comment:hover {
+  color: black;
+  font-weight: 500;
+}
+
+.commentForm {
+  width: calc(100% - 40px);
+  margin-bottom: 10px;
+  margin-left: 40px;
+}
+
+.commentFooter {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.buttonsContainer {
+  display: flex;
+  width: max-content;
+}
+
+.buttonContainer {
+  margin-left: 5px;
+}
+
+.commentButton {
+  cursor: pointer;
+}

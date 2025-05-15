@@ -1,0 +1,23 @@
+.createPostInput {
+  display: none;
+}
+
+.createPostLabel {
+  background-color: #246bce;
+  color: white;
+  padding: 15px 25px;
+  font-weight: 500;
+  font-size: 20px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.createPostLabel:hover {
+  background-color: #0d47a1;
+}
+
+.createPostButton {
+  margin-bottom: 20px;
+}
