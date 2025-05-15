@@ -20,6 +20,9 @@ const s3 = new S3Client({
 });
 
 const getImageFromS3 = async ({ filename }) => {
+  if (filename === "") {
+    return "";
+  }
   const command = new GetObjectCommand({
     Bucket: bucketName,
     Key: filename,
