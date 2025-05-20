@@ -12,6 +12,7 @@
 
 .scrollWatcher {
   animation: scroll-watcher linear;
+  animation-name: --scrollWatcher;
   animation-timeline: scroll(y);
 }
 
