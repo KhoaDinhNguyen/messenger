@@ -6,17 +6,20 @@
   z-index: 100;
   background-color: #50c878;
   width: 100%;
-  scale: 0 1;
+
   transform-origin: left;
 }
 
 .scrollWatcher {
-  animation: scroll-watcher linear;
-  animation-name: --scrollWatcher;
+  animation-name: scroll-watcher;
+  animation-timing-function: linear;
   animation-timeline: scroll(y);
 }
 
 @keyframes scroll-watcher {
+  from {
+    scale: 0 1;
+  }
   to {
     scale: 1 1;
   }
