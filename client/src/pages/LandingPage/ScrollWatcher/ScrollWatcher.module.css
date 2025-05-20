@@ -8,6 +8,9 @@
   width: 100%;
   scale: 0 1;
   transform-origin: left;
+}
+
+.scrollWatcher {
   animation: scroll-watcher linear;
   animation-timeline: scroll(y);
 }
