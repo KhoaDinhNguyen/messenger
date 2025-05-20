@@ -1,0 +1,27 @@
+.rootContainer {
+  margin-right: 100px;
+}
+
+.title {
+  color: white;
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.list {
+  list-style-type: none;
+}
+
+.list li {
+  margin-top: 20px;
+}
+
+.list li a {
+  color: #adb5bd;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.list li:has(.activeLink) a {
+  color: white;
+}

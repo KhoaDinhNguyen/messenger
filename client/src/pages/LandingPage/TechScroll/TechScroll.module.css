@@ -1,0 +1,42 @@
+.rootContainer {
+  overflow: hidden;
+  mask: linear-gradient(90deg, transparent, white 20%, white 80%, transparent);
+  border: 3px solid #ced4da;
+  max-width: 756px;
+}
+
+.listTech {
+  display: flex;
+  list-style-type: none;
+  gap: 50px;
+  padding-block: 10px;
+  flex-wrap: nowrap;
+  animation: backward 20s linear infinite;
+  width: fit-content;
+}
+
+.reverseList {
+  animation-direction: reverse;
+}
+
+.listTech li {
+  width: max-content;
+}
+
+@keyframes backward {
+  to {
+    transform: translate(calc(-50% - 50px));
+  }
+}
+
+.techLogo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.techLogo p {
+  margin-top: 10px;
+  font-weight: 500;
+  font-size: 18px;
+}

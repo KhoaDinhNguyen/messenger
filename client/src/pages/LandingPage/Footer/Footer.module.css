@@ -1,0 +1,10 @@
+.rootContainer {
+  background-color: #2b2d42;
+  width: 100%;
+  padding: 50px 100px;
+  padding-bottom: 20px;
+}
+
+.listPageContainer {
+  display: flex;
+}

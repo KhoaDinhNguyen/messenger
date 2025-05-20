@@ -1,0 +1,102 @@
+.rootContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 100px;
+  width: 100%;
+  max-width: 800px;
+  margin-top: 10px;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+}
+
+.image {
+  width: 64px;
+  height: 64px;
+}
+
+.appName {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.listNavContainer {
+  border: 1px solid #ced4da;
+  padding: 10px 20px;
+  border-radius: 20px;
+}
+
+.listNav {
+  display: flex;
+  list-style-type: none;
+  gap: 50px;
+}
+
+.navContainer:first-child {
+  margin-left: 50px;
+}
+
+.navContainer:last-child {
+  margin-right: 50px;
+}
+.navContainer a {
+  color: black;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.navContainer:has(.activeLink) a {
+  color: #f48c06;
+}
+
+.getStartButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.getStartInput {
+  display: none;
+}
+
+.getStartLabel::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 0%;
+  top: 0;
+  left: 0;
+  border-radius: 10px;
+  transition-duration: 300ms;
+}
+
+.getStartLabel {
+  border: 2px solid #246bce;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: #246bce;
+  cursor: pointer;
+  position: relative;
+}
+
+.labelText {
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+  transition-duration: 500ms;
+  z-index: 2;
+  position: relative;
+}
+
+.getStartLabel:hover .labelText {
+  color: #246bce;
+}
+
+.getStartLabel:hover::before {
+  background-color: white;
+  height: 100%;
+}

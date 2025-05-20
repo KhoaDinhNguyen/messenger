@@ -1,0 +1,12 @@
+.rootContainer {
+  background-color: #246bce;
+}
+
+.contentContainer {
+  background-color: white;
+  margin: 0px 100px;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

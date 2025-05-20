@@ -103,16 +103,14 @@ function SignUpForm() {
     setLoading(true);
     if (gender === "") {
       setErrorGender((messages) => [...messages, "Gender is required"]);
-    }
-    if (password !== confirmedPassword) {
+    } else if (password !== confirmedPassword) {
       setErrorPassword((message) => [
         ...message,
         "Confirmed password is incorrect",
       ]);
-    }
-
-    const graphQLQuery = {
-      query: `
+    } else {
+      const graphQLQuery = {
+        query: `
           mutation CreateUser($username: String!, $password: String!, $name: String!, $email: String, $dob: String!, $gender: String!, $pronounce: String, $phone: String){
             createUser(
               userInput: {
@@ -130,39 +128,40 @@ function SignUpForm() {
             }
           }
         `,
-      variables: {
-        username: account,
-        password: password,
-        name: formatName(firstName, middleName, lastName),
-        dob: formatDate(date, convertMonthToNum(month), year),
-        gender: gender,
-        email: email,
-        phone: phone,
-        pronounce: getPronounce(gender, ""),
-      },
-    };
+        variables: {
+          username: account,
+          password: password,
+          name: formatName(firstName, middleName, lastName),
+          dob: formatDate(date, convertMonthToNum(month), year),
+          gender: gender,
+          email: email,
+          phone: phone,
+          pronounce: getPronounce(gender, ""),
+        },
+      };
 
-    const bodyJSON = JSON.stringify(graphQLQuery);
-    const myHeader = new Headers();
-    myHeader.append("Content-type", "application/json");
+      const bodyJSON = JSON.stringify(graphQLQuery);
+      const myHeader = new Headers();
+      myHeader.append("Content-type", "application/json");
 
-    try {
-      const jsonResponse = await fetch(process.env.REACT_APP_SERVER_API, {
-        method: "POST",
-        body: bodyJSON,
-        headers: myHeader,
-      });
+      try {
+        const jsonResponse = await fetch(process.env.REACT_APP_SERVER_API, {
+          method: "POST",
+          body: bodyJSON,
+          headers: myHeader,
+        });
 
-      setLoading(false);
-      const response = await jsonResponse.json();
+        setLoading(false);
+        const response = await jsonResponse.json();
 
-      if (response.data === null) {
-        setErrorForm([...response.errors[0].data]);
-      } else {
-        navigate("/signupsuccess");
+        if (response.data === null) {
+          setErrorForm([...response.errors[0].data]);
+        } else {
+          navigate("/signupsuccess");
+        }
+      } catch (e) {
+        alert(e);
       }
-    } catch (e) {
-      alert(e);
     }
   };
 

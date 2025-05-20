@@ -1,14 +1,19 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router";
-import LandingPage from "./LandingPage/LandingPage";
+import { Outlet } from "react-router";
+import LandingPageNavigation from "./LandingPage/LandingPageNavigation/LandingPageNavigation";
+import Footer from "./LandingPage/Footer/Footer";
+
+import styles from "./Root.module.css";
 
 function Root() {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    navigate("home");
-  });
-  return <></>;
+  return (
+    <div className={styles.rootContainer}>
+      <div className={styles.contentContainer}>
+        <LandingPageNavigation />
+        <Outlet />
+      </div>
+      <Footer />
+    </div>
+  );
 }
 
 export default Root;

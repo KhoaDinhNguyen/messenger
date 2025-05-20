@@ -1,12 +1,18 @@
 import { Outlet } from "react-router";
 
 import HomepageNavigation from "./HomepageNavigation/HomepageNavigation";
+import Footer from "../LandingPage/Footer/Footer";
+
+import styles from "./Homepage.module.css";
 
 function Homepage() {
   return (
     <>
       <HomepageNavigation />
-      <Outlet />
+      <div className={styles.contentContainer}>
+        <Outlet />
+      </div>
+      <Footer />
     </>
   );
 }

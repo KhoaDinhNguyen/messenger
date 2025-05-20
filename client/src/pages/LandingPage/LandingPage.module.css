@@ -1,0 +1,235 @@
+.rootContainer {
+  background-color: #246bce;
+  width: 100%;
+}
+
+.rootContent {
+  justify-self: center;
+  width: 90%;
+  min-width: max-content;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+}
+
+.contentContainer {
+  width: max-content;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sectionTitle {
+  font-weight: 500;
+  font-size: 40px;
+}
+
+.introSection::before {
+  content: "";
+  background-image: url("../../asset/img/friendImage.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0.5;
+  z-index: 1;
+  border-radius: 10px;
+}
+
+.introSection {
+  margin-bottom: 50px;
+  padding: 50px 200px;
+  position: relative;
+  animation: fade-in linear 1s;
+  max-width: 100vw;
+}
+
+@keyframes fade-in {
+  from {
+    scale: 0.8;
+    opacity: 0;
+  }
+  to {
+    scale: 1;
+    opacity: 1;
+  }
+}
+
+.introContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image {
+  max-width: 768px;
+  border-radius: 10px;
+  border: 5px solid #ced4da;
+}
+
+.sectionTitleContainer {
+  margin-bottom: 30px;
+}
+
+.getStartButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.getStartInput {
+  display: none;
+}
+
+.getStartLabel::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 0%;
+  top: 0;
+  left: 0;
+  border-radius: 10px;
+  transition-duration: 300ms;
+}
+
+.getStartLabel {
+  border: 2px solid #246bce;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: #246bce;
+  cursor: pointer;
+  position: relative;
+}
+
+.labelText {
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+  transition-duration: 500ms;
+  z-index: 2;
+  position: relative;
+}
+
+.getStartLabel:hover .labelText {
+  color: #246bce;
+}
+
+.getStartLabel:hover::before {
+  background-color: white;
+  height: 100%;
+}
+
+.contactTitle {
+  font-weight: 500;
+  margin-bottom: 20px;
+  font-size: 32px;
+  max-width: 500px;
+  text-align: center;
+  color: white;
+}
+
+.contactSection::before {
+  content: "";
+  background-image: url("../../asset/img/contactImage.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 1;
+  z-index: 1;
+  border-radius: 10px;
+}
+
+.contactSection {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding: 50px 200px;
+  position: relative;
+  animation: fade-in2 linear;
+  animation-timeline: view();
+  max-width: 100vw;
+  animation-range: entry 0 cover 30%;
+}
+
+.contactContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@keyframes fade-in2 {
+  from {
+    scale: 0.5;
+    opacity: 0;
+  }
+  to {
+    scale: 1;
+    opacity: 1;
+  }
+}
+
+.contactButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.contactInput {
+  display: none;
+}
+
+.contactLabel::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 0%;
+  bottom: 0;
+  left: 0;
+  border-radius: 10px;
+  transition-duration: 300ms;
+}
+
+.contactLabel {
+  border: 2px solid #50c878;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: #50c878;
+  cursor: pointer;
+  position: relative;
+}
+
+.labelText {
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+  transition-duration: 500ms;
+  z-index: 2;
+  position: relative;
+}
+
+.contactLabel:hover {
+  border: 2px solid #00693e;
+}
+.contactLabel:hover .labelText {
+  color: #00693e;
+}
+
+.contactLabel:hover::before {
+  background-color: white;
+  height: 100%;
+}

@@ -15,6 +15,9 @@ import Homepage from "./pages/Homepage/Homepage";
 import SignUp from "./pages/Homepage/SignUp/SignUp";
 import Login from "./pages/Homepage/Login/Login";
 import SignUpSuccess from "./pages/Homepage/SignUpSuccess/SignUpSuccess";
+import FeaturePage from "./pages/LandingPage/FeaturePage/FeaturePage";
+import LandingPage from "./pages/LandingPage/LandingPage";
+import ContactPage from "./pages/LandingPage/ContactPage/ContactPage";
 
 import Auth from "./pages/Auth/Auth";
 import ForgetPassword from "./pages/Auth/ForgetPassword/ForgetPassword";
@@ -35,7 +38,11 @@ export const cookies = new Cookies(null, {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<Root />} />
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/" element={<Root />}>
+        <Route path="feature" element={<FeaturePage />} />
+        <Route path="contact" element={<ContactPage />} />
+      </Route>
       <Route path="home" element={<Homepage />}>
         <Route path="signup" element={<SignUp />} />
         <Route path="login" element={<Login />} />
