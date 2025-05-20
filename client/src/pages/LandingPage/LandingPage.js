@@ -19,6 +19,7 @@ function LandingPage() {
 
   const onClickGoToContact = () => {
     navigate("./contact");
+    window.scrollTo(0, 0);
   };
   return (
     <div className={styles.rootContainer}>

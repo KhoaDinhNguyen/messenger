@@ -1,3 +1,166 @@
-.rootContainer {
-  width: 100;
+.contactFormContainer::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-image: url("../../../asset/img/contactImage2.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 1;
+  z-index: 1;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0.5;
+    scale: 0.8;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+.contactFormContainer {
+  position: relative;
+  padding: 50px;
+  margin-bottom: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation-name: fade-in;
+  animation-timing-function: linear;
+  animation-duration: 500ms;
+}
+.contactFormContent {
+  display: flex;
+  position: relative;
+  z-index: 2;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.textLabel {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.textInput {
+  padding: 10px;
+  outline: 0;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  margin-bottom: 20px;
+  margin-top: 5px;
+}
+
+.textInput:focus {
+  border: 2px solid orange;
+}
+
+.textAreaInput {
+  resize: vertical;
+  min-height: 200px;
+  max-height: 300px;
+  width: 500px;
+  padding: 10px;
+  outline: 0;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.textAreaInput:focus {
+  border: 2px solid orange;
+}
+
+.formContainer {
+  background-color: #e9ecef;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.submitInput {
+  display: none;
+}
+
+.submitLabel::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 0%;
+  z-index: 1;
+  background-color: white;
+  bottom: 0;
+  left: 0;
+  transition-duration: 500ms;
+  border-radius: 10px;
+}
+.submitLabel {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  font-weight: 500;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+  align-items: center;
+  z-index: 1;
+  background-color: #246bce;
+  border: 2px solid #246bce;
+}
+
+.submitLabel:hover::before {
+  background-color: white;
+  height: 100%;
+}
+
+.submitLabelText {
+  position: relative;
+  z-index: 3;
+  color: white;
+  transition-duration: 500ms;
+}
+
+.submitLabel:hover .submitLabelText {
+  color: #246bce;
+}
+.submitButton {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.contactTitleContainer {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 30px;
+}
+
+.contactTitleContent {
+  background-color: #ddb892;
+  padding: 10px;
+  border-radius: 10px;
+}
+.simpleText {
+  color: #343a40;
+  font-weight: 500;
+  text-align: justify;
+  font-size: 20px;
+}
+
+.note {
+  margin-top: 5px;
+  margin-bottom: -5px;
+}
+
+.note p {
+  font-style: italic;
+  color: #8d99ae;
 }

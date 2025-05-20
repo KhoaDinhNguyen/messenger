@@ -32,7 +32,6 @@ function CommentForm({ postId, commentId, onChangeVisibleCommentForm, level }) {
   const [comment, setComment] = useState("");
   const [visileEmoji, setVisibleEmoji] = useState(false);
   const [hasFocus, setHasFocus] = useState(false);
-  const [textAreaNumRows, setTextAreaNumRows] = useState(1);
   const creatorName = useSelector((state) => state[nameSlice.name]);
   const formRef = useRef(null);
   const userImage = useSelector(
@@ -41,24 +40,6 @@ function CommentForm({ postId, commentId, onChangeVisibleCommentForm, level }) {
 
   const onChangeComment = (event) => {
     setComment((text) => event.target.value);
-    const wordBreak = event.target.value.split("\n");
-    const maxLength = 42;
-    //TODO: hard code
-    let newNumRows = 0;
-    for (const words of wordBreak) {
-      const numRowsNeed =
-        words.length % maxLength === 0
-          ? words.length / maxLength
-          : Math.floor(words.length / maxLength) + 1;
-
-      if (words.length === 0) {
-        newNumRows += 1;
-      } else {
-        newNumRows += numRowsNeed;
-      }
-    }
-
-    setTextAreaNumRows(newNumRows);
   };
 
   const onClickEmoji = (emoji) => {
@@ -190,7 +171,6 @@ function CommentForm({ postId, commentId, onChangeVisibleCommentForm, level }) {
       });
 
     setComment((text) => "");
-    setTextAreaNumRows(1);
     if (commentId !== undefined) {
       onChangeVisibleCommentForm();
     }
@@ -240,7 +220,6 @@ function CommentForm({ postId, commentId, onChangeVisibleCommentForm, level }) {
             onChangeText={onChangeComment}
             onKeyDown={onKeyDown}
             required={true}
-            row={textAreaNumRows}
           />
           {hasFocus && (
             <div className={styles.buttonsContainer}>
