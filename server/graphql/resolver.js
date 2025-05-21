@@ -36,6 +36,7 @@ const { createPost, getPost } = postController;
 const { createCommentFromPost, getComments, createCommentFromComment } =
   commentControllers;
 
+const { sendFeedback } = require("../controllers/contactControllers");
 module.exports = {
   createUser,
   updateUser,
@@ -60,6 +61,7 @@ module.exports = {
   createCommentFromPost,
   getComments,
   createCommentFromComment,
+  sendFeedback,
   hello() {
     return "Hello world";
   },

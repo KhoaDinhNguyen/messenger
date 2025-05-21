@@ -65,6 +65,12 @@ const {
   createCommentFromComment,
 } = commentSchema;
 
+const {
+  ContactInputType,
+  ContactType,
+  sendFeedback,
+} = require("../schema/contactSchema");
+
 const schema = buildSchema(`
   ${UserType}
   ${UserWaitingFriendsType}
@@ -74,6 +80,7 @@ const schema = buildSchema(`
   ${MessageType}
   ${PostType}
   ${CommentType}
+  ${ContactType}
 
   ${ImageInputType}
   ${UserInputTypeSignUp}
@@ -97,6 +104,7 @@ const schema = buildSchema(`
   ${CommentInputTypeId}
   ${CommentInputTypeComment}
 
+  ${ContactInputType}
   type RootMutation {
     ${createUser}
     ${updateUser}
@@ -117,6 +125,7 @@ const schema = buildSchema(`
 
     ${createCommentFromPost}
     ${createCommentFromComment}
+
   }
 
   type RootQuery {
@@ -130,6 +139,8 @@ const schema = buildSchema(`
     ${generateImageURLWithUserId}
     ${getPost}
     ${getComments}
+
+    ${sendFeedback}
   }
   schema {
     query: RootQuery

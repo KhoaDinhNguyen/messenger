@@ -32,6 +32,49 @@ function ContactPage() {
   const onSubmitContactForm = (event) => {
     event.preventDefault();
 
+    const graphQLQuery = {
+      query: `
+        query SendFeedback($name: String!, $phone: String, $email: String!, $message: String!) {
+          sendFeedback(ContactInput:{
+            name: $name,
+            phone: $phone,
+            email: $email,
+            message: $message
+          }) {
+            name,
+            phone,
+            email,
+            message
+          }
+        }`,
+      variables: {
+        name: contactName,
+        phone: contactPhone,
+        email: contactEmail,
+        message: contactMessage,
+      },
+    };
+
+    const bodyJSON = JSON.stringify(graphQLQuery);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-type", "application/json");
+
+    fetch(process.env.REACT_APP_SERVER_API, {
+      method: "POST",
+      body: bodyJSON,
+      headers: myHeaders,
+    })
+      .then((jsonResonse) => jsonResonse.json())
+      .then((response) => {
+        if (response.data.sendFeedback === "null") {
+        } else {
+          console.log("Receive feedback");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     setContactName("");
     setContactPhone("");
     setContactEmail("");
