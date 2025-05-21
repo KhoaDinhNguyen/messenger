@@ -1,16 +1,48 @@
+import { useState } from "react";
+
 import InputText from "../../../components/Utils/InputText/InputText";
 import InputButton from "../../../components/Utils/InputButton/InputButton";
 import InputTextArea from "../../../components/Utils/InputTextArea/InputTextArea";
+import FeedbackList from "../FeedbackList/FeedbackList";
 
 import styles from "./ContactPage.module.css";
 
 function ContactPage() {
+  const [contactName, setContactName] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
+  const [contactEmail, setContactEmail] = useState("");
+  const [contactMessage, setContactMessage] = useState("");
+
+  const onChangeContactName = (event) => {
+    setContactName(event.target.value);
+  };
+
+  const onChangeContactPhone = (event) => {
+    setContactPhone(event.target.value);
+  };
+
+  const onChangeContactEmail = (event) => {
+    setContactEmail(event.target.value);
+  };
+
+  const onChangeMessage = (event) => {
+    setContactMessage(event.target.value);
+  };
+
+  const onSubmitContactForm = (event) => {
+    event.preventDefault();
+
+    setContactName("");
+    setContactPhone("");
+    setContactEmail("");
+    setContactMessage("");
+  };
   return (
     <div className={styles.rootContainer}>
       <div className={styles.contactFormContainer}>
         <div className={styles.contactFormContent}>
           <div className={styles.formContainer}>
-            <form autoComplete="off">
+            <form autoComplete="off" onSubmit={onSubmitContactForm}>
               <InputText
                 id={"contactName"}
                 placeholder={"Your name"}
@@ -19,15 +51,19 @@ function ContactPage() {
                 rootContainer={styles.textContainer}
                 labelContainer={styles.textLabel}
                 inputContainer={styles.textInput}
+                valueText={contactName}
+                onChangeText={onChangeContactName}
               />
               <InputText
                 id={"contactPhone"}
                 placeholder={"(012) 345-6789"}
-                labelText={"Phone Number"}
+                labelText={"Phone Number (optional)"}
                 rootContainer={styles.textContainer}
                 labelContainer={styles.textLabel}
                 inputContainer={styles.textInput}
                 pattern={"[0-9]+"}
+                valueText={contactPhone}
+                onChangeText={onChangeContactPhone}
               />
               <InputText
                 id={"contactEmail"}
@@ -38,6 +74,8 @@ function ContactPage() {
                 labelContainer={styles.textLabel}
                 inputContainer={styles.textInput}
                 pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                valueText={contactEmail}
+                onChangeText={onChangeContactEmail}
               />
               <InputTextArea
                 id={"contactMessage"}
@@ -46,6 +84,8 @@ function ContactPage() {
                 rootContainer={styles.textContainer}
                 labelContainer={styles.textLabel}
                 inputContainer={styles.textAreaInput}
+                valueText={contactMessage}
+                onChangeText={onChangeMessage}
               />
               <div className={styles.note}>
                 <p>Your information is protected by our company.</p>
@@ -76,6 +116,7 @@ function ContactPage() {
           </div>
         </div>
       </div>
+      <FeedbackList />
     </div>
   );
 }

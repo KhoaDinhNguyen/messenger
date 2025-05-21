@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
 
 import FeaturePage from "./FeaturePage/FeaturePage";
+import FeedbackList from "./FeedbackList/FeedbackList";
 import InputButton from "../../components/Utils/InputButton/InputButton";
 import LandingPageNavigation from "./LandingPageNavigation/LandingPageNavigation";
 import ScrollWatcher from "./ScrollWatcher/ScrollWatcher";
@@ -72,6 +73,7 @@ function LandingPage() {
               />
             </div>
           </div>
+          <FeedbackList />
         </div>
       </div>
 
