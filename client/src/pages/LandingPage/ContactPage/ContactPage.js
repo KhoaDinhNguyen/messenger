@@ -151,8 +151,7 @@ function ContactPage() {
               </div>
               <div>
                 <p className={styles.simpleText}>
-                  Your helpful feedback definitely makes our community become
-                  greater.
+                  Your helpful feedback makes our community become greater.
                 </p>
               </div>
             </div>
