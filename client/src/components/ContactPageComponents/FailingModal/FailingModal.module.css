@@ -1,0 +1,105 @@
+.rootContainer {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.contentContainer {
+  background-color: white;
+  padding: 20px 30px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  z-index: 999;
+  left: 50%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+}
+
+.textContainer {
+  margin-top: 20px;
+}
+.title {
+  color: black;
+  font-weight: 300;
+  text-align: justify;
+  max-width: 300px;
+  font-size: 20px;
+}
+
+.hiddenModal {
+  position: relative;
+  top: -50%;
+}
+
+.visibleModal {
+  top: 50%;
+  transition-duration: 0.5s;
+}
+
+.svgContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.svgText {
+  font-size: 20px;
+  font-weight: 500;
+  color: #ff4d6d;
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.closeInput {
+  display: none;
+}
+
+.closeLabel::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 0%;
+  bottom: 0;
+  left: 0;
+  border-radius: 5px;
+  transition-duration: 500ms;
+}
+
+.closeLabel {
+  border: 2px solid #ff4d6d;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: #ff4d6d;
+  cursor: pointer;
+  position: relative;
+}
+
+.labelText {
+  font-size: 18px;
+  font-weight: 500;
+  transition-duration: 500ms;
+  z-index: 2;
+  position: relative;
+  color: white;
+}
+
+.closeLabel:hover .labelText {
+  color: white;
+}
+
+.closeLabel:hover::before {
+  background-color: black;
+  height: 100%;
+}
+
+.closeLabel:hover {
+  border: 2px solid black;
+}

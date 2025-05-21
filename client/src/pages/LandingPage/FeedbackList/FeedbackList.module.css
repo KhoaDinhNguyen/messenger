@@ -74,6 +74,7 @@
   z-index: 3;
   font-weight: 500;
   transition-duration: 1s;
+  cursor: default;
 }
 
 .feedbackContainer:hover::before {
