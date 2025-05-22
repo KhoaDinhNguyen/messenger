@@ -30,6 +30,10 @@ const commentSchema = new Schema(
     level: {
       type: Number,
     },
+    emoji: {
+      type: [Schema.ObjectId],
+      ref: "Emoji",
+    },
   },
   { collection: "comments", timestamps: true }
 );

@@ -1,7 +1,7 @@
 import { getDayInYear } from "../dateConfigs/format";
 
 function getMessageByDates(messages) {
-  if (messages.length == 0) {
+  if (messages.length === 0) {
     return [];
   }
 

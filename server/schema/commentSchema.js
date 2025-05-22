@@ -10,6 +10,7 @@ const CommentType = `
     createdAt: String
     updatedAt: String
     level: Int
+    emoji: [String]
   }
 `;
 
@@ -39,6 +40,15 @@ const CommentInputTypeId = `
     commentIdArray: [String!]!
   }
 `;
+
+const CommentInputUpdateEmoji = `
+  input CommentInputUpdateEmoji {
+    commentId: String!
+    emojiCreatorId: String!
+    emoji: String!
+  }
+`;
+
 const createCommentFromPost = `
   createCommentFromPost(postInput: CommentInputTypePost): CommentType
 `;
@@ -51,13 +61,22 @@ const getComments = `
   getComments(commentInput: CommentInputTypeId): [CommentType]
 `;
 
+const updateCommentEmoji = `
+  updateCommentEmoji(commentInput: CommentInputUpdateEmoji): Boolean
+`;
+
 module.exports = {
   types: [CommentType],
   inputTypes: [
     CommentInputTypePost,
     CommentInputTypeId,
     CommentInputTypeComment,
+    CommentInputUpdateEmoji,
   ],
   queries: [getComments],
-  mutations: [createCommentFromComment, createCommentFromPost],
+  mutations: [
+    createCommentFromComment,
+    createCommentFromPost,
+    updateCommentEmoji,
+  ],
 };

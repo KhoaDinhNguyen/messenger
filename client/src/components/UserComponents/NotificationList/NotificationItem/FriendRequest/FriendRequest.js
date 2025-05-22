@@ -58,7 +58,7 @@ function FriendRequest({ notification }) {
     })
       .then((jsonResponse) => jsonResponse.json())
       .then((response) => {
-        if (response.data === null) {
+        if (response.data === undefined) {
         } else {
           const notification = response.data.declineFriendRequest;
 

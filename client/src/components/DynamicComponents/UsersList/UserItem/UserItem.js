@@ -20,6 +20,7 @@ function UserItem({ user, isAuth }) {
   const senderName = useSelector((state) => state[nameSlice.name]);
 
   const { _id, name, profileUrl, pronounce, profileImageURL } = user;
+
   const onClickSeeDetails = () => {
     window.open(profileUrl, "_blank");
   };

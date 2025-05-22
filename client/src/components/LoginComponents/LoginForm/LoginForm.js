@@ -35,10 +35,6 @@ function LoginForm() {
   const onSumbmitForm = async (event) => {
     setLoading(true);
     event.preventDefault();
-    const body = {
-      username,
-      password,
-    };
 
     const graphQLQuery = {
       query: `query FindUser($username: String!, $password: String!){
@@ -81,7 +77,7 @@ function LoginForm() {
         setTimeout(() => {
           const { findUser } = response.data;
           const { _id } = findUser;
-          navigate(`/user/${_id}`);
+          navigate(`/user/${_id}/posts`);
           setSuccess(false);
         }, 1000);
       }

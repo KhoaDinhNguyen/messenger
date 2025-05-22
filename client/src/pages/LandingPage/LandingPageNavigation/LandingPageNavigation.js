@@ -16,10 +16,17 @@ function LandingPageNavigation() {
     navigate("./home/login");
   };
 
+  const onClickNavigateToHome = () => {
+    navigate("/");
+    window.scroll(0, 0);
+  };
   return (
     <div className={styles.rootContainer}>
       <div>
-        <figure className={styles.logoContainer}>
+        <figure
+          className={styles.logoContainer}
+          onClick={onClickNavigateToHome}
+        >
           <img src={pageIcon} alt="Page Icon" className={styles.image} />
           <figcaption className={styles.appName}>MessApp</figcaption>
         </figure>

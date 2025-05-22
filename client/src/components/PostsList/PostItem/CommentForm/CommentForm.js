@@ -66,7 +66,7 @@ function CommentForm({ postId, commentId, onChangeVisibleCommentForm, level }) {
 
   const onSubmitForm = (event) => {
     event.preventDefault();
-
+    console.log("Call");
     let graphQLQuery;
     if (postId !== undefined) {
       graphQLQuery = {
@@ -171,7 +171,7 @@ function CommentForm({ postId, commentId, onChangeVisibleCommentForm, level }) {
       });
 
     setComment((text) => "");
-    setHasFocus(false);
+    setHasFocus((state) => false);
     if (commentId !== undefined) {
       onChangeVisibleCommentForm();
     }

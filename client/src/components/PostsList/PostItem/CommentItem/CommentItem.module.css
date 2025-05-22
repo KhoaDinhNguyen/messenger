@@ -27,14 +27,19 @@
   height: auto;
 }
 
-.textContainer {
-  background-color: #dee2e6;
-  padding: 5px 15px;
-  border-radius: 10px;
+.commentContentContainer {
   width: max-content;
   max-width: 100%;
 }
 
+.textContainer {
+  background-color: #dee2e6;
+  padding: 5px 15px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 .contentContainer {
   width: 100%;
 }
@@ -57,9 +62,11 @@
   color: #6c757d;
 }
 
-.comment:hover {
+.comment:hover,
+.like:hover {
   color: black;
   font-weight: 500;
+  cursor: pointer;
 }
 
 .commentForm {
@@ -69,8 +76,8 @@
 }
 
 .commentFooter {
-  max-width: 100%;
-  overflow: hidden;
+  width: calc(100% - 32px);
+  overflow: visible;
 }
 
 .buttonsContainer {
@@ -80,8 +87,30 @@
 
 .buttonContainer {
   margin-left: 5px;
+  position: relative;
 }
 
 .commentButton {
   cursor: pointer;
+}
+
+.emojiPickerContainer {
+  position: absolute;
+  left: 20px;
+  z-index: 3;
+}
+
+.emojiPicker {
+  position: absolute;
+  transform: translateY(-50%);
+  top: 25px;
+  z-index: 3;
+  left: 20px;
+}
+
+.emojiListContainer {
+  position: relative;
+  top: -10px;
+  display: flex;
+  justify-content: flex-end;
 }

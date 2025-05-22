@@ -1,6 +1,7 @@
 const Post = require("../models/post");
 const Comment = require("../models/comment");
 const User = require("../models/user");
+const Emoji = require("../models/emoji");
 
 const io = require("../socket");
 const Sockets = require("../models/socket");
@@ -116,5 +117,49 @@ module.exports = {
       console.log(err);
       throw err;
     }
+  },
+  updateCommentEmoji: async function ({ commentInput }, req) {
+    const { commentId, emojiCreatorId, emoji } = commentInput;
+
+    try {
+      const foundEmoji = await Emoji.findOne({
+        commentId: commentId,
+        emojiCreatorId: emojiCreatorId,
+      });
+
+      if (foundEmoji === null) {
+        const newEmoji = new Emoji({
+          emojiCreatorId: emojiCreatorId,
+          commentId: commentId,
+          emoji: emoji,
+          postId: null,
+        });
+
+        await newEmoji.save();
+
+        await Comment.findById(commentId).updateOne({
+          $push: {
+            emoji: newEmoji.id,
+          },
+        });
+      } else {
+        if (foundEmoji.emoji !== emoji) {
+          await foundEmoji.updateOne({
+            emoji: emoji,
+          });
+        } else {
+          await Promise.all([
+            Comment.findById(commentId).updateOne({
+              $pull: { emoji: foundEmoji.id },
+            }),
+            Emoji.findByIdAndDelete(foundEmoji.id),
+          ]);
+        }
+      }
+    } catch (err) {
+      throw err;
+    }
+
+    return true;
   },
 };

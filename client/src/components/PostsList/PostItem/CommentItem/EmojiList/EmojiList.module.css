@@ -1,0 +1,17 @@
+.rootContainer {
+  margin-bottom: -10px;
+}
+.emojiList {
+  display: flex;
+  list-style-type: none;
+}
+
+.emojiContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rootContainer p {
+  font-size: 16px;
+}

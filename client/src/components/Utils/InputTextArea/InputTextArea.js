@@ -30,7 +30,7 @@ function InputTextArea({
         textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
       }
     }
-  }, [valueText]);
+  }, [valueText, defaultHeight]);
 
   return (
     <div className={rootContainer}>

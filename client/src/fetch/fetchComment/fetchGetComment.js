@@ -10,6 +10,7 @@ async function fetchGetCommentsInitial(comments) {
             comments
             createdAt
             level
+            emoji
           }
         }
       `,
