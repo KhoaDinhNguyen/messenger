@@ -11,6 +11,14 @@ const PostInputType = `
   }
 `;
 
+const PostInputUpdateEmoji = `
+  input PostInputUpdateEmoji {
+    postId: String!
+    emojiCreatorId: String!
+    emoji: String!
+  }
+`;
+
 const PostType = `
   type PostType {
     _id: ID
@@ -26,6 +34,7 @@ const PostType = `
     modifiers: String
     createdAt: String
     updatedAt: String
+    emoji: [String]
   }
 `;
 
@@ -37,9 +46,13 @@ const getPost = `
   getPost(userInput: UserInputTypeId): [PostType]
 `;
 
+const updatePostEmoji = `
+  updatePostEmoji(postInput: PostInputUpdateEmoji): Boolean
+`;
+
 module.exports = {
-  PostInputType,
-  PostType,
-  createPost,
-  getPost,
+  inputTypes: [PostInputType, PostInputUpdateEmoji],
+  types: [PostType],
+  mutations: [createPost, updatePostEmoji],
+  queries: [getPost],
 };

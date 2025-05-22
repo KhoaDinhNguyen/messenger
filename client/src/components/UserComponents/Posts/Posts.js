@@ -29,6 +29,7 @@ function Posts() {
             images
             imagesUrl
             comments
+            emoji
           }
         }
       `,

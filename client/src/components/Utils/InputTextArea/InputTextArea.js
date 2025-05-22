@@ -15,6 +15,7 @@ function InputTextArea({
   labelContainer,
   inputContainer,
   row,
+  defaultHeight,
 }) {
   const placeHolderModifiers = placeholder === undefined ? "" : placeholder;
   const requiredModifers = required === undefined ? false : required;
@@ -23,8 +24,11 @@ function InputTextArea({
 
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      if (valueText === "" && defaultHeight !== undefined) {
+        textareaRef.current.style.height = defaultHeight;
+      } else {
+        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      }
     }
   }, [valueText]);
 

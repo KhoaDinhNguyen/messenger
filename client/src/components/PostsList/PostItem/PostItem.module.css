@@ -51,12 +51,17 @@
   word-break: break-all;
   width: 100%;
 }
+
+.emojiListContainer {
+  margin-top: 20px;
+}
+
 .buttonsContainer {
   display: flex;
   justify-content: space-between;
   border-top: 1px solid #eaeaea;
-  margin-top: 20px;
   padding-top: 10px;
+  margin-top: 10px;
   align-items: center;
   margin-bottom: 10px;
 }

@@ -42,6 +42,10 @@ const postSchema = new Schema(
       type: String,
       require: true,
     },
+    emoji: {
+      type: [Schema.ObjectId],
+      ref: "Emoji",
+    },
   },
   { collection: "posts", timestamps: true }
 );

@@ -1,9 +1,11 @@
 const { buildSchema } = require("graphql");
 const userSchema = require("../schema/userSchema");
 const notificationSchema = require("../schema/notificationSchema");
-const MessageSchema = require("../schema/messageSchema");
-const postSchema = require("../schema/postSchema");
+const messageSchema = require("../schema/messageSchema");
 const commentSchema = require("../schema/commentSchema");
+const postSchema = require("../schema/postSchema");
+const contactSchema = require("../schema/contactSchema");
+const emojiSchema = require("../schema/emojiSchema");
 
 const {
   UserInputTypeSignUp,
@@ -51,25 +53,35 @@ const {
   getLatestMessages,
   updateHaveSeenMessages,
   updateMessageEmoji,
-} = MessageSchema;
+} = messageSchema;
 
-const { PostType, PostInputType, createPost, getPost } = postSchema;
+const allTypes = [
+  ...postSchema.types,
+  ...commentSchema.types,
+  ...contactSchema.types,
+  ...emojiSchema.types,
+];
 
-const {
-  CommentInputTypePost,
-  CommentType,
-  createCommentFromPost,
-  CommentInputTypeId,
-  getComments,
-  CommentInputTypeComment,
-  createCommentFromComment,
-} = commentSchema;
+const allInputTypes = [
+  ...postSchema.inputTypes,
+  ...commentSchema.inputTypes,
+  ...contactSchema.inputTypes,
+  ...emojiSchema.inputTypes,
+];
 
-const {
-  ContactInputType,
-  ContactType,
-  sendFeedback,
-} = require("../schema/contactSchema");
+const allMutations = [
+  ...postSchema.mutations,
+  ...commentSchema.mutations,
+  ...contactSchema.mutations,
+  ...emojiSchema.mutations,
+];
+
+const allQueries = [
+  ...postSchema.queries,
+  ...commentSchema.queries,
+  ...contactSchema.queries,
+  ...emojiSchema.queries,
+];
 
 const schema = buildSchema(`
   ${UserType}
@@ -78,9 +90,6 @@ const schema = buildSchema(`
   ${UserWithImageType}
   ${NotificationType}
   ${MessageType}
-  ${PostType}
-  ${CommentType}
-  ${ContactType}
 
   ${ImageInputType}
   ${UserInputTypeSignUp}
@@ -98,13 +107,9 @@ const schema = buildSchema(`
   ${MessageInputTypeSenderAndReceiver}
   ${MessageInputTypeEmoji}
 
-  ${PostInputType}
+  ${allTypes.join("\n")}
+  ${allInputTypes.join("\n")}
 
-  ${CommentInputTypePost}
-  ${CommentInputTypeId}
-  ${CommentInputTypeComment}
-
-  ${ContactInputType}
   type RootMutation {
     ${createUser}
     ${updateUser}
@@ -121,11 +126,7 @@ const schema = buildSchema(`
     ${updateHaveSeenMessages}
     ${updateMessageEmoji}
 
-    ${createPost}
-
-    ${createCommentFromPost}
-    ${createCommentFromComment}
-
+    ${allMutations.join("\n")}
   }
 
   type RootQuery {
@@ -137,10 +138,9 @@ const schema = buildSchema(`
     ${getMessage}
     ${getLatestMessages}
     ${generateImageURLWithUserId}
-    ${getPost}
-    ${getComments}
-
-    ${sendFeedback}
+    
+    ${allQueries.join("\n")}
+    
   }
   schema {
     query: RootQuery

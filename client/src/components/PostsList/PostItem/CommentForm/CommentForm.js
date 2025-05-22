@@ -171,21 +171,18 @@ function CommentForm({ postId, commentId, onChangeVisibleCommentForm, level }) {
       });
 
     setComment((text) => "");
+    setHasFocus(false);
     if (commentId !== undefined) {
       onChangeVisibleCommentForm();
     }
   };
 
   const onFocusHandler = (event) => {
-    if (event.target !== event.currentTarget) {
-      setHasFocus(true);
-    }
+    setHasFocus((state) => true);
   };
 
   const onBlurHandler = (event) => {
-    if (event.target === event.currentTarget) {
-      setHasFocus(false);
-    }
+    setHasFocus((state) => false);
   };
 
   return (
@@ -220,6 +217,7 @@ function CommentForm({ postId, commentId, onChangeVisibleCommentForm, level }) {
             onChangeText={onChangeComment}
             onKeyDown={onKeyDown}
             required={true}
+            defaultHeight={"20px"}
           />
           {hasFocus && (
             <div className={styles.buttonsContainer}>

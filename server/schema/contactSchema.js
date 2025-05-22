@@ -1,3 +1,5 @@
+const { queries, mutations } = require("./postSchema");
+
 const ContactInputType = `
   input ContactTypeInput {
     name: String!
@@ -21,7 +23,8 @@ const sendFeedback = `
 `;
 
 module.exports = {
-  ContactInputType,
-  ContactType,
-  sendFeedback,
+  types: [ContactType],
+  inputTypes: [ContactInputType],
+  queries: [sendFeedback],
+  mutations: [],
 };

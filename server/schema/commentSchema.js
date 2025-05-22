@@ -52,11 +52,12 @@ const getComments = `
 `;
 
 module.exports = {
-  CommentType,
-  CommentInputTypePost,
-  createCommentFromPost,
-  getComments,
-  CommentInputTypeId,
-  CommentInputTypeComment,
-  createCommentFromComment,
+  types: [CommentType],
+  inputTypes: [
+    CommentInputTypePost,
+    CommentInputTypeId,
+    CommentInputTypeComment,
+  ],
+  queries: [getComments],
+  mutations: [createCommentFromComment, createCommentFromPost],
 };

@@ -1,0 +1,14 @@
+.emojiList {
+  display: flex;
+  list-style-type: none;
+}
+
+.emojiContainer {
+  margin-right: 5px;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  border-radius: 10px;
+}

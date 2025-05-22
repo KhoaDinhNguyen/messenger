@@ -1,5 +1,6 @@
 const Post = require("../models/post");
 const User = require("../models/user");
+const Emoji = require("../models/emoji");
 
 const { getImageFromS3 } = require("../s3");
 
@@ -90,5 +91,49 @@ module.exports = {
       console.log(err);
       throw err;
     }
+  },
+  updatePostEmoji: async function ({ postInput }, req) {
+    const { postId, emojiCreatorId, emoji } = postInput;
+
+    try {
+      const foundEmoji = await Emoji.findOne({
+        postId: postId,
+        emojiCreatorId: emojiCreatorId,
+      });
+
+      if (foundEmoji === null) {
+        const newEmoji = new Emoji({
+          emojiCreatorId: emojiCreatorId,
+          postId: postId,
+          emoji: emoji,
+          commentId: null,
+        });
+
+        await newEmoji.save();
+
+        await Post.findById(postId).updateOne({
+          $push: {
+            emoji: newEmoji.id,
+          },
+        });
+      } else {
+        if (foundEmoji.emoji !== emoji) {
+          await foundEmoji.updateOne({
+            emoji: emoji,
+          });
+        } else {
+          await Promise.all([
+            Post.findById(postId).updateOne({
+              $pull: { emoji: foundEmoji.id },
+            }),
+            Emoji.findByIdAndDelete(foundEmoji.id),
+          ]);
+        }
+      }
+    } catch (err) {
+      throw err;
+    }
+
+    return true;
   },
 };
