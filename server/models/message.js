@@ -46,6 +46,10 @@ const messageSchema = new Schema(
       type: [String],
       require: true,
     },
+    replyOf: {
+      type: Schema.ObjectId,
+      ref: "Message",
+    },
   },
   { collection: "messages", timestamps: true }
 );

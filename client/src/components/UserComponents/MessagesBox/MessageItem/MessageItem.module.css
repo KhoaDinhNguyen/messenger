@@ -2,7 +2,7 @@
   margin-bottom: 20px;
   display: flex;
   align-items: flex-start;
-  max-width: 500px;
+  max-width: 450px;
 }
 
 .senderContainer {
@@ -23,6 +23,51 @@
 .image {
   width: 32px;
   height: auto;
+}
+
+.replyOfContainer {
+  background-color: #ced4da;
+  max-height: 150px;
+  width: max-content;
+  overflow: auto;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  align-self: center;
+  max-width: 400px;
+}
+
+.replyOfHeaderContainer {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.replyOfTextContainer {
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.replyOfTitleContainer {
+  display: flex;
+}
+
+.replyOfTime {
+  font-weight: 300;
+  font-size: 12px;
+}
+
+.senderMessage:has(.replyOfContainer) {
+  background-color: #bbdefb;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.receiverMessage:has(.replyOfContainer) {
+  background-color: #e9ecef;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 .senderText {
@@ -47,7 +92,6 @@
 }
 
 .text {
-  max-width: 500px;
   word-wrap: break-word;
 }
 
@@ -71,7 +115,6 @@
 .emojiButtonContainer {
   cursor: pointer;
   display: flex;
-  margin: 0x 10px;
 }
 
 .emojiButtonContainer svg path,
@@ -83,14 +126,18 @@
   fill: white;
 }
 
+.replyMessageContainer {
+  cursor: pointer;
+}
+
 .dotMenuContainer {
-  display: flex;
   cursor: pointer;
 }
 
 .emojiContainer {
   position: relative;
 }
+
 .emojiText {
   position: absolute;
   background-color: white;

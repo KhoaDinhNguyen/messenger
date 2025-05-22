@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
 
@@ -19,6 +19,7 @@ function MessagesBox({ searchParams }) {
   const senderName = useSelector((state) => state[nameSlice.name]);
   const receiverId = searchParams.get("friendId");
   const receiverName = searchParams.get("friendName");
+  const [replyMessage, setReplyMessage] = useState(null);
 
   useEffect(() => {
     if (receiverId !== null && receiverName !== null) {
@@ -43,6 +44,7 @@ function MessagesBox({ searchParams }) {
               receiverEmoji
               images
               imagesUrl
+              replyOf
             }
           }
         `,
@@ -65,7 +67,7 @@ function MessagesBox({ searchParams }) {
       })
         .then((jsonResponse) => jsonResponse.json())
         .then((response) => {
-          if (response.data === null) {
+          if (response.data === undefined) {
           } else {
             dispatch(
               currentMessageSlice.actions.init(response.data.getMessage)
@@ -76,14 +78,23 @@ function MessagesBox({ searchParams }) {
           console.log(err);
         });
     }
+    setReplyMessage(null);
   }, [senderId, senderName, dispatch, receiverId, receiverName]);
 
   return (
     <div className={styles.rootContainer}>
       <div>{receiverId !== null && <CurrentFriend />}</div>
-      <div>{receiverId !== null && <MessageList />}</div>
+      <div>
+        {receiverId !== null && (
+          <MessageList setReplyMessage={setReplyMessage} />
+        )}
+      </div>
       <div className={styles.messageInput}>
-        <MessageInput searchParams={searchParams} />
+        <MessageInput
+          searchParams={searchParams}
+          replyMessage={replyMessage}
+          setReplyMessage={setReplyMessage}
+        />
       </div>
     </div>
   );

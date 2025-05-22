@@ -8,8 +8,15 @@ const { getImageFromS3 } = require("../s3");
 
 module.exports = {
   createMessage: async function ({ messageInput }, req) {
-    const { senderId, senderName, receiverId, receiverName, text, images } =
-      messageInput;
+    const {
+      senderId,
+      senderName,
+      receiverId,
+      receiverName,
+      text,
+      images,
+      replyOf,
+    } = messageInput;
 
     const generateImagesUrlPromises = images.map((image) =>
       getImageFromS3({ filename: image })
@@ -29,6 +36,7 @@ module.exports = {
       receiverEmoji: "",
       images: images,
       imagesUrl: imagesUrl,
+      replyOf: replyOf,
     });
 
     try {
@@ -171,6 +179,15 @@ module.exports = {
       return foundMessage;
     } catch (err) {
       console.log(err);
+      throw err;
+    }
+  },
+  getMessageById: async function ({ messageInput }, req) {
+    const { messageId } = messageInput;
+
+    try {
+      return await Message.findById(messageId);
+    } catch (err) {
       throw err;
     }
   },

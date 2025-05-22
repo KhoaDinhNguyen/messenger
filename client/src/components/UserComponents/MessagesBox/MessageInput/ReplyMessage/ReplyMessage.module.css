@@ -1,0 +1,48 @@
+.rootContainer {
+  background-color: #dee2e6;
+  max-width: 90%;
+  max-height: 150px;
+  width: max-content;
+  overflow: auto;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.headerContainer {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.textContainer {
+  background-color: #ced4da;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.titleContainer {
+  display: flex;
+}
+
+.time {
+  font-weight: 300;
+  font-size: 12px;
+}
+
+.closeButton {
+  justify-self: flex-end;
+}
+
+.closeInput {
+  display: none;
+}
+
+.closeLabel {
+  cursor: pointer;
+  padding: 0px 5px;
+  padding-bottom: 2px;
+  background-color: white;
+  border-radius: 50%;
+  font-size: 14px;
+  margin-left: 10px;
+}

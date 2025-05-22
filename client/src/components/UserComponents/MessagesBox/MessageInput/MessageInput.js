@@ -1,12 +1,13 @@
 import { useParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EmojiPicker from "emoji-picker-react";
 
 import InputText from "../../../../components/Utils/InputText/InputText";
 import InputButton from "../../../Utils/InputButton/InputButton";
 import InputFile from "../../../Utils/InputFile/InputFile";
 import ImageList from "./ImageList/ImageList";
+import ReplyMessage from "./ReplyMessage/ReplyMessage";
 
 import { getRandomString } from "../../../../utils/fileConfigs/format";
 
@@ -23,7 +24,7 @@ import styles from "./MessageInput.module.css";
 
 const validFileTypes = ["image/png", "image/jpeg", "image/png"];
 
-function MessageInput({ searchParams }) {
+function MessageInput({ searchParams, replyMessage, setReplyMessage }) {
   const params = useParams();
   const dispatch = useDispatch();
   const [text, setText] = useState("");
@@ -34,6 +35,13 @@ function MessageInput({ searchParams }) {
   const senderName = useSelector((state) => state[nameSlice.name]);
   const receiverId = searchParams.get("friendId");
   const receiverName = searchParams.get("friendName");
+
+  useEffect(() => {
+    setText("");
+    setRenderedImages([]);
+    setStoredImages([]);
+    setVisiblePicker(false);
+  }, [receiverId]);
 
   const onChangeText = (event) => {
     setText(event.target.value);
@@ -122,7 +130,7 @@ function MessageInput({ searchParams }) {
 
       const graphQLQuery = {
         query: `
-        mutation CreateMessage($senderId: String!, $senderName: String!, $receiverId: String!, $receiverName: String!, $text: String!, $images: [String]){
+        mutation CreateMessage($senderId: String!, $senderName: String!, $receiverId: String!, $receiverName: String!, $text: String!, $images: [String], $replyOf: String){
           createMessage(messageInput:{
             senderId: $senderId
             senderName: $senderName
@@ -130,6 +138,7 @@ function MessageInput({ searchParams }) {
             receiverName: $receiverName
             text: $text
             images: $images
+            replyOf: $replyOf
           }) {
             _id
             senderId
@@ -142,6 +151,7 @@ function MessageInput({ searchParams }) {
             receiverEmoji
             images
             imagesUrl
+            replyOf
           }
         }
         `,
@@ -152,6 +162,7 @@ function MessageInput({ searchParams }) {
           receiverName: receiverName,
           text: text,
           images: images,
+          replyOf: replyMessage !== null ? replyMessage._id : null,
         },
       };
 
@@ -175,6 +186,7 @@ function MessageInput({ searchParams }) {
             dispatch(
               latestMessageSlice.actions.addMessage(response.data.createMessage)
             );
+            setReplyMessage(null);
           }
         })
         .catch((err) => {
@@ -211,30 +223,38 @@ function MessageInput({ searchParams }) {
         />
         <div className={styles.messageInputContainer}>
           <div>
-            <div>
-              {renderedImages.length > 0 && (
-                <ImageList
-                  images={renderedImages}
-                  onClickDeleteImage={onChangeDeleteImage}
-                />
-              )}
-            </div>
-            <InputText
-              id={"messageInput"}
-              rootContainer={styles.messageContainer}
-              inputContainer={styles.messageInput}
-              valueText={text}
-              onChangeText={onChangeText}
+            <ReplyMessage
+              message={replyMessage}
+              setReplyMessage={setReplyMessage}
             />
           </div>
+          <div className={styles.messageInputText}>
+            <div>
+              <div>
+                {renderedImages.length > 0 && (
+                  <ImageList
+                    images={renderedImages}
+                    onClickDeleteImage={onChangeDeleteImage}
+                  />
+                )}
+              </div>
+              <InputText
+                id={"messageInput"}
+                rootContainer={styles.messageContainer}
+                inputContainer={styles.messageInput}
+                valueText={text}
+                onChangeText={onChangeText}
+              />
+            </div>
 
-          <div
-            className={`${styles.emojiButtonContainer} ${
-              visiblePicker ? styles.emojiButtonContainerFocus : ""
-            }`}
-            onClick={onChangeVisiblePicker}
-          >
-            <EmojiSVG />
+            <div
+              className={`${styles.emojiButtonContainer} ${
+                visiblePicker ? styles.emojiButtonContainerFocus : ""
+              }`}
+              onClick={onChangeVisiblePicker}
+            >
+              <EmojiSVG />
+            </div>
           </div>
         </div>
         {visiblePicker && (

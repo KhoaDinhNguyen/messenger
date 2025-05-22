@@ -4,10 +4,10 @@ import { formatDateString } from "../../../../utils/dateConfigs/format";
 
 import styles from "./MessageDate.module.css";
 
-function MessageDate({ date, messagesList }) {
+function MessageDate({ date, messagesList, setReplyMessage }) {
   const messagesListRender = messagesList.map((message) => (
     <li key={message._id}>
-      <MessageItem message={message} />
+      <MessageItem message={message} setReplyMessage={setReplyMessage} />
     </li>
   ));
 

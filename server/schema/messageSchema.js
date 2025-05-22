@@ -7,6 +7,12 @@ const MessageInputTypeSenderAndReceiver = `
   }
 `;
 
+const MessageInputId = `
+  input MessageInputId {
+    messageId: String!
+  }
+`;
+
 const MessageInputTypeEmoji = `
   input MessageInputTypeEmoji {
     messageId: String!
@@ -23,6 +29,7 @@ const MessageInputType = `
     receiverName: String!
     text: String!
     images: [String]
+    replyOf: String
   }
 `;
 
@@ -41,6 +48,7 @@ const MessageType = `
     receiverEmoji: String
     images: [String]
     imagesUrl: [String]
+    replyOf: String
   }
 `;
 
@@ -64,17 +72,18 @@ const updateMessageEmoji = `
   updateMessageEmoji(messageInput: MessageInputTypeEmoji!): MessageType
 `;
 
-const generateImagesUrl = `
-
+const getMessageById = `
+  getMessageById(messageInput: MessageInputId): MessageType
 `;
+
 module.exports = {
-  MessageInputType,
-  MessageInputTypeEmoji,
-  MessageType,
-  MessageInputTypeSenderAndReceiver,
-  createMessage,
-  getMessage,
-  getLatestMessages,
-  updateHaveSeenMessages,
-  updateMessageEmoji,
+  types: [MessageType],
+  inputTypes: [
+    MessageInputType,
+    MessageInputTypeEmoji,
+    MessageInputTypeSenderAndReceiver,
+    MessageInputId,
+  ],
+  queries: [getMessage, getLatestMessages, getMessageById],
+  mutations: [createMessage, updateHaveSeenMessages, updateMessageEmoji],
 };

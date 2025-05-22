@@ -1,6 +1,6 @@
 import { useParams, useSearchParams } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Picker from "emoji-picker-react";
 
 import { nameSlice } from "../../../../redux/userSlice";
@@ -11,15 +11,23 @@ import {
 
 import MessageImage from "./MessageImage/MessageImage";
 
-import { EmojiSVG, DotMenuSVG } from "../../../../utils/svgConfigs/SVG";
+import {
+  EmojiSVG,
+  DotMenuSVG,
+  ReplyMessageSVG,
+  ReplyMessageSVG2,
+} from "../../../../utils/svgConfigs/SVG";
 
-import { getTimeInDay } from "../../../../utils/dateConfigs/format";
+import {
+  getTimeInDay,
+  getDayInYear,
+} from "../../../../utils/dateConfigs/format";
 
 import userpublic from "../../../../asset/img/userpublic.png";
 
 import styles from "./MessageItem.module.css";
 
-function MessageItem({ message }) {
+function MessageItem({ message, setReplyMessage }) {
   const params = useParams();
   const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
@@ -35,15 +43,64 @@ function MessageItem({ message }) {
     createdAt,
     images,
     imagesUrl,
+    replyOf,
   } = message;
 
   const friendImage = searchParams.get("friendImage");
   const sender = useSelector((state) => state[currentSenderSlice.name]);
   const [visiblePicker, setVisiblePicker] = useState(false);
+  const [replyOfMessage, setReplyOfMessage] = useState(null);
+
+  useEffect(() => {
+    if (replyOf !== null) {
+      const graphQLQuery = {
+        query: `query GetMessageById($messageId: String!){
+          getMessageById(messageInput:{messageId: $messageId}) {
+            text
+            senderId
+            senderName
+            receiverId
+            receiverName
+            images
+            imagesUrl
+            createdAt
+          }
+        }`,
+        variables: {
+          messageId: replyOf,
+        },
+      };
+
+      const bodyJSON = JSON.stringify(graphQLQuery);
+      const myHeaders = new Headers();
+      myHeaders.append("Content-type", "application/json");
+
+      fetch(process.env.REACT_APP_SERVER_API, {
+        method: "POST",
+        body: bodyJSON,
+        headers: myHeaders,
+      })
+        .then((jsonResponse) => jsonResponse.json())
+        .then((response) => {
+          if (response.data === undefined) {
+          } else {
+            setReplyOfMessage(response.data.getMessageById);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [replyOf]);
+
   const onChangeVisiblePicker = () => {
     setVisiblePicker((state) => !state);
   };
-  // console.log(message);
+
+  const onClickReplyMessage = () => {
+    setReplyMessage((prevState) => message);
+  };
+
   const onClickEmoji = (emoji) => {
     const graphQLQuery = {
       query: `
@@ -156,6 +213,37 @@ function MessageItem({ message }) {
           isCurrentPage ? styles.senderMessage : styles.receiverMessage
         }
       >
+        {replyOfMessage !== null && (
+          <div className={styles.replyOfContainer}>
+            <div className={styles.replyOfHeaderContainer}>
+              <div className={styles.replyOfTitleContainer}>
+                <ReplyMessageSVG2 />
+                <p>
+                  Replying message from{" "}
+                  {replyOfMessage.senderId === params.userid
+                    ? "you"
+                    : replyOfMessage.receiverName}
+                </p>
+              </div>
+              <div className={styles.replyOfTime}>
+                <p>
+                  {getDayInYear(new Date(Number(replyOfMessage.createdAt)))} -{" "}
+                  {getTimeInDay(replyOfMessage.createdAt)}
+                </p>
+              </div>
+            </div>
+            <div className={styles.replyOfTextContainer}>
+              <p>{replyOfMessage.text}</p>
+            </div>
+            {images.length > 0 && (
+              <MessageImage
+                images={replyOfMessage.images}
+                imagesUrl={replyOfMessage.imagesUrl}
+              />
+            )}
+          </div>
+        )}
+
         <div
           className={isCurrentPage ? styles.senderText : styles.receiverText}
         >
@@ -180,12 +268,20 @@ function MessageItem({ message }) {
       </div>
 
       <div className={styles.buttonsContainer}>
-        <div className={styles.dotMenuContainer}>
+        <div className={styles.dotMenuContainer} title="More">
           <DotMenuSVG />
+        </div>
+        <div
+          className={styles.replyMessageContainer}
+          onClick={onClickReplyMessage}
+          title="Reply"
+        >
+          <ReplyMessageSVG />
         </div>
         <div
           className={styles.emojiButtonContainer}
           onClick={onChangeVisiblePicker}
+          title="Emoji"
         >
           <EmojiSVG />
         </div>

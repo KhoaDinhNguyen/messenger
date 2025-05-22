@@ -43,19 +43,8 @@ const {
   dropNotificationBySenderAndReceiver,
 } = notificationSchema;
 
-const {
-  MessageInputType,
-  MessageInputTypeEmoji,
-  MessageType,
-  MessageInputTypeSenderAndReceiver,
-  createMessage,
-  getMessage,
-  getLatestMessages,
-  updateHaveSeenMessages,
-  updateMessageEmoji,
-} = messageSchema;
-
 const allTypes = [
+  ...messageSchema.types,
   ...postSchema.types,
   ...commentSchema.types,
   ...contactSchema.types,
@@ -63,6 +52,7 @@ const allTypes = [
 ];
 
 const allInputTypes = [
+  ...messageSchema.inputTypes,
   ...postSchema.inputTypes,
   ...commentSchema.inputTypes,
   ...contactSchema.inputTypes,
@@ -70,6 +60,7 @@ const allInputTypes = [
 ];
 
 const allMutations = [
+  ...messageSchema.mutations,
   ...postSchema.mutations,
   ...commentSchema.mutations,
   ...contactSchema.mutations,
@@ -77,6 +68,7 @@ const allMutations = [
 ];
 
 const allQueries = [
+  ...messageSchema.queries,
   ...postSchema.queries,
   ...commentSchema.queries,
   ...contactSchema.queries,
@@ -89,8 +81,7 @@ const schema = buildSchema(`
   ${UserFriendsType}
   ${UserWithImageType}
   ${NotificationType}
-  ${MessageType}
-
+  
   ${ImageInputType}
   ${UserInputTypeSignUp}
   ${UserInputTypeLogin}
@@ -102,10 +93,6 @@ const schema = buildSchema(`
 
   ${NotificationInputType}
   ${NotificationInputSenderAndReceiver}
-
-  ${MessageInputType}
-  ${MessageInputTypeSenderAndReceiver}
-  ${MessageInputTypeEmoji}
 
   ${allTypes.join("\n")}
   ${allInputTypes.join("\n")}
@@ -122,10 +109,6 @@ const schema = buildSchema(`
     ${createNotification}
     ${dropNotificationBySenderAndReceiver}
 
-    ${createMessage}
-    ${updateHaveSeenMessages}
-    ${updateMessageEmoji}
-
     ${allMutations.join("\n")}
   }
 
@@ -135,8 +118,7 @@ const schema = buildSchema(`
     ${findUserById}
     ${findUserByName}
     ${getNotificationsById}
-    ${getMessage}
-    ${getLatestMessages}
+
     ${generateImageURLWithUserId}
     
     ${allQueries.join("\n")}
