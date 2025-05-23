@@ -282,6 +282,7 @@ function User() {
               haveSeen
               createdAt
               images
+              _id
             }
           }
         `,

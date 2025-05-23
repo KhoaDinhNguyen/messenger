@@ -15,7 +15,7 @@ import userpublic from "../../../../asset/img/userpublic.png";
 
 import styles from "./MessageList.module.css";
 
-function MessageList({ setReplyMessage }) {
+function MessageList({ setReplyMessage, onClickOpenPermantDeleteModal }) {
   const dispatch = useDispatch();
   const messagesList = useSelector((state) => state[currentMessageSlice.name]);
   const sender = useSelector((state) => state[currentSenderSlice.name]);
@@ -145,6 +145,7 @@ function MessageList({ setReplyMessage }) {
           date={messageDate.date}
           messagesList={messageDate.messages}
           setReplyMessage={setReplyMessage}
+          onClickOpenPermantDeleteModal={onClickOpenPermantDeleteModal}
         />
       </li>
     );

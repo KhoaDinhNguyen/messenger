@@ -202,3 +202,51 @@
   color: #6c757d;
   font-size: 12px;
 }
+
+.dropListMoreContainer {
+  position: relative;
+}
+
+.dropListMoreSubContainer {
+  position: absolute;
+  transform: translateY(-30%);
+  bottom: 100%;
+}
+
+.receiverContainer .dropListMoreSubContainer {
+  transform: translateY(-100%);
+}
+
+.listMoreContainer {
+  width: max-content;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.listMore {
+  list-style-type: none;
+}
+
+.listMore li {
+  padding: 10px;
+  border: 1px solid black;
+  border-top: 0;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.listMore li:first-child {
+  border-top: 1px solid black;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.listMore li:last-child {
+  border-bottom: 1px solid black;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.listMore li:hover {
+  background-color: #dee2e6;
+}

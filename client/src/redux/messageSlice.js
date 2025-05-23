@@ -36,6 +36,10 @@ const currentMessageSlice = createSlice({
 
       return state;
     },
+    deleteMessage(state, action) {
+      const { messageId } = action.payload;
+      return [...state.filter((message) => message._id !== messageId)];
+    },
   },
 });
 
@@ -44,6 +48,7 @@ const latestMessageSlice = createSlice({
   initialState: [],
   reducers: {
     init(state, action) {
+      console.log(action.payload);
       return action.payload.filter((message) => message !== null);
     },
     addMessage(state, action) {
@@ -65,6 +70,14 @@ const latestMessageSlice = createSlice({
       return state.forEach((message) => {
         if (message.senderId === action.payload.senderId) {
           message.haveSeen = true;
+        }
+      });
+    },
+    deleteMessage(state, action) {
+      const { messageId } = action.payload;
+      return state.forEach((message) => {
+        if (message._id === messageId) {
+          message.getDeleted = true;
         }
       });
     },

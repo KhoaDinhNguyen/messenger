@@ -191,4 +191,31 @@ module.exports = {
       throw err;
     }
   },
+  deleteMessageById: async function ({ messageInput }, req) {
+    const { messageId, receiverId, senderId } = messageInput;
+
+    try {
+      //TODO: delete images / replyOf
+      await Message.findByIdAndDelete(messageId);
+
+      const foundSocket = Sockets.findSocketByUserId(receiverId);
+      if (foundSocket !== null) {
+        io.getIO()
+          .to(foundSocket.socketId)
+          .emit("message", {
+            action: "delete",
+            message: {
+              messageId: messageId,
+              receiverId: receiverId,
+              senderId: senderId,
+            },
+          });
+        //console.log(`emit to ${receiverId} -- id: ${foundSocket.socketId}`);
+      }
+
+      return true;
+    } catch (err) {
+      throw err;
+    }
+  },
 };

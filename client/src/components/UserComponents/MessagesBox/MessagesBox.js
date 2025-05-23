@@ -5,6 +5,7 @@ import { useParams } from "react-router";
 import MessageList from "./MessageList/MessageList";
 import MessageInput from "./MessageInput/MessageInput";
 import CurrentFriend from "./CurrentFriend/CurrentFriend";
+import PermanentDeleteModal from "./MessageItem/PermanentDeleteModal/PermanentDeleteModal";
 
 import { currentMessageSlice } from "../../../redux/messageSlice";
 
@@ -20,6 +21,8 @@ function MessagesBox({ searchParams }) {
   const receiverId = searchParams.get("friendId");
   const receiverName = searchParams.get("friendName");
   const [replyMessage, setReplyMessage] = useState(null);
+  const [permanentDeleteModal, setPermanentDeleteModal] = useState(false);
+  const [chosenMessage, setChosenMessage] = useState(null);
 
   useEffect(() => {
     if (receiverId !== null && receiverName !== null) {
@@ -81,22 +84,42 @@ function MessagesBox({ searchParams }) {
     setReplyMessage(null);
   }, [senderId, senderName, dispatch, receiverId, receiverName]);
 
+  const onClickOpenPermantDeleteModal = (chosenMessage) => {
+    setPermanentDeleteModal((prevState) => true);
+    setChosenMessage((prevState) => chosenMessage);
+  };
+
+  const onClickClosePermantDeleteModal = () => {
+    setPermanentDeleteModal((prevState) => false);
+    setChosenMessage((prevState) => null);
+  };
+
   return (
-    <div className={styles.rootContainer}>
-      <div>{receiverId !== null && <CurrentFriend />}</div>
-      <div>
-        {receiverId !== null && (
-          <MessageList setReplyMessage={setReplyMessage} />
-        )}
+    <>
+      <div className={styles.rootContainer}>
+        <div>{receiverId !== null && <CurrentFriend />}</div>
+        <div>
+          {receiverId !== null && (
+            <MessageList
+              setReplyMessage={setReplyMessage}
+              onClickOpenPermantDeleteModal={onClickOpenPermantDeleteModal}
+            />
+          )}
+        </div>
+        <div className={styles.messageInput}>
+          <MessageInput
+            searchParams={searchParams}
+            replyMessage={replyMessage}
+            setReplyMessage={setReplyMessage}
+          />
+        </div>
       </div>
-      <div className={styles.messageInput}>
-        <MessageInput
-          searchParams={searchParams}
-          replyMessage={replyMessage}
-          setReplyMessage={setReplyMessage}
-        />
-      </div>
-    </div>
+      <PermanentDeleteModal
+        visible={permanentDeleteModal}
+        chosenMessage={chosenMessage}
+        onClickClosePermantDeleteModal={onClickClosePermantDeleteModal}
+      />
+    </>
   );
 }
 

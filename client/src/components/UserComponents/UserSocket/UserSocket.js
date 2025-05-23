@@ -106,6 +106,24 @@ function UserSocket({ userid }) {
               commentId: data.commentId,
             })
           );
+        } else if (action === "delete") {
+          const friendId = searchParams.get("friendId");
+
+          if (
+            message.senderId === friendId &&
+            message.senderId !== message.receiverId
+          ) {
+            dispatch(
+              currentMessageSlice.actions.deleteMessage({
+                messageId: message.messageId,
+              })
+            );
+            dispatch(
+              latestMessageSlice.actions.deleteMessage({
+                messageId: message.messageId,
+              })
+            );
+          }
         }
       } catch (err) {
         console.log(err);

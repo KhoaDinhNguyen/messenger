@@ -13,6 +13,14 @@ const MessageInputId = `
   }
 `;
 
+const MessageInputDelete = `
+  input MessageInputDelete {
+      messageId: String!
+      receiverId: String!
+      senderId: String!
+  }
+`;
+
 const MessageInputTypeEmoji = `
   input MessageInputTypeEmoji {
     messageId: String!
@@ -76,6 +84,10 @@ const getMessageById = `
   getMessageById(messageInput: MessageInputId): MessageType
 `;
 
+const deleteMessageById = `
+  deleteMessageById(messageInput: MessageInputDelete): Boolean
+`;
+
 module.exports = {
   types: [MessageType],
   inputTypes: [
@@ -83,7 +95,13 @@ module.exports = {
     MessageInputTypeEmoji,
     MessageInputTypeSenderAndReceiver,
     MessageInputId,
+    MessageInputDelete,
   ],
   queries: [getMessage, getLatestMessages, getMessageById],
-  mutations: [createMessage, updateHaveSeenMessages, updateMessageEmoji],
+  mutations: [
+    createMessage,
+    updateHaveSeenMessages,
+    updateMessageEmoji,
+    deleteMessageById,
+  ],
 };

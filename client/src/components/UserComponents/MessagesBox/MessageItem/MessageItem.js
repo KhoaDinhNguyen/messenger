@@ -27,12 +27,16 @@ import userpublic from "../../../../asset/img/userpublic.png";
 
 import styles from "./MessageItem.module.css";
 
-function MessageItem({ message, setReplyMessage }) {
+function MessageItem({
+  message,
+  setReplyMessage,
+  onClickOpenPermantDeleteModal,
+}) {
   const params = useParams();
   const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
-  const senderId = params.userid;
-  const senderName = useSelector((state) => state[nameSlice.name]);
+  const currId = params.userid;
+  const currName = useSelector((state) => state[nameSlice.name]);
   const {
     receiverId,
     receiverName,
@@ -44,11 +48,14 @@ function MessageItem({ message, setReplyMessage }) {
     images,
     imagesUrl,
     replyOf,
+    senderId,
+    senderName,
   } = message;
 
   const friendImage = searchParams.get("friendImage");
   const sender = useSelector((state) => state[currentSenderSlice.name]);
   const [visiblePicker, setVisiblePicker] = useState(false);
+  const [visibleMore, setVisibleMore] = useState(false);
   const [replyOfMessage, setReplyOfMessage] = useState(null);
 
   useEffect(() => {
@@ -95,6 +102,10 @@ function MessageItem({ message, setReplyMessage }) {
 
   const onChangeVisiblePicker = () => {
     setVisiblePicker((state) => !state);
+  };
+
+  const onChangeVisibleMore = () => {
+    setVisibleMore((prevState) => !prevState);
   };
 
   const onClickReplyMessage = () => {
@@ -167,7 +178,7 @@ function MessageItem({ message, setReplyMessage }) {
       ? friendImage
       : userpublic;
   const isCurrentPage =
-    receiverId !== senderId || message.senderId === message.receiverId;
+    receiverId !== currId || message.senderId === message.receiverId;
 
   const emojiArray = [];
   let emojiLength = 0;
@@ -268,8 +279,39 @@ function MessageItem({ message, setReplyMessage }) {
       </div>
 
       <div className={styles.buttonsContainer}>
-        <div className={styles.dotMenuContainer} title="More">
-          <DotMenuSVG />
+        <div className={styles.dotMenuContainer} onClick={onChangeVisibleMore}>
+          <div title="More">
+            <DotMenuSVG />
+          </div>
+          {visibleMore && (
+            <div className={styles.dropListMoreContainer}>
+              <div className={styles.dropListMoreSubContainer}>
+                <div className={styles.listMoreContainer}>
+                  <ul className={styles.listMore}>
+                    {senderId === currId && (
+                      <>
+                        <li
+                          onClick={onClickOpenPermantDeleteModal.bind(
+                            this,
+                            message
+                          )}
+                        >
+                          Delete permanently
+                        </li>
+                      </>
+                    )}
+
+                    <li>Delete locally</li>
+                    {senderId === currId && (
+                      <>
+                        <li>Edit</li>
+                      </>
+                    )}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         <div
           className={styles.replyMessageContainer}
