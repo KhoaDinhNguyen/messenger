@@ -214,7 +214,7 @@
 }
 
 .receiverContainer .dropListMoreSubContainer {
-  transform: translateY(-100%);
+  transform: translateY(-80%);
 }
 
 .listMoreContainer {

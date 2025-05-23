@@ -9,6 +9,7 @@ function MessageDate({
   messagesList,
   setReplyMessage,
   onClickOpenPermantDeleteModal,
+  onClickOpenLocalDeleteModal,
 }) {
   const messagesListRender = messagesList.map((message) => (
     <li key={message._id}>
@@ -16,6 +17,7 @@ function MessageDate({
         message={message}
         setReplyMessage={setReplyMessage}
         onClickOpenPermantDeleteModal={onClickOpenPermantDeleteModal}
+        onClickOpenLocalDeleteModal={onClickOpenLocalDeleteModal}
       />
     </li>
   ));

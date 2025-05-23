@@ -37,6 +37,8 @@ module.exports = {
       images: images,
       imagesUrl: imagesUrl,
       replyOf: replyOf,
+      senderHidden: false,
+      receiverHidden: false,
     });
 
     try {
@@ -64,8 +66,8 @@ module.exports = {
     try {
       const messages = await Message.find({
         $or: [
-          { senderId: senderId, receiverId: receiverId },
-          { senderId: receiverId, receiverId: senderId },
+          { senderId: senderId, receiverId: receiverId, senderHidden: false },
+          { senderId: receiverId, receiverId: senderId, receiverHidden: false },
         ],
       }).sort({ createdAt: -1 });
 
@@ -103,8 +105,8 @@ module.exports = {
       const promises = friendIdList.map(async (friendId) => {
         return Message.find({
           $or: [
-            { senderId: id, receiverId: friendId },
-            { senderId: friendId, receiverId: id },
+            { senderId: id, receiverId: friendId, senderHidden: false },
+            { senderId: friendId, receiverId: id, receiverHidden: false },
           ],
         })
           .sort({ createdAt: -1 })
@@ -211,6 +213,49 @@ module.exports = {
             },
           });
         //console.log(`emit to ${receiverId} -- id: ${foundSocket.socketId}`);
+      }
+
+      return true;
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateMessageSenderHidden: async function ({ messageInput }, req) {
+    const { messageId } = messageInput;
+
+    try {
+      //TODO: replyOf
+      const foundMessage = await Message.findById(messageId);
+
+      if (foundMessage !== null) {
+        if (foundMessage.receiverHidden === true) {
+          await foundMessage.deleteOne();
+          //TODO: replyOf, images
+        } else {
+          await Message.findByIdAndUpdate(messageId, {
+            $set: { senderHidden: true },
+          });
+        }
+      }
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateMessageReceiverHidden: async function ({ messageInput }, req) {
+    const { messageId } = messageInput;
+
+    try {
+      //TODO: replyOf
+      const foundMessage = await Message.findById(messageId);
+
+      if (foundMessage !== null) {
+        if (foundMessage.senderHidden === true) {
+          await foundMessage.deleteOne();
+        } else {
+          await Message.findByIdAndUpdate(messageId, {
+            $set: { receiverHidden: true },
+          });
+        }
       }
 
       return true;

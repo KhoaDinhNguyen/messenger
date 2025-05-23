@@ -15,16 +15,16 @@ import {
   latestMessageSlice,
 } from "../../../../../redux/messageSlice";
 
-import { TrashBinSVG } from "../../../../../utils/svgConfigs/SVG";
+import { HiddenSVG } from "../../../../../utils/svgConfigs/SVG";
 
 import userpublic from "../../../../../asset/img/userpublic.png";
 
-import styles from "./PermanentDeleteModal.module.css";
+import styles from "./LocalDeleteModal.module.css";
 
-function PermanentDeleteModal({
+function LocalDeleteModal({
   visible,
   chosenMessage,
-  onClickClosePermantDeleteModal,
+  onClickCloseLocalDeleteModal,
 }) {
   const [searchParams] = useSearchParams();
   const params = useParams();
@@ -38,22 +38,44 @@ function PermanentDeleteModal({
     return <></>;
   }
 
-  const { text, images, imagesUrl, receiverName, createdAt, _id } =
-    chosenMessage;
+  const {
+    text,
+    images,
+    imagesUrl,
+    receiverName,
+    createdAt,
+    _id,
+    senderId,
+    receiverId,
+  } = chosenMessage;
 
   const onClickDelete = () => {
-    const graphQLQuery = {
-      query: `
-        mutation DeleteMessageById($messageInput: String!, $receiverId: String!, $senderId: String!){
-          deleteMessageById(messageInput:{messageId: $messageInput , receiverId: $receiverId, senderId: $senderId})
+    // TODO: 2 hidden == delete
+    let graphQLQuery;
+
+    if (senderId === params.userid) {
+      graphQLQuery = {
+        query: `
+        mutation UpdateMessageSenderHidden($messageInput: String!){
+          updateMessageSenderHidden(messageInput:{messageId: $messageInput})
         }
       `,
-      variables: {
-        messageInput: _id,
-        receiverId: friendId,
-        senderId: params.userid,
-      },
-    };
+        variables: {
+          messageInput: _id,
+        },
+      };
+    } else if (receiverId === params.userid) {
+      graphQLQuery = {
+        query: `
+        mutation UpdateMessageReceiverHidden($messageInput: String!){
+          updateMessageReceiverHidden(messageInput:{messageId: $messageInput})
+        }
+      `,
+        variables: {
+          messageInput: _id,
+        },
+      };
+    }
 
     const bodyJSON = JSON.stringify(graphQLQuery);
     const myHeaders = new Headers();
@@ -66,7 +88,10 @@ function PermanentDeleteModal({
     })
       .then((jsonResponse) => jsonResponse.json())
       .then((response) => {
-        if (response.data.deleteMessageById === undefined) {
+        if (
+          response.data.updateMessageSenderHidden === undefined &&
+          response.data.updateMessageReceiverHidden === undefined
+        ) {
         } else {
           dispatch(
             currentMessageSlice.actions.deleteMessage({
@@ -83,14 +108,14 @@ function PermanentDeleteModal({
       .catch((err) => {
         console.log(err);
       });
-    onClickClosePermantDeleteModal();
+    onClickCloseLocalDeleteModal();
   };
   return (
     <Modal visible={visible} overrideStyle={styles.rootContainer}>
       <div className={styles.contentContainer}>
         <div className={styles.svgContainer}>
-          <TrashBinSVG />
-          <p className={styles.svgText}>Permanent Delete</p>
+          <HiddenSVG />
+          <p className={styles.svgText}>Local Delete</p>
         </div>
         <div className={styles.messageContainer}>
           <div className={styles.headerContainer}>
@@ -111,9 +136,9 @@ function PermanentDeleteModal({
         </div>
         <div className={styles.simpleTextContainer}>
           <p>
-            You are deleting the above message permanently. Once you delete it,
-            neither you nor your partner will see it again. And you cannot
-            reverse this process.
+            You are deleting the above message locally. That means once you
+            delete it, you cannot see it again but your friend is still able to
+            see it. You cannot reverse this process.
           </p>
         </div>
         <div className={styles.promptContainer}>
@@ -133,7 +158,7 @@ function PermanentDeleteModal({
               valueButton={""}
               labelText={"No"}
               rootContainer={styles.noButton}
-              onClickHandler={onClickClosePermantDeleteModal}
+              onClickHandler={onClickCloseLocalDeleteModal}
             />
           </div>
         </div>
@@ -142,4 +167,4 @@ function PermanentDeleteModal({
   );
 }
 
-export default PermanentDeleteModal;
+export default LocalDeleteModal;

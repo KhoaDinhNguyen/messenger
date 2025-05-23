@@ -31,6 +31,7 @@ function MessageItem({
   message,
   setReplyMessage,
   onClickOpenPermantDeleteModal,
+  onClickOpenLocalDeleteModal,
 }) {
   const params = useParams();
   const [searchParams] = useSearchParams();
@@ -301,7 +302,11 @@ function MessageItem({
                       </>
                     )}
 
-                    <li>Delete locally</li>
+                    <li
+                      onClick={onClickOpenLocalDeleteModal.bind(this, message)}
+                    >
+                      Delete locally
+                    </li>
                     {senderId === currId && (
                       <>
                         <li>Edit</li>

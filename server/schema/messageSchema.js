@@ -84,6 +84,14 @@ const getMessageById = `
   getMessageById(messageInput: MessageInputId): MessageType
 `;
 
+const updateMessageSenderHidden = `
+  updateMessageSenderHidden(messageInput: MessageInputId): Boolean
+`;
+
+const updateMessageReceiverHidden = `
+  updateMessageReceiverHidden(messageInput: MessageInputId): Boolean
+`;
+
 const deleteMessageById = `
   deleteMessageById(messageInput: MessageInputDelete): Boolean
 `;
@@ -103,5 +111,7 @@ module.exports = {
     updateHaveSeenMessages,
     updateMessageEmoji,
     deleteMessageById,
+    updateMessageReceiverHidden,
+    updateMessageSenderHidden,
   ],
 };

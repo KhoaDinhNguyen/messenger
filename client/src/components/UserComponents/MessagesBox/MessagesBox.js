@@ -6,6 +6,7 @@ import MessageList from "./MessageList/MessageList";
 import MessageInput from "./MessageInput/MessageInput";
 import CurrentFriend from "./CurrentFriend/CurrentFriend";
 import PermanentDeleteModal from "./MessageItem/PermanentDeleteModal/PermanentDeleteModal";
+import LocalDeleteModal from "./MessageItem/LocalDeleteModal/LocalDeleteModal";
 
 import { currentMessageSlice } from "../../../redux/messageSlice";
 
@@ -22,6 +23,7 @@ function MessagesBox({ searchParams }) {
   const receiverName = searchParams.get("friendName");
   const [replyMessage, setReplyMessage] = useState(null);
   const [permanentDeleteModal, setPermanentDeleteModal] = useState(false);
+  const [localDeleteModal, setLocalDeleteModal] = useState(false);
   const [chosenMessage, setChosenMessage] = useState(null);
 
   useEffect(() => {
@@ -56,6 +58,7 @@ function MessagesBox({ searchParams }) {
           senderName: senderName,
           receiverId: receiverId,
           receiverName: receiverName,
+          currUserId: params.userid,
         },
       };
 
@@ -71,6 +74,7 @@ function MessagesBox({ searchParams }) {
         .then((jsonResponse) => jsonResponse.json())
         .then((response) => {
           if (response.data === undefined) {
+            console.log(response);
           } else {
             dispatch(
               currentMessageSlice.actions.init(response.data.getMessage)
@@ -82,15 +86,25 @@ function MessagesBox({ searchParams }) {
         });
     }
     setReplyMessage(null);
-  }, [senderId, senderName, dispatch, receiverId, receiverName]);
+  }, [senderId, senderName, dispatch, receiverId, receiverName, params.userid]);
 
   const onClickOpenPermantDeleteModal = (chosenMessage) => {
     setPermanentDeleteModal((prevState) => true);
     setChosenMessage((prevState) => chosenMessage);
   };
 
+  const onClickOpenLocalDeleteModal = (chosenMessage) => {
+    setLocalDeleteModal((prevState) => true);
+    setChosenMessage((prevState) => chosenMessage);
+  };
+
   const onClickClosePermantDeleteModal = () => {
     setPermanentDeleteModal((prevState) => false);
+    setChosenMessage((prevState) => null);
+  };
+
+  const onClickCloseLocalDeleteModal = () => {
+    setLocalDeleteModal((prevState) => false);
     setChosenMessage((prevState) => null);
   };
 
@@ -103,6 +117,7 @@ function MessagesBox({ searchParams }) {
             <MessageList
               setReplyMessage={setReplyMessage}
               onClickOpenPermantDeleteModal={onClickOpenPermantDeleteModal}
+              onClickOpenLocalDeleteModal={onClickOpenLocalDeleteModal}
             />
           )}
         </div>
@@ -114,11 +129,20 @@ function MessagesBox({ searchParams }) {
           />
         </div>
       </div>
-      <PermanentDeleteModal
-        visible={permanentDeleteModal}
-        chosenMessage={chosenMessage}
-        onClickClosePermantDeleteModal={onClickClosePermantDeleteModal}
-      />
+      {permanentDeleteModal && (
+        <PermanentDeleteModal
+          visible={permanentDeleteModal}
+          chosenMessage={chosenMessage}
+          onClickClosePermantDeleteModal={onClickClosePermantDeleteModal}
+        />
+      )}
+      {localDeleteModal && (
+        <LocalDeleteModal
+          visible={localDeleteModal}
+          chosenMessage={chosenMessage}
+          onClickCloseLocalDeleteModal={onClickCloseLocalDeleteModal}
+        />
+      )}
     </>
   );
 }
