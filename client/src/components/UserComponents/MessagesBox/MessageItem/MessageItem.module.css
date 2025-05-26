@@ -2,7 +2,8 @@
   margin-bottom: 20px;
   display: flex;
   align-items: flex-start;
-  max-width: 450px;
+  max-width: 600px;
+  width: 100%;
 }
 
 .senderContainer {
@@ -23,39 +24,6 @@
 .image {
   width: 32px;
   height: auto;
-}
-
-.replyOfContainer {
-  background-color: #ced4da;
-  max-height: 150px;
-  width: max-content;
-  overflow: auto;
-  padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  align-self: center;
-  max-width: 400px;
-}
-
-.replyOfHeaderContainer {
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 10px;
-}
-
-.replyOfTextContainer {
-  padding: 10px;
-  border-radius: 10px;
-  font-size: 14px;
-}
-
-.replyOfTitleContainer {
-  display: flex;
-}
-
-.replyOfTime {
-  font-weight: 300;
-  font-size: 12px;
 }
 
 .senderMessage:has(.replyOfContainer) {
@@ -199,6 +167,7 @@
 }
 
 .timeText {
+  margin-top: 10px;
   color: #6c757d;
   font-size: 12px;
 }
@@ -249,4 +218,12 @@
 
 .listMore li:hover {
   background-color: #dee2e6;
+}
+
+.updatedMessageContainer {
+  width: 100%;
+}
+
+.topContainer {
+  display: flex;
 }

@@ -15,9 +15,9 @@ const MessageInputId = `
 
 const MessageInputDelete = `
   input MessageInputDelete {
-      messageId: String!
-      receiverId: String!
-      senderId: String!
+    messageId: String!
+    receiverId: String!
+    senderId: String!
   }
 `;
 
@@ -26,6 +26,15 @@ const MessageInputTypeEmoji = `
     messageId: String!
     emoji: String
     commentId: String!
+  }
+`;
+
+const MessageInputEdit = `
+  input MessageInputEdit {
+    messageId: String!
+    text: String!
+    images: [String]
+    replyOf: String
   }
 `;
 
@@ -80,6 +89,10 @@ const updateMessageEmoji = `
   updateMessageEmoji(messageInput: MessageInputTypeEmoji!): MessageType
 `;
 
+const updateMessageContent = `
+  updateMessageContent(messageInput: MessageInputEdit): MessageType
+`;
+
 const getMessageById = `
   getMessageById(messageInput: MessageInputId): MessageType
 `;
@@ -104,6 +117,7 @@ module.exports = {
     MessageInputTypeSenderAndReceiver,
     MessageInputId,
     MessageInputDelete,
+    MessageInputEdit,
   ],
   queries: [getMessage, getLatestMessages, getMessageById],
   mutations: [
@@ -113,5 +127,6 @@ module.exports = {
     deleteMessageById,
     updateMessageReceiverHidden,
     updateMessageSenderHidden,
+    updateMessageContent,
   ],
 };

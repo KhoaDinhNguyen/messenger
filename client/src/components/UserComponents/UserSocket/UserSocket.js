@@ -124,6 +124,23 @@ function UserSocket({ userid }) {
               })
             );
           }
+        } else if (action === "updateContent") {
+          const friendId = searchParams.get("friendId");
+          console.log(message);
+          if (
+            message.senderId === friendId &&
+            message.senderId !== message.receiverId
+          ) {
+            dispatch(
+              currentMessageSlice.actions.updateContent({
+                messageId: message._id,
+                text: message.text,
+                replyOf: message.replyOf,
+                updatedAt: new Date(message.updatedAt),
+                images: message.images,
+              })
+            );
+          }
         }
       } catch (err) {
         console.log(err);

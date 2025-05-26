@@ -26,6 +26,8 @@ function InputTextArea({
     if (textareaRef.current) {
       if (valueText === "" && defaultHeight !== undefined) {
         textareaRef.current.style.height = defaultHeight;
+      } else if (valueText === "" && defaultHeight === undefined) {
+        textareaRef.current.style.height = "auto";
       } else {
         textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
       }

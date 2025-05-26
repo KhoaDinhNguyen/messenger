@@ -17,7 +17,7 @@ function ReplyMessage({ message, setReplyMessage }) {
   if (message === null) {
     return <></>;
   }
-  console.log(message);
+  //TODO: imagesURL get expired
   const { senderId, text, senderName, createdAt, images, imagesUrl } = message;
 
   const onClickClearReplyMessage = () => {

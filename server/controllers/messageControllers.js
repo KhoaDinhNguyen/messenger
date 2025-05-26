@@ -155,7 +155,7 @@ module.exports = {
 
       const updatedMessage = await foundMessage.updateOne(
         { $set: query },
-        { new: true }
+        { new: true, timestamps: false }
       );
 
       if (
@@ -177,7 +177,6 @@ module.exports = {
         }
       }
 
-      //TODO: the foundMessgage does not return updatedMessage
       return foundMessage;
     } catch (err) {
       console.log(err);
@@ -232,9 +231,15 @@ module.exports = {
           await foundMessage.deleteOne();
           //TODO: replyOf, images
         } else {
-          await Message.findByIdAndUpdate(messageId, {
-            $set: { senderHidden: true },
-          });
+          await Message.findByIdAndUpdate(
+            messageId,
+            {
+              $set: { senderHidden: true },
+            },
+            {
+              timestamps: false,
+            }
+          );
         }
       }
     } catch (err) {
@@ -252,14 +257,58 @@ module.exports = {
         if (foundMessage.senderHidden === true) {
           await foundMessage.deleteOne();
         } else {
-          await Message.findByIdAndUpdate(messageId, {
-            $set: { receiverHidden: true },
-          });
+          await Message.findByIdAndUpdate(
+            messageId,
+            {
+              $set: { receiverHidden: true },
+            },
+            {
+              timestamps: false,
+            }
+          );
         }
       }
 
       return true;
     } catch (err) {
+      throw err;
+    }
+  },
+  updateMessageContent: async function ({ messageInput }, req) {
+    const { messageId, text, images, replyOf } = messageInput;
+
+    try {
+      const updatedMessage = await Message.findByIdAndUpdate(
+        messageId,
+        {
+          $set: {
+            text: text,
+            images: images,
+            replyOf: replyOf,
+          },
+        },
+        { new: true }
+      );
+
+      if (
+        updatedMessage.receiverId.toString() !==
+        updatedMessage.senderId.toString()
+      ) {
+        const foundSocket = Sockets.findSocketByUserId(
+          updatedMessage.receiverId.toString()
+        );
+
+        if (foundSocket !== null) {
+          io.getIO().to(foundSocket.socketId).emit("message", {
+            action: "updateContent",
+            message: updatedMessage,
+          });
+        }
+      }
+
+      return updatedMessage;
+    } catch (err) {
+      console.log(err);
       throw err;
     }
   },

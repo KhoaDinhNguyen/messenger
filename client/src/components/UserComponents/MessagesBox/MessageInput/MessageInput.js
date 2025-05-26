@@ -147,6 +147,7 @@ function MessageInput({ searchParams, replyMessage, setReplyMessage }) {
             receiverName
             text
             createdAt
+            updatedAt
             senderEmoji
             receiverEmoji
             images
