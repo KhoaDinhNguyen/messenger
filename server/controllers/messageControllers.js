@@ -4,7 +4,7 @@ const Sockets = require("../models/socket");
 
 const io = require("../socket");
 
-const { getImageFromS3 } = require("../s3");
+const { getImageFromS3, deleteImageFromS3 } = require("../s3");
 
 module.exports = {
   createMessage: async function ({ messageInput }, req) {
@@ -187,7 +187,17 @@ module.exports = {
     const { messageId } = messageInput;
 
     try {
-      return await Message.findById(messageId);
+      const foundMessage = await Message.findById(messageId);
+      const imagesUrl = await Promise.all(
+        foundMessage.images.map((image) =>
+          getImageFromS3({
+            filename: image,
+          })
+        )
+      );
+
+      foundMessage.imagesUrl = imagesUrl;
+      return foundMessage;
     } catch (err) {
       throw err;
     }
@@ -196,7 +206,18 @@ module.exports = {
     const { messageId, receiverId, senderId } = messageInput;
 
     try {
-      //TODO: delete images / replyOf
+      const foundMessage = await Message.findById(messageId);
+
+      const images = foundMessage.images;
+
+      await Promise.all(
+        images.map((image) =>
+          deleteImageFromS3({
+            filename: image,
+          })
+        )
+      );
+
       await Message.findByIdAndDelete(messageId);
 
       const foundSocket = Sockets.findSocketByUserId(receiverId);
@@ -211,7 +232,6 @@ module.exports = {
               senderId: senderId,
             },
           });
-        //console.log(`emit to ${receiverId} -- id: ${foundSocket.socketId}`);
       }
 
       return true;

@@ -76,6 +76,7 @@ function MessageItem({
             images
             imagesUrl
             createdAt
+            _id
           }
         }`,
         variables: {
@@ -94,7 +95,15 @@ function MessageItem({
       })
         .then((jsonResponse) => jsonResponse.json())
         .then((response) => {
-          if (response.data === undefined) {
+          if (response.data.getMessageById === null) {
+            const errorMessages = response.errors.map((error) => error.message);
+            if (
+              errorMessages.includes(
+                "Cannot read properties of null (reading 'images')"
+              )
+            ) {
+              setReplyOfMessage({ deleted: true });
+            }
           } else {
             setReplyOfMessage(response.data.getMessageById);
           }
@@ -227,6 +236,7 @@ function MessageItem({
     : styles.receiverMessage;
 
   const textContainer = isCurrentPage ? styles.senderText : styles.receiverText;
+
   return (
     <div className={rootContainer}>
       <div className={styles.imageContainer}>

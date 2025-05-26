@@ -2,6 +2,7 @@ const {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
+  DeleteObjectCommand,
 } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 require("dotenv").config();
@@ -54,4 +55,18 @@ const uploadToS3 = async ({ file, userid }) => {
   return key;
 };
 
-module.exports = { uploadToS3, getImageFromS3 };
+const deleteImageFromS3 = async ({ filename }) => {
+  const command = new DeleteObjectCommand({
+    Bucket: bucketName,
+    Key: filename,
+  });
+
+  try {
+    await s3.send(command);
+    return true;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+module.exports = { uploadToS3, getImageFromS3, deleteImageFromS3 };

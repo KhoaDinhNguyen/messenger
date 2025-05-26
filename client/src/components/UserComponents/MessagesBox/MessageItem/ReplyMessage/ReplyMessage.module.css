@@ -30,3 +30,8 @@
   font-weight: 300;
   font-size: 12px;
 }
+
+.deletedText {
+  font-weight: 500;
+  color: #ff4d6d;
+}

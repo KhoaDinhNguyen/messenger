@@ -25,7 +25,6 @@ const currentMessageSlice = createSlice({
             if (message.receiverEmoji === emoji) {
               message.receiverEmoji = "";
             } else {
-              console.log("Expected");
               message.receiverEmoji = emoji;
             }
           }
@@ -38,7 +37,11 @@ const currentMessageSlice = createSlice({
     },
     deleteMessage(state, action) {
       const { messageId } = action.payload;
-      return [...state.filter((message) => message._id !== messageId)];
+      return [
+        ...state.filter((message) => {
+          return message._id !== messageId;
+        }),
+      ];
     },
     updateContent(state, action) {
       const { messageId, text, images, replyOf, updatedAt } = action.payload;
@@ -64,7 +67,6 @@ const latestMessageSlice = createSlice({
   initialState: [],
   reducers: {
     init(state, action) {
-      console.log(action.payload);
       return action.payload.filter((message) => message !== null);
     },
     addMessage(state, action) {

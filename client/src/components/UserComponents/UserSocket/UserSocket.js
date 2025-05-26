@@ -86,7 +86,7 @@ function UserSocket({ userid }) {
           formatedMessage.createdAt = new Date(message.createdAt)
             .getTime()
             .toString();
-
+          formatedMessage.updatedAt = formatedMessage.createdAt;
           const friendId = searchParams.get("friendId");
           dispatch(latestMessageSlice.actions.addMessage(formatedMessage));
           if (
