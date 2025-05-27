@@ -18,6 +18,7 @@
 ![Static Badge](https://img.shields.io/badge/Postman-FF6C37?logo=Postman&labelColor=white)
 
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/t/KhoaDinhNguyen/messenger)
+![GitHub last commit](https://img.shields.io/github/last-commit/KhoaDinhNguyen/messenger)
 
 MessApp is a web-based tool that creates a community of online users. With the application, users can connect to everyone, send messages daily, create interesting posts, and receive the latest notifications from their friends. In addition, the application will even continue to improve and update based on the user's experience and feedback.
 
