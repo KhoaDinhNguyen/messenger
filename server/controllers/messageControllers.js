@@ -317,8 +317,6 @@ module.exports = {
         {
           $set: {
             text: text,
-            images: images,
-            replyOf: replyOf,
           },
         },
         { new: true }
