@@ -66,7 +66,6 @@ function CommentForm({ postId, commentId, onChangeVisibleCommentForm, level }) {
 
   const onSubmitForm = (event) => {
     event.preventDefault();
-    console.log("Call");
     let graphQLQuery;
     if (postId !== undefined) {
       graphQLQuery = {
@@ -86,6 +85,7 @@ function CommentForm({ postId, commentId, onChangeVisibleCommentForm, level }) {
             creatorId
             comments
             level
+            emoji
           }
         }
       `,
@@ -115,6 +115,7 @@ function CommentForm({ postId, commentId, onChangeVisibleCommentForm, level }) {
             creatorId
             comments
             level
+            emoji
           }
         }
       `,

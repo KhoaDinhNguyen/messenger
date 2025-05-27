@@ -61,6 +61,7 @@ function MessageList({
             receiverEmoji
             images
             imagesUrl
+            updatedAt
           }
         }
           `,

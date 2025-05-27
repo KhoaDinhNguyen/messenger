@@ -431,7 +431,7 @@ module.exports = {
           action: "accept",
           notification: newNotification,
         });
-        c; //onsole.log(`emit to ${receiverId} -- id: foundSocket.socketId`);
+        //console.log(`emit to ${receiverId} -- id: foundSocket.socketId`);
       }
       return newNotification;
     } catch (err) {

@@ -19,7 +19,6 @@ const postsSlice = createSlice({
         }
         post.comments = [commentId, ...post.comments];
       });
-
       return newState;
     },
   },

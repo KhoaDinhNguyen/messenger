@@ -5,6 +5,8 @@ import EmojiPicker from "emoji-picker-react";
 
 import InputButton from "../../../Utils/InputButton/InputButton";
 import InputFile from "../../../Utils/InputFile/InputFile";
+import InputTextArea from "../../../Utils/InputTextArea/InputTextArea";
+import InputText from "../../../Utils/InputText/InputText";
 import ImageList from "./ImageList/ImageList";
 import ReplyMessage from "./ReplyMessage/ReplyMessage";
 
@@ -20,7 +22,6 @@ import {
 
 import sendMessage from "../../../../asset/img/send.png";
 import styles from "./MessageInput.module.css";
-import InputTextArea from "../../../Utils/InputTextArea/InputTextArea";
 
 const validFileTypes = ["image/png", "image/jpeg", "image/png"];
 
@@ -239,7 +240,7 @@ function MessageInput({ searchParams, replyMessage, setReplyMessage }) {
                   />
                 )}
               </div>
-              <InputTextArea
+              <InputText
                 id={"messageInput"}
                 rootContainer={styles.messageContainer}
                 inputContainer={styles.messageInput}
