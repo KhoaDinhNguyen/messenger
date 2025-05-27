@@ -41,7 +41,7 @@ function MessageList({
       if (friendId !== null) {
         const graphQLQuery = {
           query: `
-          mutation CreateMessage($senderId: String!, $senderName: String!, $receiverId: String!, $receiverName: String!, $text: String!, $images: [String]){
+          mutation CreateMessage($senderId: String!, $senderName: String!, $receiverId: String!, $receiverName: String!, $text: String!, $images: [String], $replyOf: String){
           createMessage(messageInput:{
             senderId: $senderId
             senderName: $senderName
@@ -49,6 +49,7 @@ function MessageList({
             receiverName: $receiverName
             text: $text
             images: $images
+            replyOf: $replyOf
           }) {
             _id
             senderId
@@ -62,6 +63,7 @@ function MessageList({
             images
             imagesUrl
             updatedAt
+            replyOf
           }
         }
           `,
@@ -72,6 +74,7 @@ function MessageList({
             receiverName: friendName,
             text: message,
             images: [],
+            replyOf: null,
           },
         };
 
@@ -86,6 +89,7 @@ function MessageList({
         })
           .then((jsonResponse) => jsonResponse.json())
           .then((response) => {
+            console.log(response);
             if (response.data.createMessage !== null) {
               dispatch(
                 currentMessageSlice.actions.addMessage(
