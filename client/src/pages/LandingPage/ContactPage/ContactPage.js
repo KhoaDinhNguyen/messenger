@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import InputText from "../../../components/Utils/InputText/InputText";
 import InputButton from "../../../components/Utils/InputButton/InputButton";
@@ -18,6 +18,10 @@ function ContactPage() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  useEffect(() => {
+    document.title = "MessApp | Contact";
+  }, []);
 
   const onChangeContactName = (event) => {
     setContactName(event.target.value);

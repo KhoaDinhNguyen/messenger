@@ -59,6 +59,9 @@ function MessageItem({
   const [replyOfMessage, setReplyOfMessage] = useState(null);
   const [visibleEdit, setVisibleEdit] = useState(false);
 
+  const diffTimeCreatedAt =
+    new Date().getTime() - new Date(Number(createdAt)).getTime();
+
   useEffect(() => {
     if (replyOf !== null) {
       const graphQLQuery = {
@@ -307,11 +310,12 @@ function MessageItem({
                           >
                             Delete locally
                           </li>
-                          {senderId === currId && (
-                            <>
-                              <li onClick={onClickOpenEditMessage}>Edit</li>
-                            </>
-                          )}
+                          {senderId === currId &&
+                            diffTimeCreatedAt <= 300000 && (
+                              <>
+                                <li onClick={onClickOpenEditMessage}>Edit</li>
+                              </>
+                            )}
                         </ul>
                       </div>
                     </div>

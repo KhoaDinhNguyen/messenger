@@ -10,10 +10,6 @@
   border-right: 1px solid black;
 }
 
-.emojiContainer {
-  margin-right: 15px;
-}
-
 .emojiContainer:hover svg path {
   fill: #246bce;
 }
@@ -42,7 +38,7 @@
   resize: none;
   width: 100%;
   outline: 0;
-  border: 1px solid #adb5bd;
+  border: 1px solid black;
   border-radius: 5px;
   padding: 10px;
   font-size: 16px;
@@ -54,4 +50,15 @@
 
 .submitInput {
   display: none;
+}
+
+.emojiRoot {
+  position: relative;
+}
+
+.emojiPicker {
+  position: absolute;
+  transform: translateX(-10%);
+  right: 100%;
+  bottom: 50%;
 }

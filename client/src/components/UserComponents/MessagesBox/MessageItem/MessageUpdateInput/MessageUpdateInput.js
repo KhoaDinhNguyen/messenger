@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import EmojiPicker from "emoji-picker-react";
 
 import InputTextArea from "../../../../Utils/InputTextArea/InputTextArea";
 import InputButton from "../../../../Utils/InputButton/InputButton";
@@ -19,8 +20,19 @@ function MessageUpdateInput({ message, onClickCloseHandler }) {
   const { text, _id } = message;
   const dispatch = useDispatch();
   const [updatedText, setUpdatedText] = useState(text);
+  const [visibleEmoji, setVisibleEmoji] = useState(false);
+
   const onChangeUpdatedText = (event) => {
     setUpdatedText(event.target.value);
+  };
+
+  const onChangeVisibleEmoji = () => {
+    setVisibleEmoji((prevState) => !prevState);
+  };
+
+  const onClickEmoji = (emoji) => {
+    setUpdatedText((prevState) => prevState + emoji.emoji);
+    setVisibleEmoji((prevState) => false);
   };
 
   const onClickSubmitForm = (event) => {
@@ -90,12 +102,22 @@ function MessageUpdateInput({ message, onClickCloseHandler }) {
         />
         <div className={styles.buttonContainers}>
           <div className={styles.updateTextButtons}>
-            <div className={styles.emojiContainer}>
+            <div
+              className={styles.emojiContainer}
+              onClick={onChangeVisibleEmoji}
+            >
               <EmojiSVG2 />
             </div>
-            <div className={styles.uploadImageContainer}>
-              <UploadImageSVG />
-            </div>
+            {visibleEmoji && (
+              <div className={styles.emojiRoot}>
+                <div className={styles.emojiPicker}>
+                  <EmojiPicker
+                    emojiStyle="native"
+                    onEmojiClick={onClickEmoji}
+                  />
+                </div>
+              </div>
+            )}
           </div>
           <div className={styles.controlFormButton}>
             <div
