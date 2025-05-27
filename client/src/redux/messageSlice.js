@@ -25,10 +25,33 @@ const currentMessageSlice = createSlice({
             if (message.receiverEmoji === emoji) {
               message.receiverEmoji = "";
             } else {
-              console.log("Expected");
               message.receiverEmoji = emoji;
             }
           }
+        }
+
+        return message;
+      });
+
+      return state;
+    },
+    deleteMessage(state, action) {
+      const { messageId } = action.payload;
+      return [
+        ...state.filter((message) => {
+          return message._id !== messageId;
+        }),
+      ];
+    },
+    updateContent(state, action) {
+      const { messageId, text, images, replyOf, updatedAt } = action.payload;
+
+      state.forEach((message) => {
+        if (message._id === messageId) {
+          message.text = text;
+          message.images = images;
+          message.replyOf = replyOf;
+          message.updatedAt = updatedAt;
         }
 
         return message;
@@ -65,6 +88,14 @@ const latestMessageSlice = createSlice({
       return state.forEach((message) => {
         if (message.senderId === action.payload.senderId) {
           message.haveSeen = true;
+        }
+      });
+    },
+    deleteMessage(state, action) {
+      const { messageId } = action.payload;
+      return state.forEach((message) => {
+        if (message._id === messageId) {
+          message.getDeleted = true;
         }
       });
     },

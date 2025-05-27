@@ -7,11 +7,34 @@ const MessageInputTypeSenderAndReceiver = `
   }
 `;
 
+const MessageInputId = `
+  input MessageInputId {
+    messageId: String!
+  }
+`;
+
+const MessageInputDelete = `
+  input MessageInputDelete {
+    messageId: String!
+    receiverId: String!
+    senderId: String!
+  }
+`;
+
 const MessageInputTypeEmoji = `
   input MessageInputTypeEmoji {
     messageId: String!
     emoji: String
     commentId: String!
+  }
+`;
+
+const MessageInputEdit = `
+  input MessageInputEdit {
+    messageId: String!
+    text: String!
+    images: [String]
+    replyOf: String
   }
 `;
 
@@ -23,6 +46,7 @@ const MessageInputType = `
     receiverName: String!
     text: String!
     images: [String]
+    replyOf: String
   }
 `;
 
@@ -41,6 +65,7 @@ const MessageType = `
     receiverEmoji: String
     images: [String]
     imagesUrl: [String]
+    replyOf: String
   }
 `;
 
@@ -64,17 +89,44 @@ const updateMessageEmoji = `
   updateMessageEmoji(messageInput: MessageInputTypeEmoji!): MessageType
 `;
 
-const generateImagesUrl = `
-
+const updateMessageContent = `
+  updateMessageContent(messageInput: MessageInputEdit): MessageType
 `;
+
+const getMessageById = `
+  getMessageById(messageInput: MessageInputId): MessageType
+`;
+
+const updateMessageSenderHidden = `
+  updateMessageSenderHidden(messageInput: MessageInputId): Boolean
+`;
+
+const updateMessageReceiverHidden = `
+  updateMessageReceiverHidden(messageInput: MessageInputId): Boolean
+`;
+
+const deleteMessageById = `
+  deleteMessageById(messageInput: MessageInputDelete): Boolean
+`;
+
 module.exports = {
-  MessageInputType,
-  MessageInputTypeEmoji,
-  MessageType,
-  MessageInputTypeSenderAndReceiver,
-  createMessage,
-  getMessage,
-  getLatestMessages,
-  updateHaveSeenMessages,
-  updateMessageEmoji,
+  types: [MessageType],
+  inputTypes: [
+    MessageInputType,
+    MessageInputTypeEmoji,
+    MessageInputTypeSenderAndReceiver,
+    MessageInputId,
+    MessageInputDelete,
+    MessageInputEdit,
+  ],
+  queries: [getMessage, getLatestMessages, getMessageById],
+  mutations: [
+    createMessage,
+    updateHaveSeenMessages,
+    updateMessageEmoji,
+    deleteMessageById,
+    updateMessageReceiverHidden,
+    updateMessageSenderHidden,
+    updateMessageContent,
+  ],
 };

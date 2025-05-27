@@ -4,12 +4,19 @@ const Sockets = require("../models/socket");
 
 const io = require("../socket");
 
-const { getImageFromS3 } = require("../s3");
+const { getImageFromS3, deleteImageFromS3 } = require("../s3");
 
 module.exports = {
   createMessage: async function ({ messageInput }, req) {
-    const { senderId, senderName, receiverId, receiverName, text, images } =
-      messageInput;
+    const {
+      senderId,
+      senderName,
+      receiverId,
+      receiverName,
+      text,
+      images,
+      replyOf,
+    } = messageInput;
 
     const generateImagesUrlPromises = images.map((image) =>
       getImageFromS3({ filename: image })
@@ -29,11 +36,13 @@ module.exports = {
       receiverEmoji: "",
       images: images,
       imagesUrl: imagesUrl,
+      replyOf: replyOf,
+      senderHidden: false,
+      receiverHidden: false,
     });
 
     try {
       await newMessage.save();
-      //newMessage._id = newMessage._id;
 
       const foundSocket = Sockets.findSocketByUserId(receiverId);
       if (foundSocket !== null) {
@@ -56,12 +65,11 @@ module.exports = {
     try {
       const messages = await Message.find({
         $or: [
-          { senderId: senderId, receiverId: receiverId },
-          { senderId: receiverId, receiverId: senderId },
+          { senderId: senderId, receiverId: receiverId, senderHidden: false },
+          { senderId: receiverId, receiverId: senderId, receiverHidden: false },
         ],
       }).sort({ createdAt: -1 });
 
-      //TODO: fix this
       const promises = messages.map(async (message) => {
         const images = message.images;
         if (images.length > 0) {
@@ -95,8 +103,8 @@ module.exports = {
       const promises = friendIdList.map(async (friendId) => {
         return Message.find({
           $or: [
-            { senderId: id, receiverId: friendId },
-            { senderId: friendId, receiverId: id },
+            { senderId: id, receiverId: friendId, senderHidden: false },
+            { senderId: friendId, receiverId: id, receiverHidden: false },
           ],
         })
           .sort({ createdAt: -1 })
@@ -120,7 +128,8 @@ module.exports = {
     try {
       await Message.updateMany(
         { senderId: senderId, receiverId: receiverId },
-        { $set: { haveSeen: true } }
+        { $set: { haveSeen: true } },
+        { timestamps: false }
       );
     } catch (err) {
       console.log(err);
@@ -145,7 +154,7 @@ module.exports = {
 
       const updatedMessage = await foundMessage.updateOne(
         { $set: query },
-        { new: true }
+        { new: true, timestamps: false }
       );
 
       if (
@@ -167,8 +176,171 @@ module.exports = {
         }
       }
 
-      //TODO: the foundMessgage does not return updatedMessage
       return foundMessage;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  },
+  getMessageById: async function ({ messageInput }, req) {
+    const { messageId } = messageInput;
+
+    try {
+      const foundMessage = await Message.findById(messageId);
+      const imagesUrl = await Promise.all(
+        foundMessage.images.map((image) =>
+          getImageFromS3({
+            filename: image,
+          })
+        )
+      );
+
+      foundMessage.imagesUrl = imagesUrl;
+      return foundMessage;
+    } catch (err) {
+      throw err;
+    }
+  },
+  deleteMessageById: async function ({ messageInput }, req) {
+    const { messageId, receiverId, senderId } = messageInput;
+
+    try {
+      const foundMessage = await Message.findById(messageId);
+
+      const images = foundMessage.images;
+
+      await Promise.all(
+        images.map((image) =>
+          deleteImageFromS3({
+            filename: image,
+          })
+        )
+      );
+
+      await foundMessage.deleteOne();
+
+      const foundSocket = Sockets.findSocketByUserId(receiverId);
+      if (foundSocket !== null) {
+        io.getIO()
+          .to(foundSocket.socketId)
+          .emit("message", {
+            action: "delete",
+            message: {
+              messageId: messageId,
+              receiverId: receiverId,
+              senderId: senderId,
+            },
+          });
+      }
+
+      return true;
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateMessageSenderHidden: async function ({ messageInput }, req) {
+    const { messageId } = messageInput;
+
+    try {
+      const foundMessage = await Message.findById(messageId);
+
+      if (foundMessage !== null) {
+        if (foundMessage.receiverHidden === true) {
+          const images = foundMessage.images;
+
+          await Promise.all(
+            images.map((image) =>
+              deleteImageFromS3({
+                filename: image,
+              })
+            )
+          );
+          await foundMessage.deleteOne();
+        } else {
+          await Message.findByIdAndUpdate(
+            messageId,
+            {
+              $set: { senderHidden: true },
+            },
+            {
+              timestamps: false,
+            }
+          );
+        }
+      }
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateMessageReceiverHidden: async function ({ messageInput }, req) {
+    const { messageId } = messageInput;
+
+    try {
+      const foundMessage = await Message.findById(messageId);
+
+      if (foundMessage !== null) {
+        if (foundMessage.senderHidden === true) {
+          const images = foundMessage.images;
+
+          await Promise.all(
+            images.map((image) =>
+              deleteImageFromS3({
+                filename: image,
+              })
+            )
+          );
+          await foundMessage.deleteOne();
+        } else {
+          await Message.findByIdAndUpdate(
+            messageId,
+            {
+              $set: { receiverHidden: true },
+            },
+            {
+              timestamps: false,
+            }
+          );
+        }
+      }
+
+      return true;
+    } catch (err) {
+      throw err;
+    }
+  },
+  updateMessageContent: async function ({ messageInput }, req) {
+    const { messageId, text, images, replyOf } = messageInput;
+
+    try {
+      const updatedMessage = await Message.findByIdAndUpdate(
+        messageId,
+        {
+          $set: {
+            text: text,
+            images: images,
+            replyOf: replyOf,
+          },
+        },
+        { new: true }
+      );
+
+      if (
+        updatedMessage.receiverId.toString() !==
+        updatedMessage.senderId.toString()
+      ) {
+        const foundSocket = Sockets.findSocketByUserId(
+          updatedMessage.receiverId.toString()
+        );
+
+        if (foundSocket !== null) {
+          io.getIO().to(foundSocket.socketId).emit("message", {
+            action: "updateContent",
+            message: updatedMessage,
+          });
+        }
+      }
+
+      return updatedMessage;
     } catch (err) {
       console.log(err);
       throw err;

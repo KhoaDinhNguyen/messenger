@@ -10,12 +10,23 @@
 
 .messageInputContainer {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
   border: 1px solid #6c757d;
   border-radius: 30px;
   padding: 10px 20px;
+  max-width: 580px;
 }
 
+/*
+ Hard code
+*/
+
+.messageInputText {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .messageContainer {
   width: 500px;
 }
@@ -23,9 +34,11 @@
 .messageInput {
   border: 0;
   outline: 0;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 300;
   width: 100%;
+  max-height: 100px;
+  resize: none;
 }
 
 .submitButton {

@@ -38,3 +38,8 @@
 .sendImages {
   font-style: italic;
 }
+
+.deletedMessage {
+  color: #ff4d6d;
+  font-weight: 500;
+}

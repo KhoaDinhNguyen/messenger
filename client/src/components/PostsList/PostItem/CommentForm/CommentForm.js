@@ -217,7 +217,6 @@ function CommentForm({ postId, commentId, onChangeVisibleCommentForm, level }) {
             onChangeText={onChangeComment}
             onKeyDown={onKeyDown}
             required={true}
-            defaultHeight={"20px"}
           />
           {hasFocus && (
             <div className={styles.buttonsContainer}>

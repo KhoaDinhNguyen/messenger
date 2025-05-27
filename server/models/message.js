@@ -46,6 +46,16 @@ const messageSchema = new Schema(
       type: [String],
       require: true,
     },
+    replyOf: {
+      type: Schema.ObjectId,
+      ref: "Message",
+    },
+    receiverHidden: {
+      type: Boolean,
+    },
+    senderHidden: {
+      type: Boolean,
+    },
   },
   { collection: "messages", timestamps: true }
 );

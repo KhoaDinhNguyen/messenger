@@ -86,7 +86,7 @@ function UserSocket({ userid }) {
           formatedMessage.createdAt = new Date(message.createdAt)
             .getTime()
             .toString();
-
+          formatedMessage.updatedAt = formatedMessage.createdAt;
           const friendId = searchParams.get("friendId");
           dispatch(latestMessageSlice.actions.addMessage(formatedMessage));
           if (
@@ -106,6 +106,41 @@ function UserSocket({ userid }) {
               commentId: data.commentId,
             })
           );
+        } else if (action === "delete") {
+          const friendId = searchParams.get("friendId");
+
+          if (
+            message.senderId === friendId &&
+            message.senderId !== message.receiverId
+          ) {
+            dispatch(
+              currentMessageSlice.actions.deleteMessage({
+                messageId: message.messageId,
+              })
+            );
+            dispatch(
+              latestMessageSlice.actions.deleteMessage({
+                messageId: message.messageId,
+              })
+            );
+          }
+        } else if (action === "updateContent") {
+          const friendId = searchParams.get("friendId");
+          console.log(message);
+          if (
+            message.senderId === friendId &&
+            message.senderId !== message.receiverId
+          ) {
+            dispatch(
+              currentMessageSlice.actions.updateContent({
+                messageId: message._id,
+                text: message.text,
+                replyOf: message.replyOf,
+                updatedAt: new Date(message.updatedAt),
+                images: message.images,
+              })
+            );
+          }
         }
       } catch (err) {
         console.log(err);

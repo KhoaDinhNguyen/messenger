@@ -71,7 +71,9 @@ function FriendItem({ friend, setSearchParams, latestMessage }) {
 
   let text = "";
 
-  if (latestMessage !== null && latestMessage.text !== "") {
+  if (latestMessage !== null && latestMessage.getDeleted === true) {
+    text = "Deleted message";
+  } else if (latestMessage !== null && latestMessage.text !== "") {
     text = latestMessage.text;
   } else if (
     latestMessage !== null &&
@@ -80,6 +82,7 @@ function FriendItem({ friend, setSearchParams, latestMessage }) {
   ) {
     text = "Send image(s)";
   }
+
   return (
     <div className={styles.rootContainer} onClick={onClickFriendItem}>
       <div className={styles.identityContainer}>
@@ -111,9 +114,12 @@ function FriendItem({ friend, setSearchParams, latestMessage }) {
               haveNotSeenMessage ? styles.haveNotSeenMessage : ""
             }
             ${
-              text === "Send image(s)" && latestMessage.text === ""
+              (text === "Send image(s)" && latestMessage.text === ""
                 ? styles.sendImages
-                : ""
+                : "") ||
+              (text === "Deleted message" && latestMessage.getDeleted === true
+                ? styles.deletedMessage
+                : "")
             }`}
           >
             {params.userid === latestMessage.senderId ? "You: " : ""}

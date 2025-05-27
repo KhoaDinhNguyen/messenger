@@ -111,6 +111,8 @@
   padding: 5px;
   border-radius: 10px;
   max-width: 460px;
+  min-height: 300px;
+  max-height: 300px;
 }
 
 .contentInput:focus {
