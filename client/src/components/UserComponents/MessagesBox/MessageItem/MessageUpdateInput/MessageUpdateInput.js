@@ -93,7 +93,7 @@ function MessageUpdateInput({ message, onClickCloseHandler }) {
             <div className={styles.emojiContainer}>
               <EmojiSVG2 />
             </div>
-            <div>
+            <div className={styles.uploadImageContainer}>
               <UploadImageSVG />
             </div>
           </div>
@@ -104,7 +104,7 @@ function MessageUpdateInput({ message, onClickCloseHandler }) {
             >
               <UpdateMessageCancelSVG />
             </div>
-            <div>
+            <div className={styles.submitButtonContainer}>
               <InputButton
                 id={`message_${_id}_updated`}
                 type={"submit"}

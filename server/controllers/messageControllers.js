@@ -43,7 +43,6 @@ module.exports = {
 
     try {
       await newMessage.save();
-      //newMessage._id = newMessage._id;
 
       const foundSocket = Sockets.findSocketByUserId(receiverId);
       if (foundSocket !== null) {
@@ -71,7 +70,6 @@ module.exports = {
         ],
       }).sort({ createdAt: -1 });
 
-      //TODO: fix this
       const promises = messages.map(async (message) => {
         const images = message.images;
         if (images.length > 0) {
@@ -130,7 +128,8 @@ module.exports = {
     try {
       await Message.updateMany(
         { senderId: senderId, receiverId: receiverId },
-        { $set: { haveSeen: true } }
+        { $set: { haveSeen: true } },
+        { timestamps: false }
       );
     } catch (err) {
       console.log(err);
@@ -218,7 +217,7 @@ module.exports = {
         )
       );
 
-      await Message.findByIdAndDelete(messageId);
+      await foundMessage.deleteOne();
 
       const foundSocket = Sockets.findSocketByUserId(receiverId);
       if (foundSocket !== null) {
@@ -243,13 +242,20 @@ module.exports = {
     const { messageId } = messageInput;
 
     try {
-      //TODO: replyOf
       const foundMessage = await Message.findById(messageId);
 
       if (foundMessage !== null) {
         if (foundMessage.receiverHidden === true) {
+          const images = foundMessage.images;
+
+          await Promise.all(
+            images.map((image) =>
+              deleteImageFromS3({
+                filename: image,
+              })
+            )
+          );
           await foundMessage.deleteOne();
-          //TODO: replyOf, images
         } else {
           await Message.findByIdAndUpdate(
             messageId,
@@ -270,11 +276,19 @@ module.exports = {
     const { messageId } = messageInput;
 
     try {
-      //TODO: replyOf
       const foundMessage = await Message.findById(messageId);
 
       if (foundMessage !== null) {
         if (foundMessage.senderHidden === true) {
+          const images = foundMessage.images;
+
+          await Promise.all(
+            images.map((image) =>
+              deleteImageFromS3({
+                filename: image,
+              })
+            )
+          );
           await foundMessage.deleteOne();
         } else {
           await Message.findByIdAndUpdate(

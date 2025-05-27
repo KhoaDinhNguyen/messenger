@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import EmojiPicker from "emoji-picker-react";
 
-import InputText from "../../../../components/Utils/InputText/InputText";
 import InputButton from "../../../Utils/InputButton/InputButton";
 import InputFile from "../../../Utils/InputFile/InputFile";
 import ImageList from "./ImageList/ImageList";
@@ -21,6 +20,7 @@ import {
 
 import sendMessage from "../../../../asset/img/send.png";
 import styles from "./MessageInput.module.css";
+import InputTextArea from "../../../Utils/InputTextArea/InputTextArea";
 
 const validFileTypes = ["image/png", "image/jpeg", "image/png"];
 
@@ -239,12 +239,13 @@ function MessageInput({ searchParams, replyMessage, setReplyMessage }) {
                   />
                 )}
               </div>
-              <InputText
+              <InputTextArea
                 id={"messageInput"}
                 rootContainer={styles.messageContainer}
                 inputContainer={styles.messageInput}
                 valueText={text}
                 onChangeText={onChangeText}
+                placeholder={"Type a message"}
               />
             </div>
 

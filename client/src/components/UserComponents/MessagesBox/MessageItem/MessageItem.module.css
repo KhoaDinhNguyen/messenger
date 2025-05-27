@@ -1,18 +1,28 @@
 .rootContainer {
   margin-bottom: 20px;
   display: flex;
-  align-items: flex-start;
   max-width: 600px;
   width: 100%;
+  flex-direction: column;
+}
+
+.senderRootContainer {
+  justify-self: flex-end;
+  align-items: flex-end;
+}
+
+.receiverRootContainer {
+  justify-self: flex-start;
+  align-items: flex-start;
 }
 
 .senderContainer {
-  justify-self: flex-end;
+  display: flex;
   flex-direction: row-reverse;
 }
 
 .receiverContainer {
-  justify-self: flex-start;
+  display: flex;
   flex-direction: row;
 }
 

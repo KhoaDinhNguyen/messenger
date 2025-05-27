@@ -13,10 +13,20 @@
 .emojiContainer {
   margin-right: 15px;
 }
+
+.emojiContainer:hover svg path {
+  fill: #246bce;
+}
 .cancelButtonContainer {
   margin-right: 15px;
 }
 
+.cancelButtonContainer:hover path,
+.submitButtonContainer:hover path,
+.uploadImageContainer:hover path,
+.uploadImageContainer:hover circle {
+  stroke: #246bce;
+}
 .controlFormButton {
   display: flex;
 }

@@ -14,25 +14,20 @@ function InputTextArea({
   rootContainer,
   labelContainer,
   inputContainer,
-  row,
-  defaultHeight,
 }) {
   const placeHolderModifiers = placeholder === undefined ? "" : placeholder;
   const requiredModifers = required === undefined ? false : required;
-  const rowModifiers = row === undefined ? 10 : row;
   const textareaRef = useRef(null);
 
   useEffect(() => {
     if (textareaRef.current) {
-      if (valueText === "" && defaultHeight !== undefined) {
-        textareaRef.current.style.height = defaultHeight;
-      } else if (valueText === "" && defaultHeight === undefined) {
+      if (valueText === "") {
         textareaRef.current.style.height = "auto";
       } else {
         textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
       }
     }
-  }, [valueText, defaultHeight]);
+  }, [valueText]);
 
   return (
     <div className={rootContainer}>

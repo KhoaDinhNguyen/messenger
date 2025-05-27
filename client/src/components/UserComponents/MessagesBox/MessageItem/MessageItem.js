@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import Picker from "emoji-picker-react";
 
-import { nameSlice } from "../../../../redux/userSlice";
 import {
   currentSenderSlice,
   currentMessageSlice,
@@ -17,7 +16,6 @@ import {
   EmojiSVG,
   DotMenuSVG,
   ReplyMessageSVG,
-  ReplyMessageSVG2,
 } from "../../../../utils/svgConfigs/SVG";
 
 import {
@@ -39,13 +37,11 @@ function MessageItem({
   const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
   const currId = params.userid;
-  const currName = useSelector((state) => state[nameSlice.name]);
   const {
     receiverId,
     receiverName,
     text,
     senderEmoji,
-    _id,
     receiverEmoji,
     createdAt,
     images,
@@ -228,7 +224,7 @@ function MessageItem({
   });
 
   const rootContainer = `${
-    isCurrentPage ? styles.senderContainer : styles.receiverContainer
+    isCurrentPage ? styles.senderRootContainer : styles.receiverRootContainer
   } ${styles.rootContainer}`;
 
   const messageContainer = isCurrentPage
@@ -239,122 +235,130 @@ function MessageItem({
 
   return (
     <div className={rootContainer}>
-      <div className={styles.imageContainer}>
-        <img
-          src={isCurrentPage ? currentUserImage : receiverImg}
-          alt="user"
-          className={styles.image}
-        />
-      </div>
-      {!visibleEdit && (
-        <>
-          <div className={messageContainer}>
-            {replyOfMessage !== null && (
-              <div className={styles.replyOfContainer}>
-                <ReplyMessage message={replyOfMessage} />
-              </div>
-            )}
-
-            <div className={textContainer}>
-              {images.length > 0 && (
-                <MessageImage images={images} imagesUrl={imagesUrl} />
-              )}
-              <div>
-                <p className={styles.text}>{text}</p>
-              </div>
-              {emojiArray.length > 0 && (
-                <div className={styles.emojiContainer}>
-                  <div className={styles.emojiText}>
-                    {emojiesRender}
-                    <p className={styles.emojiLength}>{emojiLength}</p>
-                  </div>
+      <div
+        className={
+          isCurrentPage ? styles.senderContainer : styles.receiverContainer
+        }
+      >
+        <div className={styles.imageContainer}>
+          <img
+            src={isCurrentPage ? currentUserImage : receiverImg}
+            alt="user"
+            className={styles.image}
+          />
+        </div>
+        {!visibleEdit && (
+          <>
+            <div className={messageContainer}>
+              {replyOfMessage !== null && (
+                <div className={styles.replyOfContainer}>
+                  <ReplyMessage message={replyOfMessage} />
                 </div>
               )}
-            </div>
-            <div className={styles.messageTime}>
-              <p className={styles.timeText}>
-                {createdAt === updatedAt
-                  ? getTimeInDay(createdAt)
-                  : `\u270E ${getDayInYear(
-                      new Date(Number(updatedAt))
-                    )} - ${getTimeInDay(updatedAt)}`}
-              </p>
-            </div>
-          </div>
 
-          <div className={styles.buttonsContainer}>
-            <div
-              className={styles.dotMenuContainer}
-              onClick={onChangeVisibleMore}
-            >
-              <div title="More">
-                <DotMenuSVG />
-              </div>
-              {visibleMore && (
-                <div className={styles.dropListMoreContainer}>
-                  <div className={styles.dropListMoreSubContainer}>
-                    <div className={styles.listMoreContainer}>
-                      <ul className={styles.listMore}>
-                        {senderId === currId && (
-                          <>
-                            <li
-                              onClick={onClickOpenPermantDeleteModal.bind(
-                                this,
-                                message
-                              )}
-                            >
-                              Delete permanently
-                            </li>
-                          </>
-                        )}
-
-                        <li
-                          onClick={onClickOpenLocalDeleteModal.bind(
-                            this,
-                            message
-                          )}
-                        >
-                          Delete locally
-                        </li>
-                        {senderId === currId && (
-                          <>
-                            <li onClick={onClickOpenEditMessage}>Edit</li>
-                          </>
-                        )}
-                      </ul>
+              <div className={textContainer}>
+                {images.length > 0 && (
+                  <MessageImage images={images} imagesUrl={imagesUrl} />
+                )}
+                <div>
+                  <p className={styles.text}>{text}</p>
+                </div>
+                {emojiArray.length > 0 && (
+                  <div className={styles.emojiContainer}>
+                    <div className={styles.emojiText}>
+                      {emojiesRender}
+                      <p className={styles.emojiLength}>{emojiLength}</p>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-            <div
-              className={styles.replyMessageContainer}
-              onClick={onClickReplyMessage}
-              title="Reply"
-            >
-              <ReplyMessageSVG />
-            </div>
-            <div
-              className={styles.emojiButtonContainer}
-              onClick={onChangeVisiblePicker}
-              title="Emoji"
-            >
-              <EmojiSVG />
-            </div>
-            <div className={styles.emojiPickerRoot}>
-              <div className={styles.emojiPickerContainer}>
-                <Picker
-                  reactions={["1f496", "1f44d", "1f602", "1f62d", "1f621"]}
-                  reactionsDefaultOpen={true}
-                  open={visiblePicker}
-                  emojiStyle="native"
-                  onEmojiClick={onClickEmoji}
-                  allowExpandReactions={false}
-                />
+                )}
               </div>
             </div>
-          </div>
-        </>
+            <div className={styles.buttonsContainer}>
+              <div
+                className={styles.dotMenuContainer}
+                onClick={onChangeVisibleMore}
+              >
+                <div title="More">
+                  <DotMenuSVG />
+                </div>
+                {visibleMore && (
+                  <div className={styles.dropListMoreContainer}>
+                    <div className={styles.dropListMoreSubContainer}>
+                      <div className={styles.listMoreContainer}>
+                        <ul className={styles.listMore}>
+                          {senderId === currId && (
+                            <>
+                              <li
+                                onClick={onClickOpenPermantDeleteModal.bind(
+                                  this,
+                                  message
+                                )}
+                              >
+                                Delete permanently
+                              </li>
+                            </>
+                          )}
+
+                          <li
+                            onClick={onClickOpenLocalDeleteModal.bind(
+                              this,
+                              message
+                            )}
+                          >
+                            Delete locally
+                          </li>
+                          {senderId === currId && (
+                            <>
+                              <li onClick={onClickOpenEditMessage}>Edit</li>
+                            </>
+                          )}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div
+                className={styles.replyMessageContainer}
+                onClick={onClickReplyMessage}
+                title="Reply"
+              >
+                <ReplyMessageSVG />
+              </div>
+              <div
+                className={styles.emojiButtonContainer}
+                onClick={onChangeVisiblePicker}
+                title="Emoji"
+              >
+                <EmojiSVG />
+              </div>
+              <div className={styles.emojiPickerRoot}>
+                <div className={styles.emojiPickerContainer}>
+                  <Picker
+                    reactions={["1f496", "1f44d", "1f602", "1f62d", "1f621"]}
+                    reactionsDefaultOpen={true}
+                    open={visiblePicker}
+                    emojiStyle="native"
+                    onEmojiClick={onClickEmoji}
+                    allowExpandReactions={false}
+                  />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+
+      {!visibleEdit && (
+        <div className={styles.messageTime}>
+          <p className={styles.timeText}>
+            {createdAt === updatedAt
+              ? getTimeInDay(createdAt)
+              : `\u270E ${getDayInYear(
+                  new Date(Number(updatedAt))
+                )} - ${getTimeInDay(updatedAt)}`}
+          </p>
+        </div>
       )}
       {visibleEdit && (
         <div className={styles.updatedMessageContainer}>
