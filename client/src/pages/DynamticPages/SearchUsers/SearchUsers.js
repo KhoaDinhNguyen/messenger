@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import SearchUsersForm from "../../../components/DynamicComponents/SearchUsersForm/SearchUsersForm";
 import UsersList from "../../../components/DynamicComponents/UsersList/UsersList";
@@ -10,6 +10,9 @@ function SearchUsers({ isAuth }) {
   const [usersList, setUsersList] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    document.title = "MessApp | Friends";
+  }, []);
   return (
     <div className={styles.rootContainer}>
       <SearchUsersForm setUsersList={setUsersList} setLoading={setLoading} />

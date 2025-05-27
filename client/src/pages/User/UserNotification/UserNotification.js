@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 import NotificationList from "../../../components/UserComponents/NotificationList/NotificationList";
 
@@ -11,6 +12,9 @@ function UserNotification() {
     (state) => state[notificationListSlice.name]
   );
 
+  useEffect(() => {
+    document.title = "MessApp | Notification";
+  }, []);
   return (
     <div className={styles.rootContainer}>
       {notificationsList.length > 0 && (

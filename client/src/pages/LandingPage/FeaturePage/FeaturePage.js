@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import {
   GlobalSVG,
   RealTimeSVG,
@@ -18,6 +20,9 @@ import notification from "../../../../src/asset/img/notification.png";
 import styles from "./FeaturePage.module.css";
 
 function FeaturePage() {
+  useEffect(() => {
+    document.title = "MessApp | Feature";
+  }, []);
   return (
     <div>
       <section className={styles.section}>

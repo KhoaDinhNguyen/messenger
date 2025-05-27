@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 import FeaturePage from "./FeaturePage/FeaturePage";
@@ -14,6 +15,9 @@ import styles from "./LandingPage.module.css";
 function LandingPage() {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    document.title = "MessApp | Home";
+  }, []);
   const onClickGoToLogin = () => {
     navigate("./home/login");
   };
