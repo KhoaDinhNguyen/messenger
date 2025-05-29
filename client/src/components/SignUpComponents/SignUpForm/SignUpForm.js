@@ -103,11 +103,13 @@ function SignUpForm() {
     setLoading(true);
     if (gender === "") {
       setErrorGender((messages) => [...messages, "Gender is required"]);
+      setLoading(false);
     } else if (password !== confirmedPassword) {
       setErrorPassword((message) => [
         ...message,
         "Confirmed password is incorrect",
       ]);
+      setLoading(false);
     } else {
       const graphQLQuery = {
         query: `
